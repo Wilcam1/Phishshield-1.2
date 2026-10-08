@@ -67,6 +67,22 @@
   }
 }
 
+.insignia-atajo {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--fuente-monoespaciada);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: var(--color-fondo-superficie);
+  color: var(--color-texto-terciario);
+  border: 1px solid var(--color-borde-cristal);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  user-select: none;
+  pointer-events: none;
+}
+
 .acciones-barra {
   display: flex;
   gap: var(--espaciado-sm);

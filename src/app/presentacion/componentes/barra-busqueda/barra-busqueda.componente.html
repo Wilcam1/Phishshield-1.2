@@ -8,6 +8,7 @@
       [(ngModel)]="url"
       (keydown)="alPresionarEnter($event)"
       [disabled]="estaCargando"
+      [appAtajoTeclado]="'k'"
       aria-label="URL a analizar para detección de phishing"
     />
     @if (url) {
@@ -20,6 +21,8 @@
       >
         ✕
       </button>
+    } @else {
+      <kbd class="insignia-atajo" title="Atajo: Presiona Ctrl+K para enfocar">Ctrl K</kbd>
     }
   </div>
 

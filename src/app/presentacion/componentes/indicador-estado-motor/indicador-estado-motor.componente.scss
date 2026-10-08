@@ -1,0 +1,54 @@
+.pildora-estado-motor {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espaciado-xs);
+  padding: 4px 12px;
+  border-radius: var(--radio-pildora);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-texto-secundario);
+  border: 1px solid var(--color-borde-cristal);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.punto-pulso {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--color-advertencia);
+
+  &.activo {
+    background-color: var(--color-seguro);
+    box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.7);
+    animation: pulsoVerde 2.4s infinite;
+  }
+}
+
+.texto-estado {
+  color: var(--color-texto-primario);
+}
+
+.divisor-punto {
+  color: var(--color-texto-terciario);
+}
+
+.texto-version {
+  font-family: var(--fuente-monoespaciada);
+  color: var(--color-texto-terciario);
+  font-size: 0.7rem;
+}
+
+@keyframes pulsoVerde {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(52, 199, 89, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(52, 199, 89, 0);
+  }
+}

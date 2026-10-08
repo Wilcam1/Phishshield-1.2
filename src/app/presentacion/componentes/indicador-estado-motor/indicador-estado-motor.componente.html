@@ -1,0 +1,6 @@
+<div class="pildora-estado-motor superficie-cristal" role="status" aria-live="polite">
+  <span class="punto-pulso" [class.activo]="enLinea" aria-hidden="true"></span>
+  <span class="texto-estado">{{ enLinea ? 'Motor Forense Operativo' : 'Verificando Servicios...' }}</span>
+  <span class="divisor-punto" aria-hidden="true">·</span>
+  <span class="texto-version">v{{ version }}</span>
+</div>

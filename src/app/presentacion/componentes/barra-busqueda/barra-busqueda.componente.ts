@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AtajoTecladoDirectiva } from '../../directivas/atajo-teclado.directiva';
 
 @Component({
   selector: 'app-barra-busqueda',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AtajoTecladoDirectiva],
   templateUrl: './barra-busqueda.componente.html',
   styleUrl: './barra-busqueda.componente.scss',
 })

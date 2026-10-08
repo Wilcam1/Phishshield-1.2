@@ -7,6 +7,7 @@ export * from './desglose-tecnico/desglose-tecnico.componente';
 export * from './lista-consejos/lista-consejos.componente';
 export * from './zona-pruebas/zona-pruebas.componente';
 export * from './historial-busquedas/historial-busquedas.componente';
+export * from './indicador-estado-motor/indicador-estado-motor.componente';
 export * from './selector-tema/selector-tema.componente';
 export * from './notificacion-flotante/notificacion-flotante.componente';
 export * from './panel-metricas/panel-metricas.componente';
