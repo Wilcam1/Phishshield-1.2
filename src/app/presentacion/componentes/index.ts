@@ -20,3 +20,4 @@ export * from './lista-alertas-comunitarias/lista-alertas-comunitarias.component
 export * from './drawer-incidente/drawer-incidente.componente';
 export * from './telemetria-servicios/telemetria-servicios.componente';
 export * from './visor-flujo-arquitectura/visor-flujo-arquitectura.componente';
+export * from './icono/icono.componente';

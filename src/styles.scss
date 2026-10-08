@@ -1,4 +1,7 @@
 @use 'src/app/presentacion/diseno/tokens.scss';
+@use 'src/app/presentacion/diseno/tokens-superficie.scss';
+@use 'src/app/presentacion/diseno/tokens-movimiento.scss';
+@use 'src/app/presentacion/diseno/fondo-aurora.scss';
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -51,23 +54,87 @@ button:disabled {
   outline-offset: 2px;
 }
 
-/* Clases de Superficie y Material Translúcido */
-.superficie-cristal {
-  background: var(--color-fondo-superficie);
+/* Clases de Superficie y Material Translúcido (3 Niveles Apple) */
+.superficie-nivel-1 {
+  background: var(--superficie-1);
   backdrop-filter: var(--desenfoque-material);
   -webkit-backdrop-filter: var(--desenfoque-material);
-  border: 1px solid var(--color-borde-cristal);
-  box-shadow: var(--sombra-tarjeta);
+  border: 1px solid var(--brillo-borde);
+  box-shadow: var(--sombra-base);
   border-radius: var(--radio-grande);
+  position: relative;
+  transition: transform var(--tiempo-hover) var(--resorte-critico),
+              border-color var(--tiempo-hover) ease,
+              box-shadow var(--tiempo-hover) ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: var(--brillo-borde-superior);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
+
+.superficie-nivel-2 {
+  background: var(--superficie-2);
+  backdrop-filter: var(--desenfoque-material);
+  -webkit-backdrop-filter: var(--desenfoque-material);
+  border: 1px solid var(--brillo-borde);
+  box-shadow: var(--sombra-elevada);
+  border-radius: var(--radio-grande);
+  position: relative;
+  transition: transform var(--tiempo-hover) var(--resorte-critico),
+              border-color var(--tiempo-hover) ease,
+              box-shadow var(--tiempo-hover) ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: var(--brillo-borde-superior);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
+
+.superficie-nivel-3 {
+  background: var(--superficie-3);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid var(--brillo-borde-resaltado);
+  box-shadow: var(--sombra-flotante);
+  border-radius: var(--radio-grande);
+  position: relative;
+}
+
+.superficie-cristal {
+  background: var(--superficie-1);
+  backdrop-filter: var(--desenfoque-material);
+  -webkit-backdrop-filter: var(--desenfoque-material);
+  border: 1px solid var(--brillo-borde);
+  box-shadow: var(--sombra-base);
+  border-radius: var(--radio-grande);
+  position: relative;
 }
 
 .superficie-elevada {
-  background: var(--color-fondo-elevado);
+  background: var(--superficie-2);
   backdrop-filter: var(--desenfoque-material);
   -webkit-backdrop-filter: var(--desenfoque-material);
-  border: 1px solid var(--color-borde-cristal);
-  box-shadow: var(--sombra-flotante);
+  border: 1px solid var(--brillo-borde);
+  box-shadow: var(--sombra-elevada);
   border-radius: var(--radio-grande);
+  position: relative;
 }
 
 /* Tipografía de Escala Óptica */

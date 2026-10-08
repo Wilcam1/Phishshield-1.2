@@ -1,0 +1,31 @@
+/* ==========================================================================
+   Tokens de Movimiento y Físicas — PhishShield (Apple Fluid Springs)
+   ========================================================================== */
+
+:root {
+  /* Físicas de Resorte de Apple (Damping & Response) */
+  --resorte-critico: cubic-bezier(0.16, 1, 0.3, 1);    /* Damping 1.0: suave, sin oscilación */
+  --resorte-impulso: cubic-bezier(0.34, 1.45, 0.64, 1); /* Damping ~0.8: física reactiva */
+  --curva-desaceleracion: cubic-bezier(0, 0, 0.2, 1);
+
+  /* Escala Temporal */
+  --tiempo-micro: 120ms;
+  --tiempo-hover: 200ms;
+  --tiempo-panel: 320ms;
+  --tiempo-entrada: 450ms;
+  --tiempo-cascada: 80ms;
+  --tiempo-conteo: 900ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --tiempo-micro: 0.01ms;
+    --tiempo-hover: 0.01ms;
+    --tiempo-panel: 0.01ms;
+    --tiempo-entrada: 0.01ms;
+    --tiempo-cascada: 0.01ms;
+    --tiempo-conteo: 0.01ms;
+    --resorte-critico: linear;
+    --resorte-impulso: linear;
+  }
+}

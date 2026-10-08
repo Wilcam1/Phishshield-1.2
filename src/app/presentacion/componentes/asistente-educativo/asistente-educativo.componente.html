@@ -11,7 +11,7 @@
   </header>
 
   <div class="cuerpo-asistente">
-    <p class="resumen-texto">{{ asistente.resumenExplicativo }}</p>
+    <div class="resumen-texto" [innerHTML]="asistente.resumenExplicativo | markdownSeguro"></div>
   </div>
 
   @if (asistente.recomendacion) {
@@ -19,7 +19,7 @@
       <span class="icono-bombilla" aria-hidden="true">💡</span>
       <div class="contenido-recomendacion">
         <strong>Acción recomendada:</strong>
-        <p>{{ asistente.recomendacion }}</p>
+        <div class="texto-recomendacion" [innerHTML]="asistente.recomendacion | markdownSeguro"></div>
       </div>
     </footer>
   }

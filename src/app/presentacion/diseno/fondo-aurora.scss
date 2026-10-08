@@ -1,0 +1,82 @@
+/* ==========================================================================
+   Fondo Aurora y Malla de Degradados Atmosféricos — PhishShield
+   ========================================================================== */
+
+.lienzo-aurora-fondo {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+
+  /* Resplandor superior sutil */
+  &::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: 20%;
+    width: 60vw;
+    height: 60vh;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--halo-reposo) 0%, transparent 70%);
+    filter: blur(80px);
+    opacity: 0.8;
+    transform: translateZ(0);
+    animation: derivaAurora 22s ease-in-out infinite alternate;
+  }
+
+  /* Resplandor violeta tenue */
+  &::after {
+    content: '';
+    position: absolute;
+    top: 15%;
+    right: -10%;
+    width: 50vw;
+    height: 50vh;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(191, 90, 242, 0.08) 0%, transparent 65%);
+    filter: blur(100px);
+    opacity: 0.6;
+    transform: translateZ(0);
+    animation: derivaAuroraSecundaria 28s ease-in-out infinite alternate;
+  }
+}
+
+/* Textura sutil de rejilla */
+.rejilla-patron-fondo {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.035;
+  background-size: 32px 32px;
+  background-image: linear-gradient(to right, currentColor 1px, transparent 1px),
+                    linear-gradient(to bottom, currentColor 1px, transparent 1px);
+
+  body.modo-oscuro & {
+    opacity: 0.045;
+  }
+}
+
+@keyframes derivaAurora {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(6vw, 4vh) scale(1.1); }
+  100% { transform: translate(-4vw, 8vh) scale(0.95); }
+}
+
+@keyframes derivaAuroraSecundaria {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-8vw, -5vh) scale(1.15); }
+  100% { transform: translate(5vw, 6vh) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lienzo-aurora-fondo::before,
+  .lienzo-aurora-fondo::after {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,66 @@
+/* ==========================================================================
+   Tokens de Superficie y Profundidad — PhishShield (Apple Glassmorphism)
+   ========================================================================== */
+
+:root {
+  /* Niveles de Superficie en Modo Claro */
+  --superficie-1: rgba(255, 255, 255, 0.72);
+  --superficie-2: rgba(255, 255, 255, 0.88);
+  --superficie-3: rgba(255, 255, 255, 0.96);
+
+  /* Bordes de Cristal y Resplandor Superior (Inner Highlight) */
+  --brillo-borde: rgba(0, 0, 0, 0.08);
+  --brillo-borde-resaltado: rgba(255, 255, 255, 0.8);
+  --brillo-borde-superior: linear-gradient(180deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.1) 100%);
+
+  /* Sombras Multicapa */
+  --sombra-base: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --sombra-elevada: 0 8px 24px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03);
+  --sombra-flotante: 0 20px 48px rgba(0, 0, 0, 0.14), 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  /* Halos Atmosféricos */
+  --halo-reposo: rgba(0, 113, 227, 0.08);
+  --halo-escaneo: rgba(0, 113, 227, 0.2);
+  --halo-bajo: rgba(52, 199, 89, 0.15);
+  --halo-medio: rgba(255, 149, 0, 0.18);
+  --halo-alto: rgba(255, 59, 48, 0.22);
+  --halo-error: rgba(142, 142, 147, 0.15);
+}
+
+body.modo-oscuro {
+  /* Niveles de Superficie en Modo Oscuro (Pure Dark Material) */
+  --superficie-1: rgba(18, 18, 22, 0.75);
+  --superficie-2: rgba(28, 28, 34, 0.85);
+  --superficie-3: rgba(40, 40, 48, 0.94);
+
+  /* Bordes de Cristal y Luz Superior */
+  --brillo-borde: rgba(255, 255, 255, 0.12);
+  --brillo-borde-resaltado: rgba(255, 255, 255, 0.22);
+  --brillo-borde-superior: linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.03) 100%);
+
+  /* Sombras Profundas */
+  --sombra-base: 0 2px 10px rgba(0, 0, 0, 0.4);
+  --sombra-elevada: 0 10px 30px rgba(0, 0, 0, 0.65), 0 2px 8px rgba(0, 0, 0, 0.35);
+  --sombra-flotante: 0 24px 60px rgba(0, 0, 0, 0.85), 0 6px 16px rgba(0, 0, 0, 0.5);
+
+  /* Halos Atmosféricos Oscuros */
+  --halo-reposo: rgba(41, 151, 255, 0.12);
+  --halo-escaneo: rgba(41, 151, 255, 0.32);
+  --halo-bajo: rgba(48, 209, 88, 0.22);
+  --halo-medio: rgba(255, 159, 10, 0.25);
+  --halo-alto: rgba(255, 69, 58, 0.32);
+  --halo-error: rgba(142, 142, 147, 0.2);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --superficie-1: #ffffff;
+    --superficie-2: #f2f2f7;
+    --superficie-3: #e5e5ea;
+  }
+  body.modo-oscuro {
+    --superficie-1: #161618;
+    --superficie-2: #222226;
+    --superficie-3: #2c2c30;
+  }
+}
