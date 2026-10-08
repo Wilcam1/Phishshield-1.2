@@ -1,7 +1,18 @@
+# Dependencias y entornos
 node_modules/
-__MACOSX/
-generated_figures/
-*.pyc
-*.DS_Store
-*.log
+venv/
 .env
+
+# Metadatos del sistema y macOS
+.DS_Store
+__MACOSX/
+*.log
+
+# Caché y compilados de Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Archivos temporales y de depuración
+generated_figures/
+*.tmp
