@@ -1,7 +1,7 @@
 @use '../../diseno/tokens' as *;
 
 .contenedor-capas-escaneo {
-  padding: var(--espaciado-xl);
+  padding: var(--espaciado-lg);
   border-radius: var(--radio-grande);
   display: flex;
   flex-direction: column;
@@ -11,13 +11,60 @@
   box-shadow: var(--sombra-elevada);
 }
 
+// Pista de progreso continua superior
+.pista-progreso-superior {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.05);
+
+  .barra-progreso-activa {
+    height: 100%;
+    background: linear-gradient(90deg, #38bdf8 0%, #34d399 100%);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+    transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
 .escaneo-cabecera {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   position: relative;
   padding-bottom: var(--espaciado-sm);
   border-bottom: 1px solid var(--brillo-borde);
+}
+
+.fila-titulo-progreso {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaciado-sm);
+  flex-wrap: wrap;
+}
+
+.insignia-progreso-global {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: var(--superficie-2);
+  border: 1px solid var(--brillo-borde);
+  font-size: 0.75rem;
+
+  .etiqueta-paso {
+    color: var(--color-primario);
+    font-weight: 600;
+  }
+
+  .porcentaje-cifra {
+    font-family: var(--fuente-monoespaciada);
+    font-weight: 700;
+    color: var(--color-texto-primario);
+  }
 }
 
 .pulso-linea-radar {
@@ -27,17 +74,17 @@
   right: -24px;
   height: 2px;
   background: linear-gradient(90deg, transparent 0%, var(--color-primario) 50%, transparent 100%);
-  animation: barridoRadar 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: barridoRadar 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 @keyframes barridoRadar {
   0% { transform: translateY(0); opacity: 0; }
-  50% { opacity: 1; }
+  50% { opacity: 0.8; }
   100% { transform: translateY(180px); opacity: 0; }
 }
 
 .titulo-escaneo {
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--color-texto-primario);
   letter-spacing: -0.015em;
@@ -45,17 +92,19 @@
 }
 
 .url-escaneo-destino {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--color-primario);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 520px;
+  display: block;
 }
 
 .lista-capas {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .fila-capa {
@@ -66,36 +115,79 @@
   border-radius: var(--radio-mediano);
   background: var(--color-fondo-entrada);
   border: 1px solid var(--brillo-borde);
-  transition: all var(--tiempo-hover) var(--resorte-critico);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 
+  // 1. PASO EN PROGRESO: Resplandor cian e iluminación activa
   &.estado-en_progreso {
-    background: var(--superficie-3);
-    border-color: var(--color-primario);
-    box-shadow: 0 0 16px var(--halo-escaneo);
+    background: rgba(56, 189, 248, 0.08);
+    border-color: rgba(56, 189, 248, 0.5);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.18), inset 0 0 12px rgba(56, 189, 248, 0.05);
     transform: translateX(4px);
 
     .icono-envoltorio {
       color: var(--color-primario);
-      background: var(--color-primario-fondo);
+      background: rgba(56, 189, 248, 0.15);
+      border-color: rgba(56, 189, 248, 0.4);
     }
+
     .nombre-capa {
       color: var(--color-primario);
       font-weight: 700;
     }
   }
 
+  // 2. PASO COMPLETADO: Tinte esmeralda y check verificado
   &.estado-completada {
     opacity: 0.95;
+    background: rgba(52, 211, 153, 0.03);
+    border-color: rgba(52, 211, 153, 0.25);
+
     .icono-envoltorio {
-      color: var(--color-seguro);
-      background: var(--color-seguro-fondo);
+      color: #34d399;
+      background: rgba(52, 211, 153, 0.12);
+      border-color: rgba(52, 211, 153, 0.3);
     }
   }
 
+  // 3. PASO PENDIENTE: Atenuado para marcar orden
   &.estado-pendiente {
-    opacity: 0.55;
+    opacity: 0.42;
   }
 }
+
+.linea-nombre-etiqueta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.etiqueta-estado {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 9999px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+
+  &.en-curso {
+    background: rgba(56, 189, 248, 0.18);
+    color: var(--color-primario);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    animation: pulsoEtiqueta 1.2s ease-in-out infinite alternate;
+  }
+
+  &.completado {
+    background: rgba(52, 211, 153, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(52, 211, 153, 0.35);
+  }
+}
+
+@keyframes pulsoEtiqueta {
+  from { opacity: 0.7; }
+  to { opacity: 1; }
+}
+
 
 .icono-envoltorio {
   width: 34px;

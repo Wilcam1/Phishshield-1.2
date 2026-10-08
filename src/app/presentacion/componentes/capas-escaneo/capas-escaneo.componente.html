@@ -1,21 +1,49 @@
 <div class="contenedor-capas-escaneo superficie-nivel-2" role="status" aria-live="polite">
+  <!-- Barra de progreso continua superior -->
+  <div class="pista-progreso-superior" aria-hidden="true">
+    <div
+      class="barra-progreso-activa"
+      [style.width.%]="porcentajeProgreso()"
+    ></div>
+  </div>
+
   <div class="escaneo-cabecera">
     <div class="pulso-linea-radar" aria-hidden="true"></div>
-    <div class="texto-cabecera-escaneo">
-      <h4 class="titulo-escaneo">Secuencia de Inspección Forense Activa</h4>
-      <span class="url-escaneo-destino texto-mono" [title]="urlObjetivo">{{ urlObjetivo }}</span>
+    <div class="fila-titulo-progreso">
+      <div class="texto-cabecera-escaneo">
+        <h4 class="titulo-escaneo">Secuencia de Inspección Forense Activa</h4>
+        @if (urlObjetivo) {
+          <span class="url-escaneo-destino texto-mono" [title]="urlObjetivo">{{ urlObjetivo }}</span>
+        }
+      </div>
+      <div class="insignia-progreso-global">
+        <span class="etiqueta-paso">Paso {{ indicePasoActivo() }} de 5</span>
+        <span class="porcentaje-cifra">{{ porcentajeProgreso() }}%</span>
+      </div>
     </div>
   </div>
 
-  <div class="lista-capas">
-    @for (capa of capas(); track capa.id) {
-      <div class="fila-capa" [class]="'estado-' + capa.estado">
+  <div class="lista-capas" role="list">
+    @for (capa of capas(); track capa.id; let i = $index) {
+      <div
+        class="fila-capa"
+        [class]="'estado-' + capa.estado"
+        [class.capa-activa]="capa.estado === 'en_progreso'"
+        role="listitem"
+      >
         <div class="icono-envoltorio">
           <app-icono [nombre]="capa.icono" [tamano]="18" />
         </div>
 
         <div class="info-capa">
-          <span class="nombre-capa">{{ capa.nombre }}</span>
+          <div class="linea-nombre-etiqueta">
+            <span class="nombre-capa">{{ capa.nombre }}</span>
+            @if (capa.estado === 'en_progreso') {
+              <span class="etiqueta-estado en-curso">Analizando</span>
+            } @else if (capa.estado === 'completada') {
+              <span class="etiqueta-estado completado">Verificado</span>
+            }
+          </div>
           <span class="descripcion-capa">{{ capa.descripcion }}</span>
         </div>
 
@@ -29,7 +57,7 @@
             }
             @case ('completada') {
               <span class="check-completado animado" aria-label="Capa verificada">
-                <app-icono nombre="copiado" [tamano]="16" color="#30d158" />
+                <app-icono nombre="check" [tamano]="16" color="#34d399" />
               </span>
             }
           }
@@ -38,3 +66,4 @@
     }
   </div>
 </div>
+

@@ -1,5 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnChanges, OnDestroy, signal, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  computed,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  signal,
+  SimpleChanges,
+} from '@angular/core';
 import { IconoComponente, NombreIcono } from '../icono/icono.componente';
 
 export type EstadoCapaEscaneo = 'pendiente' | 'en_progreso' | 'completada';
@@ -19,7 +28,7 @@ export interface CapaEscaneoInfo {
   templateUrl: './capas-escaneo.componente.html',
   styleUrl: './capas-escaneo.componente.scss',
 })
-export class CapasEscaneoComponente implements OnChanges, OnDestroy {
+export class CapasEscaneoComponente implements OnInit, OnChanges, OnDestroy {
   @Input() escaneando = false;
   @Input() set activo(val: boolean) {
     this.escaneando = val;
@@ -28,7 +37,6 @@ export class CapasEscaneoComponente implements OnChanges, OnDestroy {
     return this.escaneando;
   }
   @Input() urlObjetivo = '';
-
 
   readonly capas = signal<CapaEscaneoInfo[]>([
     {
@@ -68,11 +76,33 @@ export class CapasEscaneoComponente implements OnChanges, OnDestroy {
     },
   ]);
 
+  readonly indicePasoActivo = computed(() => {
+    const lista = this.capas();
+    const idxEnProgreso = lista.findIndex((c) => c.estado === 'en_progreso');
+    if (idxEnProgreso !== -1) return idxEnProgreso + 1;
+    const totalCompletadas = lista.filter((c) => c.estado === 'completada').length;
+    return Math.min(lista.length, totalCompletadas + 1);
+  });
+
+  readonly porcentajeProgreso = computed(() => {
+    const lista = this.capas();
+    const completadas = lista.filter((c) => c.estado === 'completada').length;
+    const enProgreso = lista.some((c) => c.estado === 'en_progreso') ? 0.5 : 0;
+    return Math.min(100, Math.round(((completadas + enProgreso) / lista.length) * 100));
+  });
+
   private temporizadores: ReturnType<typeof setTimeout>[] = [];
 
+  ngOnInit(): void {
+    if (this.escaneando || this.activo) {
+      this.iniciarSecuenciaEscaneo();
+    }
+  }
+
   ngOnChanges(cambios: SimpleChanges): void {
-    if (cambios['escaneando']) {
-      if (this.escaneando) {
+    if (cambios['escaneando'] || cambios['activo']) {
+      const estaActivo = this.escaneando || this.activo;
+      if (estaActivo) {
         this.iniciarSecuenciaEscaneo();
       } else {
         this.completarTodoInmediato();
@@ -91,7 +121,7 @@ export class CapasEscaneoComponente implements OnChanges, OnDestroy {
     this.actualizarEstadoTodas('pendiente');
 
     const lista = this.capas();
-    const duracionPaso = 350; // ms entre fases
+    const duracionPaso = 340; // ms entre fases forenses
 
     lista.forEach((_, idx) => {
       // Pasa a en_progreso
@@ -128,3 +158,4 @@ export class CapasEscaneoComponente implements OnChanges, OnDestroy {
     this.temporizadores = [];
   }
 }
+

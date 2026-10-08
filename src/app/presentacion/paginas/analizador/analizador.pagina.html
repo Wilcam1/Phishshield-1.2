@@ -88,9 +88,13 @@
     <!-- Línea de Escaneo Progresivo Multicapa durante el análisis -->
     @if (servicioAnalisis.estaCargando()) {
       <div class="seccion-progreso-escaneo animate-fade-in">
-        <app-capas-escaneo [activo]="servicioAnalisis.estaCargando()" />
+        <app-capas-escaneo
+          [activo]="servicioAnalisis.estaCargando()"
+          [urlObjetivo]="urlParaBarra"
+        />
       </div>
     }
+
 
     <!-- Resultados Dinámicos del Análisis en Cascada Escalonada -->
     @if (servicioAnalisis.resultadoActual(); as resultado) {
