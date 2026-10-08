@@ -1,0 +1,7 @@
+node_modules/
+__MACOSX/
+generated_figures/
+*.pyc
+*.DS_Store
+*.log
+.env
