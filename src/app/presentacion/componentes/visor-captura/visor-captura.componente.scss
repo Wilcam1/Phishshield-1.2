@@ -1,40 +1,190 @@
+@use '../../diseno/tokens' as *;
+
 .visor-captura {
   overflow: hidden;
-  border-radius: var(--radio-grande);
+  border-radius: var(--radio-lg);
   display: flex;
   flex-direction: column;
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  box-shadow: var(--sombra-sm);
+  transition: border-color var(--transicion-normal);
+
+  &:hover {
+    border-color: var(--color-borde-fuerte);
+  }
 }
 
 .encabezado-visor {
-  padding: 14px 18px;
+  padding: var(--espaciado-md) var(--espaciado-lg);
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: var(--espaciado-sm);
-  background: var(--color-fondo-entrada);
-  border-bottom: 1px solid var(--color-borde-cristal);
+  background: var(--color-superficie-elevada);
+  border-bottom: 1px solid var(--color-borde);
+  flex-wrap: wrap;
+
+  .izquierda-cabecera {
+    display: flex;
+    align-items: center;
+    gap: var(--espaciado-sm);
+  }
 
   .icono-dispositivo {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
   }
 
   .titulo-visor {
-    font-size: 0.95rem;
+    font-size: 1rem;
     font-weight: 600;
-    color: var(--color-texto-primario);
+    color: var(--color-texto);
+    margin: 0;
+  }
+
+  .subtitulo-visor {
+    font-size: 0.75rem;
+    color: var(--color-texto-secundario);
+    display: block;
+    margin-top: 1px;
+  }
+}
+
+.enlace-externo-seguro {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-primario);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  padding: 5px 12px;
+  border-radius: var(--radio-md);
+  text-decoration: none;
+  transition: all var(--transicion-rapida);
+
+  &:hover {
+    border-color: var(--color-primario);
+    transform: translateY(-1px);
   }
 }
 
 .cuerpo-visor {
   position: relative;
-  min-height: 380px;
-  background: rgba(0, 0, 0, 0.05);
+  min-height: 420px;
+  background: rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
 
-.indicador-carga,
+// ----------------------------------------------------
+// ESQUELETO SHIMMER APPLE DESIGN
+// ----------------------------------------------------
+.esqueleto-contenedor {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--espaciado-lg);
+  background: var(--color-superficie);
+  justify-content: space-between;
+}
+
+.esqueleto-tarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.shimmer-animado {
+  .esqueleto-barra,
+  .esqueleto-hero,
+  .esqueleto-bloque {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.03) 0%,
+      rgba(255, 255, 255, 0.09) 50%,
+      rgba(255, 255, 255, 0.03) 100%
+    );
+    background-size: 200% 100%;
+    animation: brilloShimmer 1.5s infinite linear;
+    border-radius: var(--radio-md);
+  }
+}
+
+@keyframes brilloShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.esqueleto-barra-corta {
+  height: 28px;
+  width: 40%;
+}
+
+.esqueleto-hero {
+  height: 180px;
+  width: 100%;
+}
+
+.esqueleto-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.esqueleto-bloque {
+  height: 90px;
+}
+
+.indicador-carga-flotante {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: var(--espaciado-sm);
+  background: var(--color-superficie-elevada);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-lg);
+  padding: 10px 18px;
+  box-shadow: var(--sombra-md);
+  z-index: 2;
+
+  .spinner-suave {
+    font-size: 1.3rem;
+    animation: balanceoSuave 1.5s infinite ease-in-out;
+  }
+
+  .texto-carga-grupo {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.82rem;
+
+    strong {
+      color: var(--color-texto);
+    }
+
+    span {
+      color: var(--color-texto-secundario);
+      font-size: 0.75rem;
+    }
+
+    .tiempo-aviso {
+      color: var(--color-alerta);
+      font-weight: 500;
+    }
+  }
+}
+
+@keyframes balanceoSuave {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(180deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// ----------------------------------------------------
+// MENSAJE DE ERROR
+// ----------------------------------------------------
 .mensaje-error {
   position: absolute;
   inset: 0;
@@ -42,39 +192,83 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--espaciado-sm);
-  padding: var(--espaciado-lg);
+  gap: var(--espaciado-md);
+  padding: var(--espaciado-xl);
   text-align: center;
-  color: var(--color-texto-secundario);
-  font-size: 0.95rem;
-}
+  background: var(--color-superficie);
 
-.mensaje-error {
-  color: var(--color-advertencia);
+  .icono-alerta {
+    font-size: 2.5rem;
+  }
 
-  span {
-    font-size: 2rem;
+  .texto-error-grupo {
+    max-width: 460px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .titulo-error {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-peligro);
+    margin: 0;
+  }
+
+  .detalle-error {
+    font-size: 0.85rem;
+    color: var(--color-texto-secundario);
+    line-height: 1.5;
+    margin: 0;
   }
 }
 
+.boton-reintentar {
+  margin-top: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: var(--radio-md);
+  background: var(--color-primario);
+  color: white;
+  border: 1px solid var(--color-primario);
+  cursor: pointer;
+  transition: all var(--transicion-rapida);
+
+  &:hover {
+    background: var(--color-primario-oscuro, #0056b3);
+    transform: translateY(-1px);
+  }
+}
+
+// ----------------------------------------------------
+// IMAGEN RENDERIZADA
+// ----------------------------------------------------
 .imagen-captura {
   width: 100%;
-  height: 380px;
+  height: 420px;
   object-fit: cover;
   object-position: top;
   opacity: 0;
-  transition: opacity var(--duracion-normal) var(--curva-suave);
+  transform: scale(0.99);
+  transition: opacity 0.35s var(--curva-suave), transform 0.35s var(--curva-suave);
 
   &.visible {
     opacity: 1;
+    transform: scale(1);
   }
 }
 
 .pie-visor {
-  padding: 12px 18px;
-  background: var(--color-fondo-entrada);
-  border-top: 1px solid var(--color-borde-cristal);
-  font-size: 0.8rem;
+  padding: var(--espaciado-sm) var(--espaciado-lg);
+  background: var(--color-superficie-elevada);
+  border-top: 1px solid var(--color-borde);
+  font-size: 0.78rem;
   color: var(--color-texto-secundario);
   line-height: 1.45;
+
+  p {
+    margin: 0;
+  }
 }

@@ -1,37 +1,95 @@
 <section class="visor-captura superficie-cristal" role="region" aria-label="Vista previa de la página analizada">
   <header class="encabezado-visor">
-    <span class="icono-dispositivo" aria-hidden="true">📱</span>
-    <h4 class="titulo-visor">Vista Previa de la Página (Emulación Headless)</h4>
+    <div class="izquierda-cabecera">
+      <span class="icono-dispositivo" aria-hidden="true">📱</span>
+      <div>
+        <h4 class="titulo-visor">Vista Previa de la Página (Emulación Headless)</h4>
+        <span class="subtitulo-visor">Renderizado en navegador aislado y seguro</span>
+      </div>
+    </div>
+
+    @if (urlDestino) {
+      <div class="acciones-visor">
+        <a
+          [href]="urlDestino"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="enlace-externo-seguro"
+          title="Abrir destino en pestaña nueva bajo precaución"
+        >
+          ↗ Abrir URL
+        </a>
+      </div>
+    }
   </header>
 
   <div class="cuerpo-visor">
-    @if (estaCargando) {
-      <div class="indicador-carga" aria-live="polite">
-        <span class="animacion-giro" aria-hidden="true">⏳</span>
-        <span>Generando captura de pantalla segura...</span>
+    <!-- ESQUELETO DE CARGA SHIMMER APPLE DESIGN -->
+    @if (estaCargando()) {
+      <div class="esqueleto-contenedor" aria-live="polite">
+        <div class="esqueleto-tarjeta shimmer-animado">
+          <div class="esqueleto-barra esqueleto-barra-corta"></div>
+          <div class="esqueleto-hero"></div>
+          <div class="esqueleto-grid">
+            <div class="esqueleto-bloque"></div>
+            <div class="esqueleto-bloque"></div>
+            <div class="esqueleto-bloque"></div>
+          </div>
+        </div>
+
+        <div class="indicador-carga-flotante">
+          <span class="spinner-suave" aria-hidden="true">⏳</span>
+          <div class="texto-carga-grupo">
+            <strong>Generando captura ultrarrápida...</strong>
+            @if (segundosEsperando() >= 3) {
+              <span class="tiempo-aviso">El servidor remoto está respondiendo con lentitud ({{ segundosEsperando() }}s)</span>
+            } @else {
+              <span>Conectando con motor de renderizado seguro</span>
+            }
+          </div>
+        </div>
       </div>
     }
 
-    @if (tieneError) {
+    <!-- MENSAJE DE ERROR CON REINTENTO -->
+    @if (tieneError()) {
       <div class="mensaje-error" role="alert">
-        <span aria-hidden="true">⚠️</span>
-        <p>No se pudo generar la vista previa (el servidor bloqueó agentes automatizados o está fuera de línea).</p>
+        <span class="icono-alerta" aria-hidden="true">⚠️</span>
+        <div class="texto-error-grupo">
+          <h5 class="titulo-error">No se pudo generar la vista previa</h5>
+          <p class="detalle-error">
+            El servidor de destino rechazó la conexión automatizada (código 403 / WAF antibot) o no se encuentra en línea.
+          </p>
+          <button
+            type="button"
+            class="boton-reintentar"
+            (click)="reintentar()"
+            title="Reintentar captura"
+          >
+            🔄 Reintentar captura
+          </button>
+        </div>
       </div>
     }
 
-    <img
-      [src]="urlCaptura"
-      [alt]="'Vista previa capturada de ' + urlDestino"
-      class="imagen-captura"
-      [class.visible]="!estaCargando && !tieneError"
-      (load)="alCargarImagen()"
-      (error)="alFallarImagen()"
-    />
+    <!-- IMAGEN PREVIA RENDERIZADA -->
+    @if (urlCapturaEfectiva()) {
+      <img
+        [src]="urlCapturaEfectiva()"
+        [alt]="'Vista previa capturada de ' + urlDestino"
+        class="imagen-captura"
+        [class.visible]="!estaCargando() && !tieneError()"
+        loading="eager"
+        decoding="async"
+        (load)="alCargarImagen()"
+        (error)="alFallarImagen()"
+      />
+    }
   </div>
 
   <footer class="pie-visor">
     <p>
-      💡 <strong>Nota Técnica SOC:</strong> Si la captura falla o devuelve <em>403 Forbidden</em> pero el sitio carga en tu navegador, el destino aplica técnicas de ofuscación o antibot para evadir analizadores de ciberseguridad.
+      💡 <strong>Nota Técnica SOC:</strong> Las capturas se ejecutan en entorno sandbox aislado mediante Puppeteer optimizado con compresión JPEG y caché local para máxima velocidad.
     </p>
   </footer>
 </section>
