@@ -1,0 +1,110 @@
+@if (visible && elemento) {
+  <div
+    class="telon-drawer"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="titulo-drawer"
+    tabindex="-1"
+    (click)="alHacerClicFondo($event)"
+    (keydown.escape)="cerrar()"
+  >
+    <aside class="panel-drawer superficie-elevada">
+      <header class="encabezado-drawer">
+        <div class="meta-drawer">
+          <span class="insignia-pildora" [ngClass]="elemento.riesgo | riesgoColor">
+            {{ elemento.riesgo | uppercase }}
+          </span>
+          <span class="puntuacion-badge">
+            Score: <strong>{{ elemento.puntuacion }}/10</strong>
+          </span>
+        </div>
+        <button
+          type="button"
+          class="boton-cerrar-drawer"
+          (click)="cerrar()"
+          aria-label="Cerrar inspector"
+        >
+          ✕
+        </button>
+      </header>
+
+      <div class="cuerpo-drawer">
+        <div class="seccion-drawer">
+          <span class="etiqueta-drawer">URL Evaluada</span>
+          <div class="caja-url">
+            <span class="texto-url texto-mono" [title]="elemento.url">{{ elemento.url }}</span>
+            <button
+              type="button"
+              class="boton-accion-url"
+              (click)="copiarUrl()"
+              [title]="estaCopiado ? 'Copiado' : 'Copiar URL'"
+            >
+              {{ estaCopiado ? '✅ Copiado' : '📋 Copiar' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="seccion-drawer">
+          <span class="etiqueta-drawer">Fecha de Análisis Forense</span>
+          <p class="valor-texto">{{ elemento.marcaTiempo | formatoFecha }}</p>
+        </div>
+
+        @if (urlCaptura) {
+          <div class="seccion-drawer">
+            <span class="etiqueta-drawer">Miniatura DOM Headless</span>
+            <div class="miniatura-envoltorio">
+              <img
+                [src]="urlCaptura"
+                [alt]="'Captura de ' + elemento.url"
+                class="miniatura-imagen"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        }
+
+        <div class="seccion-drawer">
+          <span class="etiqueta-drawer">Diagnóstico del Analista SOC</span>
+          <div class="diagnostico-caja" [ngClass]="'borde-' + (elemento.riesgo | riesgoColor)">
+            @switch (elemento.riesgo) {
+              @case ('alto') {
+                <p>
+                  <strong>🚨 Incidente Crítico:</strong> El modelo de Machine Learning y las heurísticas detectaron suplantación bancaria o punycode sospechoso. Recomendado mantener en lista de bloqueo corporativo.
+                </p>
+              }
+              @case ('medio') {
+                <p>
+                  <strong>⚠️ Observación Requerida:</strong> Parámetros anómalos o certificado emitido hace menos de 30 días. Monitorear solicitudes salientes hacia este host.
+                </p>
+              }
+              @case ('bajo') {
+                <p>
+                  <strong>🟢 Tráfico Confiable:</strong> Sin patrones de typosquatting ni formularios de captura clandestina.
+                </p>
+              }
+            }
+          </div>
+        </div>
+      </div>
+
+      <footer class="pie-drawer">
+        <button
+          type="button"
+          class="boton-secundario boton-peligro"
+          (click)="eliminar()"
+          title="Eliminar de la auditoría"
+        >
+          🗑️ Eliminar Incidente
+        </button>
+
+        <button
+          type="button"
+          class="boton-primario"
+          (click)="cerrar()"
+        >
+          Listo
+        </button>
+      </footer>
+    </aside>
+  </div>
+}

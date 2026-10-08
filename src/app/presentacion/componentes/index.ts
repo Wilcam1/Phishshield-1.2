@@ -17,3 +17,5 @@ export * from './dialogo-cambio-contrasena/dialogo-cambio-contrasena.componente'
 export * from './dialogo-urls-categoria/dialogo-urls-categoria.componente';
 export * from './tabla-historial-global/tabla-historial-global.componente';
 export * from './lista-alertas-comunitarias/lista-alertas-comunitarias.componente';
+export * from './drawer-incidente/drawer-incidente.componente';
+export * from './telemetria-servicios/telemetria-servicios.componente';

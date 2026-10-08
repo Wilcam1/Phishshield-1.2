@@ -1,95 +1,283 @@
-<div class="diseno-panel-soc">
+<div class="diseno-soc-contenedor" [class.sidebar-colapsado]="sidebarColapsado()">
   <app-notificacion-flotante />
 
-  <header class="barra-navegacion-soc" role="banner">
-    <div class="identidad-soc">
+  <!-- BARRA LATERAL (COMMAND RAIL / SIDEBAR) -->
+  <aside class="sidebar-soc" role="navigation" aria-label="Navegación del Centro de Operaciones">
+    <div class="sidebar-cabecera">
+      <div class="marca-soc">
+        <span class="marca-icono" aria-hidden="true">🛡️</span>
+        @if (!sidebarColapsado()) {
+          <div class="marca-texto">
+            <span class="marca-titulo">PhishShield</span>
+            <span class="marca-badge">ENTERPRISE SOC</span>
+          </div>
+        }
+      </div>
       <button
         type="button"
-        class="boton-volver"
+        class="boton-colapsar"
+        (click)="alternarSidebar()"
+        [attr.aria-label]="sidebarColapsado() ? 'Expandir barra lateral' : 'Colapsar barra lateral'"
+        [title]="sidebarColapsado() ? 'Expandir barra' : 'Colapsar barra'"
+      >
+        {{ sidebarColapsado() ? '❯' : '❮' }}
+      </button>
+    </div>
+
+    <!-- Menú de Navegación por Pestañas -->
+    <nav class="sidebar-menu">
+      <button
+        type="button"
+        class="menu-item"
+        [class.activo]="pestanaActiva() === 'general'"
+        (click)="establecerPestana('general')"
+        title="Tablero General"
+      >
+        <span class="menu-icono">📊</span>
+        @if (!sidebarColapsado()) {
+          <span class="menu-texto">Tablero General</span>
+        }
+      </button>
+
+      <button
+        type="button"
+        class="menu-item"
+        [class.activo]="pestanaActiva() === 'auditoria'"
+        (click)="establecerPestana('auditoria')"
+        title="Auditoría Forense"
+      >
+        <span class="menu-icono">📋</span>
+        @if (!sidebarColapsado()) {
+          <span class="menu-texto">Auditoría Forense</span>
+          @if (totalIncidentesCriticos() > 0) {
+            <span class="badge-alerta-menu">{{ totalIncidentesCriticos() }}</span>
+          }
+        }
+      </button>
+
+      <button
+        type="button"
+        class="menu-item"
+        [class.activo]="pestanaActiva() === 'alertas'"
+        (click)="establecerPestana('alertas')"
+        title="Feed de Alertas"
+      >
+        <span class="menu-icono">🚨</span>
+        @if (!sidebarColapsado()) {
+          <span class="menu-texto">Alertas Comunitarias</span>
+          @if (totalAlertasPendientes() > 0) {
+            <span class="badge-notif-menu">{{ totalAlertasPendientes() }}</span>
+          }
+        }
+      </button>
+
+      <button
+        type="button"
+        class="menu-item"
+        [class.activo]="pestanaActiva() === 'telemetria'"
+        (click)="establecerPestana('telemetria')"
+        title="Salud del Ecosistema"
+      >
+        <span class="menu-icono">📡</span>
+        @if (!sidebarColapsado()) {
+          <span class="menu-texto">Salud Microservicios</span>
+          <span class="pulso-verde-menu"></span>
+        }
+      </button>
+    </nav>
+
+    <!-- Pie del Sidebar con Estado del Operador -->
+    <div class="sidebar-pie">
+      <div class="operador-tarjeta">
+        <div class="operador-avatar">👨‍💻</div>
+        @if (!sidebarColapsado()) {
+          <div class="operador-info">
+            <span class="operador-nombre">Operador SOC</span>
+            <span class="operador-rol">SecOps Nivel 3</span>
+          </div>
+        }
+      </div>
+
+      <button
+        type="button"
+        class="boton-retorno-publico"
         (click)="volverAlAnalizador()"
-        title="Volver al verificador público"
+        title="Volver a la interfaz del Verificador público"
       >
-        ← Verificador
+        <span class="retorno-icono">🌐</span>
+        @if (!sidebarColapsado()) {
+          <span>Verificador Público</span>
+        }
       </button>
-      <div class="titulo-grupo">
-        <span class="icono-soc" aria-hidden="true">📊</span>
-        <div>
-          <h1 class="titulo-soc titular-mediano">Panel SOC & Auditoría</h1>
-          <span class="subtitulo-soc">Centro de Operaciones de Ciberseguridad</span>
-        </div>
-      </div>
     </div>
+  </aside>
 
-    <div class="acciones-soc">
-      <button
-        type="button"
-        class="boton-secundario"
-        (click)="cargarDatos()"
-        title="Recargar métricas e historiales"
-      >
-        <span>🔄 Refrescar</span>
-      </button>
-
-      <button
-        type="button"
-        class="boton-secundario"
-        (click)="abrirModalSeguridad()"
-        title="Cambiar contraseña de administrador"
-      >
-        <span>🔑 Seguridad</span>
-      </button>
-
-      <button
-        type="button"
-        class="boton-secundario boton-peligro"
-        (click)="cerrarSesion()"
-        title="Finalizar sesión"
-      >
-        <span>🚪 Salir</span>
-      </button>
-
-      <app-selector-tema />
-    </div>
-  </header>
-
-  <main class="contenedor-soc" role="main">
-    <!-- Fila de Métricas del SOC -->
-    <app-panel-metricas
-      [estadisticas]="servicioAdmin.estadisticas()"
-      [modoAdmin]="true"
-      (alSeleccionarFiltro)="abrirModalCategoria($event)"
-      (alActualizar)="cargarDatos()"
-    />
-
-    <!-- Cuadrícula Principal del SOC -->
-    <div class="rejilla-soc">
-      <!-- Columna Izquierda: Auditoría Histórica Global -->
-      <div class="columna-principal">
-        <app-tabla-historial-global
-          [historial]="servicioAdmin.historial()"
-          [estaCargando]="servicioAdmin.estaCargando()"
-          (alEliminar)="eliminarRegistro($event)"
-          (alExportarCsv)="exportarCsv()"
-        />
+  <!-- ÁREA DE CONTENIDO PRINCIPAL -->
+  <div class="area-trabajo-soc">
+    <!-- BARRA SUPERIOR (HEADER) -->
+    <header class="topbar-soc" role="banner">
+      <div class="topbar-izquierda">
+        <h2 class="vista-titulo">
+          @switch (pestanaActiva()) {
+            @case ('general') { Tablero de Mando & Telemetría Global }
+            @case ('auditoria') { Registro Forense de Incidentes }
+            @case ('alertas') { Centro de Inteligencia & Alertas Comunitarias }
+            @case ('telemetria') { Estado y Latencia de Microservicios }
+          }
+        </h2>
+        <span class="topbar-badge-en-linea">
+          <span class="punto-vivo"></span> SOC ONLINE
+        </span>
       </div>
 
-      <!-- Columna Derecha: Donut y Alertas Comunitarias -->
-      <aside class="columna-lateral">
-        <app-grafico-distribucion-riesgo
-          [distribucion]="servicioAdmin.estadisticas()?.distribucionRiesgo || { alto: 0, medio: 0, bajo: 0 }"
-        />
+      <div class="topbar-derecha">
+        <button
+          type="button"
+          class="topbar-boton"
+          (click)="cargarDatos()"
+          title="Sincronizar telemetría y registros en vivo"
+        >
+          <span>🔄 Sincronizar</span>
+        </button>
 
-        <app-lista-alertas-comunitarias
-          [reportes]="servicioAdmin.reportes()"
-          [estaCargando]="servicioAdmin.estaCargando()"
-          (alDescartar)="descartarReporte($event)"
-          (alExportarJson)="exportarJson()"
-        />
-      </aside>
-    </div>
-  </main>
+        <button
+          type="button"
+          class="topbar-boton"
+          (click)="abrirModalSeguridad()"
+          title="Seguridad y Credenciales"
+        >
+          <span>🔑 Seguridad</span>
+        </button>
 
-  <!-- Diálogo para Cambio de Contraseña -->
+        <app-selector-tema />
+
+        <button
+          type="button"
+          class="topbar-boton boton-peligro"
+          (click)="cerrarSesion()"
+          title="Cerrar sesión del SOC"
+        >
+          <span>🚪 Salir</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- CUERPO DE LA VISTA ACTIVA -->
+    <main class="contenido-dinamico" role="main">
+      <!-- 1. PESTAÑA: TABLERO GENERAL -->
+      @if (pestanaActiva() === 'general') {
+        <section class="vista-seccion animacion-aparecer">
+          <!-- Banner de Telemetría Rápida de Servicios -->
+          <app-telemetria-servicios />
+
+          <!-- Tarjetas de Métricas Ejecutivas KPI -->
+          <app-panel-metricas
+            [estadisticas]="servicioAdmin.estadisticas()"
+            [modoAdmin]="true"
+            (alSeleccionarFiltro)="abrirModalCategoria($event)"
+            (alActualizar)="cargarDatos()"
+          />
+
+          <!-- Distribución Gráfica y Registro Forense -->
+          <div class="rejilla-doble">
+            <div class="panel-forense-resumen">
+              <app-tabla-historial-global
+                [historial]="servicioAdmin.historial()"
+                [estaCargando]="servicioAdmin.estaCargando()"
+                (alEliminar)="eliminarRegistro($event)"
+                (alExportarCsv)="exportarCsv()"
+                (alSeleccionarIncidente)="abrirInspectorIncidente($event)"
+              />
+            </div>
+
+            <div class="panel-grafico-resumen">
+              <app-grafico-distribucion-riesgo
+                [distribucion]="servicioAdmin.estadisticas()?.distribucionRiesgo || { alto: 0, medio: 0, bajo: 0 }"
+              />
+
+              <app-lista-alertas-comunitarias
+                [reportes]="servicioAdmin.reportes()"
+                [estaCargando]="servicioAdmin.estaCargando()"
+                (alDescartar)="descartarReporte($event)"
+                (alExportarJson)="exportarJson()"
+              />
+            </div>
+          </div>
+        </section>
+      }
+
+      <!-- 2. PESTAÑA: AUDITORÍA FORENSE COMPLETA -->
+      @if (pestanaActiva() === 'auditoria') {
+        <section class="vista-seccion animacion-aparecer">
+          <div class="seccion-cabecera-info">
+            <div>
+              <h3 class="seccion-titulo-grande">Auditoría Forense en Tiempo Real</h3>
+              <p class="seccion-descripcion">
+                Inspeccione cualquier incidente haciendo clic sobre su fila para abrir el Drawer de Análisis Heurístico y Mitigaciones.
+              </p>
+            </div>
+          </div>
+
+          <app-tabla-historial-global
+            [historial]="servicioAdmin.historial()"
+            [estaCargando]="servicioAdmin.estaCargando()"
+            (alEliminar)="eliminarRegistro($event)"
+            (alExportarCsv)="exportarCsv()"
+            (alSeleccionarIncidente)="abrirInspectorIncidente($event)"
+          />
+        </section>
+      }
+
+      <!-- 3. PESTAÑA: ALERTAS COMUNITARIAS -->
+      @if (pestanaActiva() === 'alertas') {
+        <section class="vista-seccion animacion-aparecer">
+          <div class="seccion-cabecera-info">
+            <div>
+              <h3 class="seccion-titulo-grande">Feed de Inteligencia de Amenazas</h3>
+              <p class="seccion-descripcion">
+                Reportes comunitarios enviados por usuarios para evaluación y triage inmediato por los analistas.
+              </p>
+            </div>
+          </div>
+
+          <div class="rejilla-alertas-completa">
+            <app-lista-alertas-comunitarias
+              [reportes]="servicioAdmin.reportes()"
+              [estaCargando]="servicioAdmin.estaCargando()"
+              (alDescartar)="descartarReporte($event)"
+              (alExportarJson)="exportarJson()"
+            />
+          </div>
+        </section>
+      }
+
+      <!-- 4. PESTAÑA: SALUD DE MICROSERVICIOS -->
+      @if (pestanaActiva() === 'telemetria') {
+        <section class="vista-seccion animacion-aparecer">
+          <div class="seccion-cabecera-info">
+            <div>
+              <h3 class="seccion-titulo-grande">Monitoreo de Infraestructura de Microservicios</h3>
+              <p class="seccion-descripcion">
+                Telemetría viva de los motores de procesamiento: API Backend Node.js, Pipeline de Machine Learning e Inteligencia Generativa.
+              </p>
+            </div>
+          </div>
+
+          <app-telemetria-servicios />
+        </section>
+      }
+    </main>
+  </div>
+
+  <!-- INSPECTOR FORENSE DESLIZANTE (DRAWER / SHEET CON FÍSICA APPLE) -->
+  <app-drawer-incidente
+    [incidente]="incidenteSeleccionado()"
+    [visible]="incidenteSeleccionado() !== null"
+    (alCerrar)="cerrarInspector()"
+    (alEliminar)="eliminarRegistro($event)"
+  />
+
+  <!-- MODAL CAMBIO DE CONTRASEÑA -->
   <app-dialogo-cambio-contrasena
     [visible]="modalSeguridadVisible"
     [estaCargando]="servicioAdmin.estaCargando()"
@@ -98,7 +286,7 @@
     (alCerrar)="modalSeguridadVisible = false"
   />
 
-  <!-- Diálogo Explorador de URLs por Categoría -->
+  <!-- MODAL EXPLORADOR DE URLS POR CATEGORÍA -->
   <app-dialogo-urls-categoria
     [visible]="modalCategoriaVisible"
     [titulo]="tituloModalCategoria"

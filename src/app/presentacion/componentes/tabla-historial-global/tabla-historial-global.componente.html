@@ -1,68 +1,164 @@
-<section class="tarjeta-tabla superficie-cristal" role="region" aria-label="Historial global de análisis">
+<section class="tarjeta-tabla superficie-cristal" role="region" aria-label="Historial global de análisis forense">
   <header class="encabezado-tabla">
     <div class="izquierda-encabezado">
-      <span class="icono-tabla" aria-hidden="true">📋</span>
-      <h4 class="titulo-tabla">Auditoría Global de Análisis SOC</h4>
+      <div class="icono-insignia">📋</div>
+      <div>
+        <h4 class="titulo-tabla">Auditoría Global de Incidentes Forenses</h4>
+        <span class="subtitulo-tabla">
+          Mostrando {{ elementosFiltrados().length }} de {{ historial.length }} análisis registrados
+        </span>
+      </div>
     </div>
 
-    <button
-      type="button"
-      class="boton-exportar"
-      (click)="exportar()"
-      [disabled]="historial.length === 0"
-      title="Exportar archivo CSV con los análisis"
-    >
-      <span>📥 Exportar CSV</span>
-    </button>
+    <div class="acciones-encabezado">
+      <button
+        type="button"
+        class="boton-exportar"
+        (click)="exportar()"
+        [disabled]="historial.length === 0"
+        title="Exportar archivo CSV con los análisis"
+      >
+        <span>📥 Exportar CSV</span>
+      </button>
+    </div>
   </header>
+
+  <!-- Barra de Herramientas de Filtrado Estilo Linear -->
+  <div class="barra-herramientas">
+    <div class="campo-busqueda-grupo">
+      <span class="icono-lupa" aria-hidden="true">🔍</span>
+      <input
+        type="search"
+        class="input-busqueda"
+        placeholder="Buscar por URL, dominio o protocolo..."
+        [value]="terminoBusqueda()"
+        (input)="actualizarBusqueda($event)"
+        aria-label="Buscar en el historial"
+      />
+      @if (terminoBusqueda()) {
+        <button
+          type="button"
+          class="boton-limpiar-busqueda"
+          (click)="limpiarBusqueda()"
+          aria-label="Limpiar búsqueda"
+        >
+          ✕
+        </button>
+      }
+    </div>
+
+    <div class="chips-filtro" role="group" aria-label="Filtrar por severidad de riesgo">
+      <button
+        type="button"
+        class="chip-boton"
+        [class.activo]="filtroSeveridad() === 'todos'"
+        (click)="establecerFiltro('todos')"
+      >
+        Todos
+      </button>
+      <button
+        type="button"
+        class="chip-boton chip-alto"
+        [class.activo]="filtroSeveridad() === 'alto'"
+        (click)="establecerFiltro('alto')"
+      >
+        <span class="punto-color"></span> Crítico / Alto
+      </button>
+      <button
+        type="button"
+        class="chip-boton chip-medio"
+        [class.activo]="filtroSeveridad() === 'medio'"
+        (click)="establecerFiltro('medio')"
+      >
+        <span class="punto-color"></span> Medio
+      </button>
+      <button
+        type="button"
+        class="chip-boton chip-bajo"
+        [class.activo]="filtroSeveridad() === 'bajo'"
+        (click)="establecerFiltro('bajo')"
+      >
+        <span class="punto-color"></span> Seguro / Bajo
+      </button>
+    </div>
+  </div>
 
   <div class="cuerpo-tabla-envoltorio">
     <table class="tabla-datos">
       <thead>
         <tr>
-          <th scope="col">Estado</th>
+          <th scope="col" style="width: 120px;">Severidad</th>
           <th scope="col">URL Analizada</th>
-          <th scope="col">Puntuación</th>
-          <th scope="col">Fecha y Hora</th>
-          <th scope="col" class="columna-acciones">Acción</th>
+          <th scope="col" style="width: 130px;">Puntuación</th>
+          <th scope="col" style="width: 190px;">Fecha y Hora</th>
+          <th scope="col" class="columna-acciones" style="width: 110px;">Acciones</th>
         </tr>
       </thead>
       <tbody>
         @if (estaCargando) {
           <tr>
-            <td colspan="5" class="celda-vacia">Cargando registros forenses...</td>
+            <td colspan="5" class="celda-vacia">
+              <div class="cargando-fila">
+                <span class="spinner-icono">⏳</span>
+                <span>Cargando registros forenses en tiempo real...</span>
+              </div>
+            </td>
           </tr>
-        } @else if (historial.length === 0) {
+        } @else if (elementosFiltrados().length === 0) {
           <tr>
-            <td colspan="5" class="celda-vacia">No hay análisis en el historial global.</td>
+            <td colspan="5" class="celda-vacia">
+              <div class="vacio-fila">
+                <span>🔍 No se encontraron registros con los criterios actuales.</span>
+              </div>
+            </td>
           </tr>
         } @else {
-          @for (item of historial; track item.url) {
-            <tr>
+          @for (item of elementosPaginados(); track item.url) {
+            <tr
+              class="fila-interactiva"
+              (click)="seleccionar(item)"
+              (keydown.enter)="seleccionar(item)"
+              tabindex="0"
+              role="button"
+              [attr.aria-label]="'Inspeccionar análisis de ' + item.url"
+            >
               <td>
                 <span class="insignia-pildora" [ngClass]="item.riesgo | riesgoColor">
                   {{ item.riesgo | uppercase }}
                 </span>
               </td>
               <td class="celda-url texto-mono" [title]="item.url">
-                {{ item.url }}
+                <span class="url-texto">{{ item.url }}</span>
               </td>
               <td>
-                <strong>{{ item.puntuacion }}</strong><small>/10</small>
+                <span class="puntuacion-badge">
+                  <strong>{{ item.puntuacion }}</strong><small>/10</small>
+                </span>
               </td>
               <td class="celda-fecha">
                 {{ item.marcaTiempo | formatoFecha }}
               </td>
               <td class="columna-acciones">
-                <button
-                  type="button"
-                  class="boton-eliminar-fila"
-                  (click)="eliminar(item.url)"
-                  title="Eliminar registro"
-                  aria-label="Eliminar registro"
-                >
-                  🗑️
-                </button>
+                <div class="grupo-botones-accion">
+                  <button
+                    type="button"
+                    class="boton-inspeccionar-fila"
+                    (click)="$event.stopPropagation(); seleccionar(item)"
+                    title="Inspeccionar detalle del incidente"
+                    aria-label="Inspeccionar detalle"
+                  >
+                    👁️
+                  </button>
+                  <button
+                    type="button"
+                    class="boton-eliminar-fila"
+                    (click)="eliminar($event, item.url)"
+                    title="Eliminar registro"
+                    aria-label="Eliminar registro"
+                  >
+                    🗑️
+                  </button>
+                </div>
               </td>
             </tr>
           }
@@ -70,4 +166,33 @@
       </tbody>
     </table>
   </div>
+
+  <!-- Paginador Flotante Inferior -->
+  @if (totalPaginas() > 1) {
+    <footer class="pie-paginacion">
+      <span class="texto-paginacion">
+        Página {{ paginaActual() }} de {{ totalPaginas() }} ({{ elementosFiltrados().length }} registros)
+      </span>
+      <div class="controles-paginacion">
+        <button
+          type="button"
+          class="boton-paginador"
+          [disabled]="paginaActual() === 1"
+          (click)="irAPagina(paginaActual() - 1)"
+          aria-label="Página anterior"
+        >
+          ← Anterior
+        </button>
+        <button
+          type="button"
+          class="boton-paginador"
+          [disabled]="paginaActual() === totalPaginas()"
+          (click)="irAPagina(paginaActual() + 1)"
+          aria-label="Página siguiente"
+        >
+          Siguiente →
+        </button>
+      </div>
+    </footer>
+  }
 </section>

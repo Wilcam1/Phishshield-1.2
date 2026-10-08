@@ -1,0 +1,51 @@
+<div class="telemetria-contenedor">
+  <div class="telemetria-cabecera">
+    <div class="telemetria-titulo-grupo">
+      <span class="telemetria-icono">📡</span>
+      <div>
+        <h3 class="telemetria-titulo">Salud de Microservicios en Vivo</h3>
+        <p class="telemetria-subtitulo">Monitoreo continuo de latencia y estado operacional del ecosistema</p>
+      </div>
+    </div>
+    <div class="telemetria-meta">
+      <span class="pulso-en-linea"></span>
+      <span class="texto-actualizacion">Actualizado: {{ horaUltimaActualizacion() }}</span>
+    </div>
+  </div>
+
+  <div class="servicios-cuadricula">
+    @for (servicio of servicios(); track servicio.id) {
+      <div class="servicio-tarjeta" [class]="'estado-' + servicio.estado">
+        <div class="servicio-encabezado">
+          <div class="servicio-info">
+            <span class="servicio-nombre">{{ servicio.nombre }}</span>
+            <span class="servicio-puerto">{{ servicio.puerto }}</span>
+          </div>
+          <div class="servicio-indicador" [attr.aria-label]="'Estado: ' + servicio.estado">
+            <span class="indicador-punto"></span>
+            <span class="indicador-texto">{{ obtenerTextoEstado(servicio.estado) }}</span>
+          </div>
+        </div>
+
+        <div class="servicio-cuerpo">
+          <div class="metrica-fila">
+            <span class="metrica-etiqueta">Latencia:</span>
+            <span class="metrica-valor">{{ servicio.latenciaMs }} ms</span>
+          </div>
+          <div class="metrica-fila">
+            <span class="metrica-etiqueta">Disponibilidad:</span>
+            <span class="metrica-valor destacado">{{ servicio.disponibilidadPorcentaje }}%</span>
+          </div>
+          <div class="metrica-fila">
+            <span class="metrica-etiqueta">Versión:</span>
+            <span class="metrica-valor codigo">{{ servicio.version }}</span>
+          </div>
+        </div>
+
+        <div class="servicio-pie">
+          <span class="servicio-detalle">{{ servicio.detalles }}</span>
+        </div>
+      </div>
+    }
+  </div>
+</div>

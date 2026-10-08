@@ -1,16 +1,23 @@
+@use '../../diseno/tokens' as *;
+
 .tarjeta-tabla {
-  border-radius: var(--radio-grande);
+  border-radius: var(--radio-lg);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  box-shadow: var(--sombra-sm);
 }
 
 .encabezado-tabla {
-  padding: 16px 20px;
+  padding: var(--espaciado-md) var(--espaciado-lg);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--color-borde-cristal);
+  border-bottom: 1px solid var(--color-borde);
+  flex-wrap: wrap;
+  gap: var(--espaciado-sm);
 
   .izquierda-encabezado {
     display: flex;
@@ -18,88 +25,252 @@
     gap: var(--espaciado-sm);
   }
 
-  .icono-tabla {
-    font-size: 1.2rem;
+  .icono-insignia {
+    font-size: 1.3rem;
   }
 
   .titulo-tabla {
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 600;
-    color: var(--color-texto-primario);
+    color: var(--color-texto);
+    margin: 0;
+  }
+
+  .subtitulo-tabla {
+    font-size: 0.75rem;
+    color: var(--color-texto-secundario);
+    display: block;
+    margin-top: 2px;
   }
 }
 
 .boton-exportar {
   font-size: 0.8rem;
-  font-weight: 600;
-  padding: 6px 12px;
-  border-radius: var(--radio-mediano);
-  background: var(--color-primario);
-  color: white;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: var(--radio-md);
+  background: var(--color-superficie-elevada);
+  color: var(--color-texto);
+  border: 1px solid var(--color-borde);
+  transition: all var(--transicion-rapida);
+  cursor: pointer;
 
   &:hover:not(:disabled) {
-    background: var(--color-primario-activo);
+    background: var(--color-superficie);
+    border-color: var(--color-primario);
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.barra-herramientas {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--espaciado-sm) var(--espaciado-lg);
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--color-borde);
+  flex-wrap: wrap;
+  gap: var(--espaciado-sm);
+}
+
+.campo-busqueda-grupo {
+  display: flex;
+  align-items: center;
+  background: var(--color-superficie-elevada);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-md);
+  padding: 4px 10px;
+  min-width: 280px;
+  flex: 1;
+  max-width: 440px;
+  transition: border-color var(--transicion-rapida);
+
+  &:focus-within {
+    border-color: var(--color-primario);
+  }
+
+  .icono-lupa {
+    font-size: 0.85rem;
+    margin-right: 6px;
+    opacity: 0.6;
+  }
+
+  .input-busqueda {
+    border: none;
+    background: transparent;
+    color: var(--color-texto);
+    font-size: 0.82rem;
+    width: 100%;
+    outline: none;
+
+    &::placeholder {
+      color: var(--color-texto-terciario);
+    }
+  }
+
+  .boton-limpiar-busqueda {
+    background: none;
+    border: none;
+    color: var(--color-texto-terciario);
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 2px 4px;
+
+    &:hover {
+      color: var(--color-texto);
+    }
+  }
+}
+
+.chips-filtro {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.chip-boton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: var(--radio-completo);
+  background: var(--color-superficie-elevada);
+  border: 1px solid var(--color-borde);
+  color: var(--color-texto-secundario);
+  cursor: pointer;
+  transition: all var(--transicion-rapida);
+
+  .punto-color {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  &.chip-alto .punto-color {
+    background: var(--color-peligro);
+  }
+
+  &.chip-medio .punto-color {
+    background: var(--color-alerta);
+  }
+
+  &.chip-bajo .punto-color {
+    background: var(--color-exito);
+  }
+
+  &:hover {
+    color: var(--color-texto);
+    border-color: var(--color-borde-fuerte);
+  }
+
+  &.activo {
+    background: var(--color-primario);
+    color: white;
+    border-color: var(--color-primario);
+
+    .punto-color {
+      background: white;
+    }
   }
 }
 
 .cuerpo-tabla-envoltorio {
   overflow-x: auto;
-  max-height: 440px;
+  max-height: 520px;
 }
 
 .tabla-datos {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
 
   thead {
-    background: var(--color-fondo-entrada);
+    background: var(--color-superficie-elevada);
     position: sticky;
     top: 0;
     z-index: 2;
 
     th {
-      padding: 12px 16px;
+      padding: 10px 16px;
       font-weight: 600;
       color: var(--color-texto-secundario);
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       text-transform: uppercase;
-      letter-spacing: var(--rastreo-etiqueta);
-      border-bottom: 1px solid var(--color-borde-cristal);
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--color-borde);
     }
   }
 
-  tbody tr {
-    border-bottom: 1px solid var(--color-borde-cristal);
-    transition: background var(--duracion-rapida) var(--curva-suave);
+  tbody tr.fila-interactiva {
+    border-bottom: 1px solid var(--color-borde);
+    transition: background var(--transicion-rapida);
+    cursor: pointer;
 
     &:hover {
-      background: var(--color-fondo-entrada);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-primario);
+      outline-offset: -2px;
     }
 
     td {
-      padding: 12px 16px;
-      color: var(--color-texto-primario);
+      padding: 11px 16px;
+      color: var(--color-texto);
+      vertical-align: middle;
     }
   }
 
   .celda-url {
-    max-width: 280px;
+    max-width: 320px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-family: var(--fuente-mono);
+    font-size: 0.8rem;
+  }
+
+  .puntuacion-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background: var(--color-superficie-elevada);
+    border-radius: var(--radio-sm);
+    border: 1px solid var(--color-borde);
+    font-size: 0.8rem;
+
+    small {
+      color: var(--color-texto-terciario);
+    }
   }
 
   .celda-fecha {
     color: var(--color-texto-secundario);
-    font-size: 0.8rem;
+    font-size: 0.78rem;
+    white-space: nowrap;
   }
 
   .celda-vacia {
     text-align: center;
-    padding: 30px;
+    padding: 40px 20px;
     color: var(--color-texto-terciario);
+
+    .cargando-fila, .vacio-fila {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
   }
 
   .columna-acciones {
@@ -107,13 +278,82 @@
   }
 }
 
+.insignia-pildora {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: var(--radio-completo);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.grupo-botones-accion {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.boton-inspeccionar-fila,
 .boton-eliminar-fila {
   opacity: 0.7;
-  padding: 4px;
-  border-radius: var(--radio-pequeno);
+  padding: 5px 8px;
+  border-radius: var(--radio-sm);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all var(--transicion-rapida);
 
   &:hover {
     opacity: 1;
-    background: var(--color-peligro-fondo);
+    background: var(--color-superficie-elevada);
+    border-color: var(--color-borde);
+  }
+}
+
+.boton-eliminar-fila:hover {
+  background: rgba(255, 69, 58, 0.15);
+  border-color: rgba(255, 69, 58, 0.3);
+}
+
+.pie-paginacion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--espaciado-sm) var(--espaciado-lg);
+  border-top: 1px solid var(--color-borde);
+  background: var(--color-superficie-elevada);
+}
+
+.texto-paginacion {
+  font-size: 0.78rem;
+  color: var(--color-texto-secundario);
+}
+
+.controles-paginacion {
+  display: flex;
+  gap: 6px;
+}
+
+.boton-paginador {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: var(--radio-sm);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  border: 1px solid var(--color-borde);
+  cursor: pointer;
+  transition: all var(--transicion-rapida);
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-primario);
+    background: var(--color-superficie-elevada);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
   }
 }

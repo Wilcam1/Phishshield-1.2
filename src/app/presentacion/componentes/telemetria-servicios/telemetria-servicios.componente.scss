@@ -1,0 +1,215 @@
+@use '../../diseno/tokens' as *;
+
+.telemetria-contenedor {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-lg);
+  padding: var(--espaciado-lg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  margin-bottom: var(--espaciado-xl);
+  box-shadow: var(--sombra-sm);
+  transition: border-color var(--transicion-normal);
+
+  &:hover {
+    border-color: var(--color-borde-fuerte);
+  }
+}
+
+.telemetria-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--espaciado-lg);
+  padding-bottom: var(--espaciado-sm);
+  border-bottom: 1px solid var(--color-borde);
+  flex-wrap: wrap;
+  gap: var(--espaciado-md);
+}
+
+.telemetria-titulo-grupo {
+  display: flex;
+  align-items: center;
+  gap: var(--espaciado-sm);
+}
+
+.telemetria-icono {
+  font-size: 1.5rem;
+}
+
+.telemetria-titulo {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-texto);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.telemetria-subtitulo {
+  font-size: 0.8rem;
+  color: var(--color-texto-secundario);
+  margin: 2px 0 0;
+}
+
+.telemetria-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--espaciado-xs);
+  font-size: 0.75rem;
+  color: var(--color-texto-terciario);
+  background: var(--color-superficie-elevada);
+  padding: 4px 10px;
+  border-radius: var(--radio-completo);
+  border: 1px solid var(--color-borde);
+}
+
+.pulso-en-linea {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--color-exito);
+  box-shadow: 0 0 8px var(--color-exito);
+  animation: pulsoVerde 2s infinite ease-in-out;
+}
+
+@keyframes pulsoVerde {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.7; }
+}
+
+.servicios-cuadricula {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--espaciado-md);
+}
+
+.servicio-tarjeta {
+  background: var(--color-superficie-elevada);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-md);
+  padding: var(--espaciado-md);
+  transition: all var(--transicion-normal);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra-md);
+    border-color: var(--color-primario);
+  }
+
+  &.estado-operativo {
+    border-left: 3px solid var(--color-exito);
+  }
+
+  &.estado-degradado {
+    border-left: 3px solid var(--color-alerta);
+  }
+
+  &.estado-inactivo {
+    border-left: 3px solid var(--color-peligro);
+  }
+}
+
+.servicio-encabezado {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--espaciado-sm);
+}
+
+.servicio-nombre {
+  display: block;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-texto);
+}
+
+.servicio-puerto {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-family: var(--fuente-mono);
+  color: var(--color-texto-terciario);
+  background: var(--color-fondo);
+  padding: 1px 6px;
+  border-radius: var(--radio-sm);
+  margin-top: 3px;
+}
+
+.servicio-indicador {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: var(--radio-completo);
+
+  .estado-operativo & {
+    background: rgba(48, 209, 88, 0.12);
+    color: var(--color-exito);
+    .indicador-punto { background: var(--color-exito); }
+  }
+
+  .estado-degradado & {
+    background: rgba(255, 214, 10, 0.12);
+    color: var(--color-alerta);
+    .indicador-punto { background: var(--color-alerta); }
+  }
+
+  .estado-inactivo & {
+    background: rgba(255, 69, 58, 0.12);
+    color: var(--color-peligro);
+    .indicador-punto { background: var(--color-peligro); }
+  }
+}
+
+.indicador-punto {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.servicio-cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: var(--espaciado-xs) 0;
+  border-top: 1px dashed var(--color-borde);
+  border-bottom: 1px dashed var(--color-borde);
+  margin-bottom: var(--espaciado-xs);
+}
+
+.metrica-fila {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+}
+
+.metrica-etiqueta {
+  color: var(--color-texto-secundario);
+}
+
+.metrica-valor {
+  font-weight: 500;
+  color: var(--color-texto);
+
+  &.destacado {
+    color: var(--color-exito);
+  }
+
+  &.codigo {
+    font-family: var(--fuente-mono);
+    font-size: 0.75rem;
+  }
+}
+
+.servicio-pie {
+  padding-top: 4px;
+}
+
+.servicio-detalle {
+  font-size: 0.72rem;
+  color: var(--color-texto-terciario);
+  line-height: 1.3;
+}
