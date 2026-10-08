@@ -3,11 +3,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ElementoHistorialLocal } from '../../../datos/modelos/analisis.modelo';
 import { FormatoFechaTuberia } from '../../tuberias/formato-fecha.tuberia';
 import { RiesgoColorTuberia } from '../../tuberias/riesgo-color.tuberia';
+import { IconoComponente } from '../icono/icono.componente';
+import { LuzCursorDirectiva } from '../../directivas/luz-cursor.directiva';
 
 @Component({
   selector: 'app-historial-busquedas',
   standalone: true,
-  imports: [CommonModule, RiesgoColorTuberia, FormatoFechaTuberia],
+  imports: [CommonModule, RiesgoColorTuberia, FormatoFechaTuberia, IconoComponente, LuzCursorDirectiva],
   templateUrl: './historial-busquedas.componente.html',
   styleUrl: './historial-busquedas.componente.scss',
 })

@@ -2,11 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ReporteComunitario } from '../../../datos/modelos/administracion.modelo';
 import { FormatoFechaTuberia } from '../../tuberias/formato-fecha.tuberia';
+import { IconoComponente } from '../icono/icono.componente';
+import { LuzCursorDirectiva } from '../../directivas/luz-cursor.directiva';
 
 @Component({
   selector: 'app-lista-alertas-comunitarias',
   standalone: true,
-  imports: [CommonModule, FormatoFechaTuberia],
+  imports: [CommonModule, FormatoFechaTuberia, IconoComponente, LuzCursorDirectiva],
   templateUrl: './lista-alertas-comunitarias.componente.html',
   styleUrl: './lista-alertas-comunitarias.componente.scss',
 })

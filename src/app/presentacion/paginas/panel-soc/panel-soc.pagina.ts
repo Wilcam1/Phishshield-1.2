@@ -14,6 +14,7 @@ import {
   DrawerIncidenteComponente,
   FiltroCategoriaKpi,
   GraficoDistribucionRiesgoComponente,
+  IconoComponente,
   ListaAlertasComunitariasComponente,
   NotificacionFlotanteComponente,
   PanelMetricasComponente,
@@ -22,6 +23,7 @@ import {
   TelemetriaServiciosComponente,
   VisorFlujoArquitecturaComponente,
 } from '../../componentes';
+import { LuzCursorDirectiva } from '../../directivas/luz-cursor.directiva';
 
 export type PestanaSoc = 'general' | 'auditoria' | 'alertas' | 'telemetria' | 'arquitectura';
 
@@ -30,6 +32,8 @@ export type PestanaSoc = 'general' | 'auditoria' | 'alertas' | 'telemetria' | 'a
   standalone: true,
   imports: [
     CommonModule,
+    IconoComponente,
+    LuzCursorDirectiva,
     PanelMetricasComponente,
     TablaHistorialGlobalComponente,
     GraficoDistribucionRiesgoComponente,
@@ -45,6 +49,7 @@ export type PestanaSoc = 'general' | 'auditoria' | 'alertas' | 'telemetria' | 'a
   templateUrl: './panel-soc.pagina.html',
   styleUrl: './panel-soc.pagina.scss',
 })
+
 export class PanelSocPaginaComponente implements OnInit {
   readonly servicioAdmin = inject(AdministracionServicio);
   readonly servicioNotif = inject(NotificacionServicio);

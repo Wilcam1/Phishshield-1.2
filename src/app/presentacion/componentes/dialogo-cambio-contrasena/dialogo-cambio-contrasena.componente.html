@@ -11,7 +11,7 @@
     <div class="caja-modal superficie-elevada">
       <header class="encabezado-modal">
         <div class="logo-modal">
-          <span class="icono-llave" aria-hidden="true">🔑</span>
+          <app-icono nombre="candado" [tamano]="22" color="var(--color-primario)" />
           <div>
             <h3 id="titulo-cambio-clave" class="titulo-modal">Seguridad de la Cuenta</h3>
             <span class="subtitulo-modal">Actualizar Credencial de Administrador</span>
@@ -23,7 +23,7 @@
           (click)="cerrar()"
           aria-label="Cerrar ventana modal"
         >
-          ✕
+          <app-icono nombre="cerrar" [tamano]="16" />
         </button>
       </header>
 
@@ -55,19 +55,19 @@
 
           <div class="requisitos-contrasena" role="status">
             <div class="item-requisito" [class.cumplido]="evaluacion.longitudValida">
-              <span>{{ evaluacion.longitudValida ? '✅' : '❌' }}</span>
+              <app-icono [nombre]="evaluacion.longitudValida ? 'check' : 'cerrar'" [tamano]="13" [color]="evaluacion.longitudValida ? '#34d399' : '#f87171'" />
               <span>Mínimo 8 caracteres</span>
             </div>
             <div class="item-requisito" [class.cumplido]="evaluacion.tieneMayuscula">
-              <span>{{ evaluacion.tieneMayuscula ? '✅' : '❌' }}</span>
+              <app-icono [nombre]="evaluacion.tieneMayuscula ? 'check' : 'cerrar'" [tamano]="13" [color]="evaluacion.tieneMayuscula ? '#34d399' : '#f87171'" />
               <span>Mínimo una letra mayúscula</span>
             </div>
             <div class="item-requisito" [class.cumplido]="evaluacion.tieneNumero">
-              <span>{{ evaluacion.tieneNumero ? '✅' : '❌' }}</span>
+              <app-icono [nombre]="evaluacion.tieneNumero ? 'check' : 'cerrar'" [tamano]="13" [color]="evaluacion.tieneNumero ? '#34d399' : '#f87171'" />
               <span>Mínimo un número</span>
             </div>
             <div class="item-requisito" [class.cumplido]="evaluacion.tieneEspecial">
-              <span>{{ evaluacion.tieneEspecial ? '✅' : '❌' }}</span>
+              <app-icono [nombre]="evaluacion.tieneEspecial ? 'check' : 'cerrar'" [tamano]="13" [color]="evaluacion.tieneEspecial ? '#34d399' : '#f87171'" />
               <span>Mínimo un carácter especial (&#64;$!%*?&#38;#...)</span>
             </div>
           </div>
@@ -91,10 +91,11 @@
 
         @if (mensajeError) {
           <div class="alerta-error" role="alert">
-            <span>❌</span>
+            <app-icono nombre="alerta" [tamano]="16" color="#f87171" />
             <span>{{ mensajeError }}</span>
           </div>
         }
+
 
         <footer class="pie-modal">
           <button

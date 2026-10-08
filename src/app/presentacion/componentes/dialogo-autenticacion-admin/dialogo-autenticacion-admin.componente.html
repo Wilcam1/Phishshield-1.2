@@ -11,7 +11,7 @@
     <div class="caja-modal superficie-elevada">
       <header class="encabezado-modal">
         <div class="logo-modal">
-          <span class="icono-escudo" aria-hidden="true">🛡️</span>
+          <app-icono nombre="escudo" [tamano]="22" color="var(--color-primario)" />
           <div>
             <h3 id="titulo-login-admin" class="titulo-modal">Acceso Seguro SOC</h3>
             <span class="subtitulo-modal">Panel de Control Administrativo</span>
@@ -23,7 +23,7 @@
           (click)="cerrar()"
           aria-label="Cerrar ventana modal"
         >
-          ✕
+          <app-icono nombre="cerrar" [tamano]="16" />
         </button>
       </header>
 
@@ -31,7 +31,9 @@
         <div class="campo-grupo">
           <label for="admin-usuario" class="etiqueta-campo">Usuario</label>
           <div class="input-con-icono">
-            <span class="icono-input" aria-hidden="true">👤</span>
+            <span class="icono-input" aria-hidden="true">
+              <app-icono nombre="ojo" [tamano]="16" color="var(--color-texto-terciario)" />
+            </span>
             <input
               id="admin-usuario"
               type="text"
@@ -48,7 +50,9 @@
         <div class="campo-grupo">
           <label for="admin-contrasena" class="etiqueta-campo">Contraseña</label>
           <div class="input-con-icono">
-            <span class="icono-input" aria-hidden="true">🔑</span>
+            <span class="icono-input" aria-hidden="true">
+              <app-icono nombre="candado" [tamano]="16" color="var(--color-texto-terciario)" />
+            </span>
             <input
               id="admin-contrasena"
               type="password"
@@ -64,10 +68,11 @@
 
         @if (mensajeError) {
           <div class="alerta-error" role="alert">
-            <span>❌</span>
+            <app-icono nombre="alerta" [tamano]="16" color="#f87171" />
             <span>{{ mensajeError }}</span>
           </div>
         }
+
 
         <footer class="pie-modal">
           <button

@@ -1,11 +1,15 @@
 <div class="diseno-soc-contenedor" [class.sidebar-colapsado]="sidebarColapsado()">
+  <!-- Fondo vivo aurora y rejilla de precisión técnica -->
+  <div class="lienzo-aurora-fondo" aria-hidden="true"></div>
+  <div class="rejilla-patron-fondo" aria-hidden="true"></div>
+
   <app-notificacion-flotante />
 
-  <!-- BARRA LATERAL (COMMAND RAIL / SIDEBAR) -->
-  <aside class="sidebar-soc" role="navigation" aria-label="Navegación del Centro de Operaciones">
+  <!-- BARRA LATERAL (COMMAND RAIL / SIDEBAR GLASSMORPHISM) -->
+  <aside class="sidebar-soc superficie-nivel-2" role="navigation" aria-label="Navegación del Centro de Operaciones">
     <div class="sidebar-cabecera">
       <div class="marca-soc">
-        <span class="marca-icono" aria-hidden="true">🛡️</span>
+        <app-icono nombre="escudo" [tamano]="24" color="var(--color-primario)" />
         @if (!sidebarColapsado()) {
           <div class="marca-texto">
             <span class="marca-titulo">PhishShield</span>
@@ -20,7 +24,7 @@
         [attr.aria-label]="sidebarColapsado() ? 'Expandir barra lateral' : 'Colapsar barra lateral'"
         [title]="sidebarColapsado() ? 'Expandir barra' : 'Colapsar barra'"
       >
-        {{ sidebarColapsado() ? '❯' : '❮' }}
+        <app-icono [nombre]="sidebarColapsado() ? 'chevron-abajo' : 'chevron-arriba'" [tamano]="14" />
       </button>
     </div>
 
@@ -29,11 +33,12 @@
       <button
         type="button"
         class="menu-item"
+        appLuzCursor
         [class.activo]="pestanaActiva() === 'general'"
         (click)="establecerPestana('general')"
         title="Tablero General"
       >
-        <span class="menu-icono">📊</span>
+        <app-icono nombre="cpu" [tamano]="18" />
         @if (!sidebarColapsado()) {
           <span class="menu-texto">Tablero General</span>
         }
@@ -42,11 +47,12 @@
       <button
         type="button"
         class="menu-item"
+        appLuzCursor
         [class.activo]="pestanaActiva() === 'auditoria'"
         (click)="establecerPestana('auditoria')"
         title="Auditoría Forense"
       >
-        <span class="menu-icono">📋</span>
+        <app-icono nombre="terminal" [tamano]="18" />
         @if (!sidebarColapsado()) {
           <span class="menu-texto">Auditoría Forense</span>
           @if (totalIncidentesCriticos() > 0) {
@@ -58,11 +64,12 @@
       <button
         type="button"
         class="menu-item"
+        appLuzCursor
         [class.activo]="pestanaActiva() === 'alertas'"
         (click)="establecerPestana('alertas')"
         title="Feed de Alertas"
       >
-        <span class="menu-icono">🚨</span>
+        <app-icono nombre="alerta" [tamano]="18" />
         @if (!sidebarColapsado()) {
           <span class="menu-texto">Alertas Comunitarias</span>
           @if (totalAlertasPendientes() > 0) {
@@ -74,11 +81,12 @@
       <button
         type="button"
         class="menu-item"
+        appLuzCursor
         [class.activo]="pestanaActiva() === 'telemetria'"
         (click)="establecerPestana('telemetria')"
         title="Salud del Ecosistema"
       >
-        <span class="menu-icono">📡</span>
+        <app-icono nombre="servidor" [tamano]="18" />
         @if (!sidebarColapsado()) {
           <span class="menu-texto">Salud Microservicios</span>
           <span class="pulso-verde-menu"></span>
@@ -88,11 +96,12 @@
       <button
         type="button"
         class="menu-item"
+        appLuzCursor
         [class.activo]="pestanaActiva() === 'arquitectura'"
         (click)="establecerPestana('arquitectura')"
         title="Trazador de Flujo entre Capas"
       >
-        <span class="menu-icono">🧬</span>
+        <app-icono nombre="capas" [tamano]="18" />
         @if (!sidebarColapsado()) {
           <span class="menu-texto">Flujo de Capas</span>
         }
@@ -102,7 +111,9 @@
     <!-- Pie del Sidebar con Estado del Operador -->
     <div class="sidebar-pie">
       <div class="operador-tarjeta">
-        <div class="operador-avatar">👨‍💻</div>
+        <div class="operador-avatar">
+          <app-icono nombre="candado" [tamano]="16" color="var(--color-primario)" />
+        </div>
         @if (!sidebarColapsado()) {
           <div class="operador-info">
             <span class="operador-nombre">Operador SOC</span>
@@ -114,10 +125,11 @@
       <button
         type="button"
         class="boton-retorno-publico"
+        appLuzCursor
         (click)="volverAlAnalizador()"
         title="Volver a la interfaz del Verificador público"
       >
-        <span class="retorno-icono">🌐</span>
+        <app-icono nombre="ojo" [tamano]="16" />
         @if (!sidebarColapsado()) {
           <span>Verificador Público</span>
         }
@@ -127,8 +139,8 @@
 
   <!-- ÁREA DE CONTENIDO PRINCIPAL -->
   <div class="area-trabajo-soc">
-    <!-- BARRA SUPERIOR (HEADER) -->
-    <header class="topbar-soc" role="banner">
+    <!-- BARRA SUPERIOR (HEADER GLASSMORPHISM) -->
+    <header class="topbar-soc superficie-nivel-1" role="banner">
       <div class="topbar-izquierda">
         <h2 class="vista-titulo">
           @switch (pestanaActiva()) {
@@ -148,19 +160,23 @@
         <button
           type="button"
           class="topbar-boton"
+          appLuzCursor
           (click)="cargarDatos()"
           title="Sincronizar telemetría y registros en vivo"
         >
-          <span>🔄 Sincronizar</span>
+          <app-icono nombre="refrescar" [tamano]="15" />
+          <span>Sincronizar</span>
         </button>
 
         <button
           type="button"
           class="topbar-boton"
+          appLuzCursor
           (click)="abrirModalSeguridad()"
           title="Seguridad y Credenciales"
         >
-          <span>🔑 Seguridad</span>
+          <app-icono nombre="candado" [tamano]="15" />
+          <span>Seguridad</span>
         </button>
 
         <app-selector-tema />
@@ -168,13 +184,16 @@
         <button
           type="button"
           class="topbar-boton boton-peligro"
+          appLuzCursor
           (click)="cerrarSesion()"
           title="Cerrar sesión del SOC"
         >
-          <span>🚪 Salir</span>
+          <app-icono nombre="cerrar" [tamano]="15" color="#ff453a" />
+          <span>Salir</span>
         </button>
       </div>
     </header>
+
 
     <!-- CUERPO DE LA VISTA ACTIVA -->
     <main class="contenido-dinamico" role="main">

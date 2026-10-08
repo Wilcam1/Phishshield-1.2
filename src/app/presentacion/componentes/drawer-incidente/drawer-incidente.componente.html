@@ -24,7 +24,7 @@
           (click)="cerrar()"
           aria-label="Cerrar inspector"
         >
-          ✕
+          <app-icono nombre="cerrar" [tamano]="16" />
         </button>
       </header>
 
@@ -36,10 +36,12 @@
             <button
               type="button"
               class="boton-accion-url"
+              appLuzCursor
               (click)="copiarUrl()"
               [title]="estaCopiado ? 'Copiado' : 'Copiar URL'"
             >
-              {{ estaCopiado ? '✅ Copiado' : '📋 Copiar' }}
+              <app-icono [nombre]="estaCopiado ? 'copiado' : 'copiar'" [tamano]="14" />
+              <span>{{ estaCopiado ? 'Copiado' : 'Copiar' }}</span>
             </button>
           </div>
         </div>
@@ -68,19 +70,28 @@
           <div class="diagnostico-caja" [ngClass]="'borde-' + (elemento.riesgo | riesgoColor)">
             @switch (elemento.riesgo) {
               @case ('alto') {
-                <p>
-                  <strong>🚨 Incidente Crítico:</strong> El modelo de Machine Learning y las heurísticas detectaron suplantación bancaria o punycode sospechoso. Recomendado mantener en lista de bloqueo corporativo.
-                </p>
+                <div class="linea-diagnostico">
+                  <app-icono nombre="alerta" [tamano]="18" color="#f87171" />
+                  <p>
+                    <strong>Incidente Crítico:</strong> El modelo de Machine Learning y las heurísticas detectaron suplantación bancaria o punycode sospechoso. Recomendado mantener en lista de bloqueo corporativo.
+                  </p>
+                </div>
               }
               @case ('medio') {
-                <p>
-                  <strong>⚠️ Observación Requerida:</strong> Parámetros anómalos o certificado emitido hace menos de 30 días. Monitorear solicitudes salientes hacia este host.
-                </p>
+                <div class="linea-diagnostico">
+                  <app-icono nombre="alerta" [tamano]="18" color="#fbbf24" />
+                  <p>
+                    <strong>Observación Requerida:</strong> Parámetros anómalos o certificado emitido hace menos de 30 días. Monitorear solicitudes salientes hacia este host.
+                  </p>
+                </div>
               }
               @case ('bajo') {
-                <p>
-                  <strong>🟢 Tráfico Confiable:</strong> Sin patrones de typosquatting ni formularios de captura clandestina.
-                </p>
+                <div class="linea-diagnostico">
+                  <app-icono nombre="check" [tamano]="18" color="#34d399" />
+                  <p>
+                    <strong>Tráfico Confiable:</strong> Sin patrones de typosquatting ni formularios de captura clandestina.
+                  </p>
+                </div>
               }
             }
           </div>
@@ -91,20 +102,24 @@
         <button
           type="button"
           class="boton-secundario boton-peligro"
+          appLuzCursor
           (click)="eliminar()"
           title="Eliminar de la auditoría"
         >
-          🗑️ Eliminar Incidente
+          <app-icono nombre="papelera" [tamano]="15" />
+          <span>Eliminar Incidente</span>
         </button>
 
         <button
           type="button"
           class="boton-primario"
+          appLuzCursor
           (click)="cerrar()"
         >
           Listo
         </button>
       </footer>
+
     </aside>
   </div>
 }

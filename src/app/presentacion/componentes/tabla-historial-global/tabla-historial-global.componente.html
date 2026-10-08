@@ -1,7 +1,9 @@
 <section class="tarjeta-tabla superficie-cristal" role="region" aria-label="Historial global de análisis forense">
   <header class="encabezado-tabla">
     <div class="izquierda-encabezado">
-      <div class="icono-insignia">📋</div>
+      <div class="icono-insignia">
+        <app-icono nombre="terminal" [tamano]="18"></app-icono>
+      </div>
       <div>
         <h4 class="titulo-tabla">Auditoría Global de Incidentes Forenses</h4>
         <span class="subtitulo-tabla">
@@ -17,8 +19,10 @@
         (click)="exportar()"
         [disabled]="historial.length === 0"
         title="Exportar archivo CSV con los análisis"
+        appLuzCursor
       >
-        <span>📥 Exportar CSV</span>
+        <app-icono nombre="descargar" [tamano]="15"></app-icono>
+        <span>Exportar CSV</span>
       </button>
     </div>
   </header>
@@ -26,7 +30,9 @@
   <!-- Barra de Herramientas de Filtrado Estilo Linear -->
   <div class="barra-herramientas">
     <div class="campo-busqueda-grupo">
-      <span class="icono-lupa" aria-hidden="true">🔍</span>
+      <span class="icono-lupa" aria-hidden="true">
+        <app-icono nombre="lupa" [tamano]="15"></app-icono>
+      </span>
       <input
         type="search"
         class="input-busqueda"
@@ -42,7 +48,7 @@
           (click)="limpiarBusqueda()"
           aria-label="Limpiar búsqueda"
         >
-          ✕
+          <app-icono nombre="cerrar" [tamano]="12"></app-icono>
         </button>
       }
     </div>
@@ -99,7 +105,7 @@
           <tr>
             <td colspan="5" class="celda-vacia">
               <div class="cargando-fila">
-                <span class="spinner-icono">⏳</span>
+                <app-icono nombre="reloj" [tamano]="18"></app-icono>
                 <span>Cargando registros forenses en tiempo real...</span>
               </div>
             </td>
@@ -108,7 +114,8 @@
           <tr>
             <td colspan="5" class="celda-vacia">
               <div class="vacio-fila">
-                <span>🔍 No se encontraron registros con los criterios actuales.</span>
+                <app-icono nombre="lupa" [tamano]="18"></app-icono>
+                <span>No se encontraron registros con los criterios actuales.</span>
               </div>
             </td>
           </tr>
@@ -147,7 +154,7 @@
                     title="Inspeccionar detalle del incidente"
                     aria-label="Inspeccionar detalle"
                   >
-                    👁️
+                    <app-icono nombre="ojo" [tamano]="14"></app-icono>
                   </button>
                   <button
                     type="button"
@@ -156,7 +163,7 @@
                     title="Eliminar registro"
                     aria-label="Eliminar registro"
                   >
-                    🗑️
+                    <app-icono nombre="papelera" [tamano]="14"></app-icono>
                   </button>
                 </div>
               </td>
@@ -181,7 +188,8 @@
           (click)="irAPagina(paginaActual() - 1)"
           aria-label="Página anterior"
         >
-          ← Anterior
+          <app-icono nombre="chevron-abajo" [tamano]="12" style="transform: rotate(90deg); display: inline-flex;"></app-icono>
+          <span>Anterior</span>
         </button>
         <button
           type="button"
@@ -190,7 +198,8 @@
           (click)="irAPagina(paginaActual() + 1)"
           aria-label="Página siguiente"
         >
-          Siguiente →
+          <span>Siguiente</span>
+          <app-icono nombre="chevron-abajo" [tamano]="12" style="transform: rotate(-90deg); display: inline-flex;"></app-icono>
         </button>
       </div>
     </footer>

@@ -4,8 +4,10 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative;
   background: var(--color-fondo);
   color: var(--color-texto);
+  overflow-x: hidden;
 }
 
 .barra-superior-arquitectura {
@@ -16,13 +18,14 @@
   align-items: center;
   flex-wrap: wrap;
   gap: var(--espaciado-md);
-  background: var(--color-superficie);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--color-borde);
+  background: var(--superficie-1);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--brillo-borde);
   position: sticky;
   top: 0;
   z-index: 100;
+  box-shadow: var(--sombra-base);
 }
 
 .identidad-seccion {
@@ -32,19 +35,27 @@
 }
 
 .boton-retorno {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 0.82rem;
   font-weight: 600;
   color: var(--color-primario);
-  padding: 6px 14px;
-  border-radius: var(--radio-md);
-  background: var(--color-superficie-elevada);
-  border: 1px solid var(--color-borde);
+  padding: 7px 14px;
+  border-radius: var(--radio-mediano);
+  background: var(--color-fondo-entrada);
+  border: 1px solid var(--brillo-borde);
   cursor: pointer;
-  transition: all var(--transicion-rapida);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 
   &:hover {
+    background: var(--superficie-2);
     border-color: var(--color-primario);
     transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: scale(0.97);
   }
 }
 
@@ -52,18 +63,21 @@
   display: flex;
   align-items: center;
   gap: var(--espaciado-sm);
-}
 
-.icono-marca {
-  font-size: 1.8rem;
+  .icono-marca-contenedor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 4px 10px rgba(56, 189, 248, 0.3));
+  }
 }
 
 .titulo-marca {
   font-size: 1.15rem;
   font-weight: 700;
   margin: 0;
-  color: var(--color-texto);
-  letter-spacing: -0.02em;
+  color: var(--color-texto-primario);
+  letter-spacing: var(--rastreo-titular);
 }
 
 .subtitulo-marca {
@@ -78,21 +92,30 @@
 }
 
 .boton-soc-acceso {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 0.82rem;
   font-weight: 600;
   padding: 7px 14px;
-  border-radius: var(--radio-md);
-  background: var(--color-superficie-elevada);
-  border: 1px solid var(--color-borde);
-  color: var(--color-texto);
+  border-radius: var(--radio-mediano);
+  background: var(--color-fondo-entrada);
+  border: 1px solid var(--brillo-borde);
+  color: var(--color-texto-primario);
   cursor: pointer;
-  transition: all var(--transicion-rapida);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 
   &:hover {
+    background: var(--superficie-2);
     border-color: var(--color-primario);
     transform: translateY(-1px);
   }
+
+  &:active {
+    transform: scale(0.97);
+  }
 }
+
 
 .contenedor-principal-arquitectura {
   width: 100%;

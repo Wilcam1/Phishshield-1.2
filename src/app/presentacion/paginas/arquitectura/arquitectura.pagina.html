@@ -1,20 +1,28 @@
 <div class="diseno-pagina-arquitectura">
+  <!-- Fondo vivo aurora y rejilla sutil -->
+  <div class="lienzo-aurora-fondo" aria-hidden="true"></div>
+  <div class="rejilla-patron-fondo" aria-hidden="true"></div>
+
   <app-notificacion-flotante />
 
-  <!-- BARRA DE NAVEGACIÓN SUPERIOR -->
-  <header class="barra-superior-arquitectura" role="banner">
+  <!-- BARRA DE NAVEGACIÓN SUPERIOR GLASSMORPHISM -->
+  <header class="barra-superior-arquitectura superficie-nivel-1" role="banner">
     <div class="identidad-seccion">
       <button
         type="button"
         class="boton-retorno"
+        appLuzCursor
         (click)="volverAlAnalizador()"
         title="Volver al verificador público"
       >
-        ← Verificador
+        <app-icono nombre="chevron-abajo" [tamano]="14" style="transform: rotate(90deg);" />
+        <span>Verificador</span>
       </button>
 
       <div class="marca-grupo">
-        <span class="icono-marca">🏛️</span>
+        <div class="icono-marca-contenedor">
+          <app-icono nombre="capas" [tamano]="24" color="var(--color-primario)" />
+        </div>
         <div>
           <h1 class="titulo-marca">Arquitectura PhishShield</h1>
           <span class="subtitulo-marca">Separación Estricta de Responsabilidades en 3 Capas</span>
@@ -26,10 +34,12 @@
       <button
         type="button"
         class="boton-soc-acceso"
+        appLuzCursor
         (click)="irAlPanelSoc()"
         title="Ir al Centro de Operaciones SOC"
       >
-        📊 Panel SOC
+        <app-icono nombre="candado" [tamano]="16" />
+        <span>Panel SOC</span>
       </button>
 
       <app-selector-tema />
@@ -41,3 +51,4 @@
     <app-visor-flujo-arquitectura />
   </main>
 </div>
+

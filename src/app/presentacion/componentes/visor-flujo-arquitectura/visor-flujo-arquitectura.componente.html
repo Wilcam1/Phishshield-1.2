@@ -1,8 +1,10 @@
-<div class="visor-flujo-contenedor" role="region" aria-label="Simulador y Visualizador de Flujo de Capas">
+<div class="visor-flujo-contenedor superficie-nivel-2" role="region" aria-label="Simulador y Visualizador de Flujo de Capas">
   <!-- CABECERA DEL VISOR -->
   <header class="visor-cabecera">
     <div class="visor-titulo-bloque">
-      <div class="icono-flujo" aria-hidden="true">🧬</div>
+      <div class="icono-flujo" aria-hidden="true">
+        <app-icono nombre="capas" [tamano]="24" color="var(--color-primario)" />
+      </div>
       <div>
         <h2 class="visor-titulo">Trazador de Arquitectura y Flujo entre Capas</h2>
         <p class="visor-subtitulo">
@@ -18,18 +20,22 @@
         <button
           type="button"
           class="boton-escenario"
+          appLuzCursor
           [class.activo]="urlSeleccionada() === 'https://banco-login-falso.xyz/login'"
           (click)="establecerUrlEjemplo('https://banco-login-falso.xyz/login')"
         >
-          🚨 Phishing Bancario
+          <app-icono nombre="alerta" [tamano]="14" color="#f87171" />
+          <span>Phishing Bancario</span>
         </button>
         <button
           type="button"
           class="boton-escenario"
+          appLuzCursor
           [class.activo]="urlSeleccionada() === 'https://portal-seguro.com/cuenta'"
           (click)="establecerUrlEjemplo('https://portal-seguro.com/cuenta')"
         >
-          🟢 Sitio Legítimo
+          <app-icono nombre="check" [tamano]="14" color="#34d399" />
+          <span>Sitio Legítimo</span>
         </button>
       </div>
     </div>
@@ -40,6 +46,7 @@
     <!-- Capa 1: Presentación -->
     <div
       class="nodo-capa"
+      appLuzCursor
       [class.activo-origen]="capaActivaOrigen() === 'presentacion'"
       [class.activo-destino]="capaActivaDestino() === 'presentacion'"
       (click)="inspeccionarCapa('presentacion')"
@@ -48,7 +55,9 @@
       (keydown.enter)="inspeccionarCapa('presentacion')"
       aria-label="Capa de Presentación. Clic para ver especificaciones."
     >
-      <div class="nodo-icono">🖥️</div>
+      <div class="nodo-icono">
+        <app-icono nombre="ojo" [tamano]="22" />
+      </div>
       <div class="nodo-cuerpo">
         <span class="nodo-tipo">FRONT-END UI</span>
         <h4 class="nodo-nombre">Presentación</h4>
@@ -69,6 +78,7 @@
     <!-- Capa 2: Lógica de Negocio -->
     <div
       class="nodo-capa"
+      appLuzCursor
       [class.activo-origen]="capaActivaOrigen() === 'logica'"
       [class.activo-destino]="capaActivaDestino() === 'logica'"
       (click)="inspeccionarCapa('logica')"
@@ -77,7 +87,9 @@
       (keydown.enter)="inspeccionarCapa('logica')"
       aria-label="Capa de Lógica de Negocio. Clic para ver especificaciones."
     >
-      <div class="nodo-icono">⚙️</div>
+      <div class="nodo-icono">
+        <app-icono nombre="cpu" [tamano]="22" />
+      </div>
       <div class="nodo-cuerpo">
         <span class="nodo-tipo">DOMAIN LOGIC</span>
         <h4 class="nodo-nombre">Lógica</h4>
@@ -98,6 +110,7 @@
     <!-- Capa 3: Acceso a Datos -->
     <div
       class="nodo-capa"
+      appLuzCursor
       [class.activo-origen]="capaActivaOrigen() === 'datos'"
       [class.activo-destino]="capaActivaDestino() === 'datos'"
       (click)="inspeccionarCapa('datos')"
@@ -106,7 +119,9 @@
       (keydown.enter)="inspeccionarCapa('datos')"
       aria-label="Capa de Datos. Clic para ver especificaciones."
     >
-      <div class="nodo-icono">🗄️</div>
+      <div class="nodo-icono">
+        <app-icono nombre="servidor" [tamano]="22" />
+      </div>
       <div class="nodo-cuerpo">
         <span class="nodo-tipo">DATA ACCESS</span>
         <h4 class="nodo-nombre">Datos</h4>
@@ -127,6 +142,7 @@
     <!-- Capa 4: Microservicios -->
     <div
       class="nodo-capa"
+      appLuzCursor
       [class.activo-origen]="capaActivaOrigen() === 'microservicios'"
       [class.activo-destino]="capaActivaDestino() === 'microservicios'"
       (click)="inspeccionarCapa('microservicios')"
@@ -135,7 +151,9 @@
       (keydown.enter)="inspeccionarCapa('microservicios')"
       aria-label="Ecosistema de Microservicios. Clic para ver especificaciones."
     >
-      <div class="nodo-icono">📡</div>
+      <div class="nodo-icono">
+        <app-icono nombre="red" [tamano]="22" />
+      </div>
       <div class="nodo-cuerpo">
         <span class="nodo-tipo">BACKEND SERVICES</span>
         <h4 class="nodo-nombre">Microservicios</h4>
@@ -147,6 +165,7 @@
     </div>
   </div>
 
+
   <!-- BARRA DE CONTROLES DE REPRODUCCIÓN -->
   <div class="controles-flujo">
     <div class="botones-reproduccion">
@@ -154,47 +173,55 @@
         <button
           type="button"
           class="boton-control boton-primario"
+          appLuzCursor
           (click)="iniciarReproduccion()"
           title="Iniciar animación automática"
         >
-          ▶ Reproducir
+          <span>Reproducir</span>
         </button>
       } @else {
         <button
           type="button"
           class="boton-control boton-pausa"
+          appLuzCursor
           (click)="pausarReproduccion()"
           title="Pausar animación"
         >
-          ⏸ Pausar
+          <span>Pausar</span>
         </button>
       }
 
       <button
         type="button"
         class="boton-control"
+        appLuzCursor
         (click)="pasoAnterior()"
         title="Paso anterior"
       >
-        ⏮ Anterior
+        <app-icono nombre="chevron-abajo" [tamano]="14" style="transform: rotate(90deg);" />
+        <span>Anterior</span>
       </button>
 
       <button
         type="button"
         class="boton-control"
+        appLuzCursor
         (click)="pasoSiguiente()"
         title="Paso siguiente"
       >
-        ⏭ Siguiente
+        <span>Siguiente</span>
+        <app-icono nombre="chevron-abajo" [tamano]="14" style="transform: rotate(-90deg);" />
       </button>
 
       <button
         type="button"
         class="boton-control boton-secundario"
+        appLuzCursor
         (click)="reiniciarFlujo()"
         title="Volver al paso inicial"
       >
-        🔄 Reiniciar
+        <app-icono nombre="refrescar" [tamano]="14" />
+        <span>Reiniciar</span>
       </button>
     </div>
 
@@ -216,11 +243,14 @@
   </div>
 
   <!-- PANEL DE DETALLES DEL PASO ACTIVO -->
-  <div class="detalle-paso-panel">
+  <div class="detalle-paso-panel superficie-nivel-1">
     <div class="detalle-paso-cabecera">
       <div class="paso-etiqueta-grupo">
         <span class="insignia-paso">PASO {{ pasoActual().numero }} DE {{ listaPasos.length }}</span>
-        <span class="archivo-insignia">📁 {{ pasoActual().archivoResponsable }}</span>
+        <span class="archivo-insignia">
+          <app-icono nombre="terminal" [tamano]="13" />
+          <span>{{ pasoActual().archivoResponsable }}</span>
+        </span>
       </div>
       <h3 class="paso-titulo">{{ pasoActual().titulo }}</h3>
       <p class="paso-subtitulo">{{ pasoActual().subtitulo }}</p>
@@ -235,7 +265,9 @@
         </div>
 
         <div class="bloque-regla-arquitectura">
-          <div class="regla-icono">🛡️</div>
+          <div class="regla-icono">
+            <app-icono nombre="escudo" [tamano]="20" color="var(--color-primario)" />
+          </div>
           <div>
             <h5 class="regla-titulo">Regla de Separación de Capas</h5>
             <p class="regla-texto">{{ pasoActual().reglaArquitectura }}</p>
@@ -274,10 +306,10 @@
       aria-modal="true"
       (keydown.escape)="cerrarInspeccionCapa()"
     >
-      <div class="inspeccion-modal">
+      <div class="inspeccion-modal superficie-nivel-3">
         <header class="inspeccion-cabecera">
           <div class="inspeccion-titulo-grupo">
-            <span class="inspeccion-icono">{{ info.icono }}</span>
+            <app-icono nombre="capas" [tamano]="22" color="var(--color-primario)" />
             <div>
               <h3 class="inspeccion-nombre">{{ info.nombre }}</h3>
               <span class="inspeccion-subtitulo">{{ info.subtitulo }}</span>
@@ -289,7 +321,7 @@
             (click)="cerrarInspeccionCapa()"
             aria-label="Cerrar modal"
           >
-            ✕
+            <app-icono nombre="cerrar" [tamano]="16" />
           </button>
         </header>
 
@@ -314,7 +346,10 @@
 
           <div class="inspeccion-grid-reglas">
             <div class="caja-regla caja-permitido">
-              <span class="titulo-regla">✅ Permitido Importar:</span>
+              <span class="titulo-regla">
+                <app-icono nombre="check" [tamano]="16" color="#34d399" />
+                <span>Permitido Importar:</span>
+              </span>
               <ul>
                 @for (imp of info.importacionesPermitidas; track imp) {
                   <li>{{ imp }}</li>
@@ -323,7 +358,10 @@
             </div>
 
             <div class="caja-regla caja-prohibido">
-              <span class="titulo-regla">🚫 Prohibido Importar:</span>
+              <span class="titulo-regla">
+                <app-icono nombre="cerrar" [tamano]="16" color="#f87171" />
+                <span>Prohibido Importar:</span>
+              </span>
               <ul>
                 @for (imp of info.importacionesProhibidas; track imp) {
                   <li>{{ imp }}</li>
@@ -336,3 +374,4 @@
     </div>
   }
 </div>
+

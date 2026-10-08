@@ -2,9 +2,9 @@
   position: fixed;
   inset: 0;
   z-index: 9000;
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,7 +17,10 @@
   max-width: 420px;
   border-radius: var(--radio-grande);
   overflow: hidden;
-  animation: escalarModal var(--duracion-normal) var(--curva-resorte) both;
+  background: var(--superficie-3);
+  border: 1px solid var(--brillo-borde);
+  box-shadow: var(--sombra-flotante);
+  animation: escalarModal 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .encabezado-modal {
@@ -25,21 +28,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--color-borde-cristal);
+  border-bottom: 1px solid var(--brillo-borde);
 
   .logo-modal {
     display: flex;
     align-items: center;
     gap: var(--espaciado-sm);
 
-    .icono-escudo {
-      font-size: 1.8rem;
-    }
-
     .titulo-modal {
       font-size: 1.15rem;
       font-weight: 700;
       color: var(--color-texto-primario);
+      letter-spacing: var(--rastreo-titular);
+      margin: 0;
     }
 
     .subtitulo-modal {
@@ -49,13 +50,19 @@
   }
 
   .boton-cerrar-modal {
-    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
     color: var(--color-texto-secundario);
     padding: 6px;
     border-radius: var(--radio-pildora);
+    cursor: pointer;
+    transition: all 0.2s ease;
 
     &:hover {
-      background: var(--color-fondo-entrada);
+      background: var(--superficie-1);
       color: var(--color-texto-primario);
     }
   }
@@ -77,6 +84,7 @@
     font-size: 0.8rem;
     font-weight: 600;
     color: var(--color-texto-secundario);
+    letter-spacing: var(--rastreo-etiqueta);
   }
 }
 
@@ -85,19 +93,20 @@
   align-items: center;
   gap: var(--espaciado-sm);
   background: var(--color-fondo-entrada);
-  border: 1px solid var(--color-borde-cristal);
+  border: 1px solid var(--brillo-borde);
   border-radius: var(--radio-mediano);
   padding: 0 14px;
   min-height: 48px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 
   &:focus-within {
     border-color: var(--color-primario);
-    background: var(--color-fondo-elevado);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2), 0 8px 20px rgba(0, 0, 0, 0.2);
   }
 
   .icono-input {
-    font-size: 1.1rem;
-    opacity: 0.7;
+    display: flex;
+    align-items: center;
   }
 
   .campo-texto {
@@ -129,7 +138,14 @@
   .boton-bloque {
     width: 100%;
     min-height: 48px;
-    font-size: 1rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: var(--radio-mediano);
+    transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &:active {
+      transform: scale(0.97);
+    }
   }
 }
 
@@ -141,10 +157,18 @@
 @keyframes escalarModal {
   from {
     opacity: 0;
-    transform: scale(0.92) translateY(10px);
+    transform: scale(0.94) translateY(12px);
   }
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .telon-modal,
+  .caja-modal {
+    animation: none !important;
+  }
+}
+

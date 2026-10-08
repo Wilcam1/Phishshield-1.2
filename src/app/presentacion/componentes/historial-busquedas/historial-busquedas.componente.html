@@ -1,7 +1,9 @@
 <section class="tarjeta-historial superficie-cristal" role="region" aria-label="Historial de análisis recientes">
   <header class="encabezado-historial">
     <div class="izquierda-historial">
-      <span class="icono-reloj" aria-hidden="true">📝</span>
+      <span class="icono-reloj-envoltorio" aria-hidden="true">
+        <app-icono nombre="reloj" [tamano]="16"></app-icono>
+      </span>
       <h3 class="titulo-historial">Búsquedas Recientes</h3>
     </div>
 
@@ -12,8 +14,10 @@
         (click)="limpiar()"
         title="Limpiar historial local"
         aria-label="Limpiar historial de búsquedas"
+        appLuzCursor
       >
-        <span>🗑️ Limpiar</span>
+        <app-icono nombre="papelera" [tamano]="13"></app-icono>
+        <span>Limpiar</span>
       </button>
     }
   </header>
@@ -30,6 +34,7 @@
               class="boton-item-url"
               (click)="seleccionar(item.url)"
               [title]="'Reanalizar ' + item.url"
+              appLuzCursor
             >
               <span class="url-texto texto-mono">{{ item.url }}</span>
               <div class="meta-item">

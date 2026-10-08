@@ -6,14 +6,16 @@ import {
   evaluarSeguridadContrasena,
   EvaluacionContrasena,
 } from '../../../logica/validadores/contrasena.validador';
+import { IconoComponente } from '../icono/icono.componente';
 
 @Component({
   selector: 'app-dialogo-cambio-contrasena',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, IconoComponente],
   templateUrl: './dialogo-cambio-contrasena.componente.html',
   styleUrl: './dialogo-cambio-contrasena.componente.scss',
 })
+
 export class DialogoCambioContrasenaComponente {
   @Input() visible = false;
   @Input() estaCargando = false;

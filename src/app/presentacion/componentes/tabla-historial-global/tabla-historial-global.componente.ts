@@ -3,13 +3,15 @@ import { Component, computed, EventEmitter, Input, Output, signal } from '@angul
 import { ElementoHistorialGlobal } from '../../../datos/modelos/administracion.modelo';
 import { FormatoFechaTuberia } from '../../tuberias/formato-fecha.tuberia';
 import { RiesgoColorTuberia } from '../../tuberias/riesgo-color.tuberia';
+import { IconoComponente } from '../icono/icono.componente';
+import { LuzCursorDirectiva } from '../../directivas/luz-cursor.directiva';
 
 export type FiltroSeveridad = 'todos' | 'alto' | 'medio' | 'bajo';
 
 @Component({
   selector: 'app-tabla-historial-global',
   standalone: true,
-  imports: [CommonModule, RiesgoColorTuberia, FormatoFechaTuberia],
+  imports: [CommonModule, RiesgoColorTuberia, FormatoFechaTuberia, IconoComponente, LuzCursorDirectiva],
   templateUrl: './tabla-historial-global.componente.html',
   styleUrl: './tabla-historial-global.componente.scss',
 })

@@ -3,14 +3,17 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ElementoHistorialGlobal } from '../../../datos/modelos/administracion.modelo';
 import { FormatoFechaTuberia } from '../../tuberias/formato-fecha.tuberia';
 import { RiesgoColorTuberia } from '../../tuberias/riesgo-color.tuberia';
+import { IconoComponente } from '../icono/icono.componente';
+import { LuzCursorDirectiva } from '../../directivas/luz-cursor.directiva';
 
 @Component({
   selector: 'app-drawer-incidente',
   standalone: true,
-  imports: [CommonModule, RiesgoColorTuberia, FormatoFechaTuberia],
+  imports: [CommonModule, RiesgoColorTuberia, FormatoFechaTuberia, IconoComponente, LuzCursorDirectiva],
   templateUrl: './drawer-incidente.componente.html',
   styleUrl: './drawer-incidente.componente.scss',
 })
+
 export class DrawerIncidenteComponente {
   @Input() elemento: ElementoHistorialGlobal | null = null;
   @Input() set incidente(valor: ElementoHistorialGlobal | null) {

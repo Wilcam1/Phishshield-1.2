@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
+import { IconoComponente, NombreIcono } from '../icono/icono.componente';
+import { LuzCursorDirectiva } from '../../directivas/luz-cursor.directiva';
 
 export type EstadoServicio = 'operativo' | 'degradado' | 'inactivo';
 
@@ -8,6 +10,7 @@ export interface ServicioEstadoInfo {
   nombre: string;
   puerto: string;
   tipo: string;
+  icono: NombreIcono;
   estado: EstadoServicio;
   latenciaMs: number;
   disponibilidadPorcentaje: number;
@@ -18,7 +21,7 @@ export interface ServicioEstadoInfo {
 @Component({
   selector: 'app-telemetria-servicios',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IconoComponente, LuzCursorDirectiva],
   templateUrl: './telemetria-servicios.componente.html',
   styleUrl: './telemetria-servicios.componente.scss',
 })
@@ -31,6 +34,7 @@ export class TelemetriaServiciosComponente {
       nombre: 'API Gateway & Motor Heurístico',
       puerto: ':3001',
       tipo: 'Node.js Express / Puppeteer',
+      icono: 'servidor',
       estado: 'operativo',
       latenciaMs: 14,
       disponibilidadPorcentaje: 99.98,
@@ -42,6 +46,7 @@ export class TelemetriaServiciosComponente {
       nombre: 'Microservicio Machine Learning',
       puerto: ':8000',
       tipo: 'Python FastAPI / Random Forest',
+      icono: 'cpu',
       estado: 'operativo',
       latenciaMs: 8,
       disponibilidadPorcentaje: 99.95,
@@ -53,6 +58,7 @@ export class TelemetriaServiciosComponente {
       nombre: 'Microservicio Educativo IA',
       puerto: ':6000',
       tipo: 'Python FastAPI / Asistente IA',
+      icono: 'ia-robot',
       estado: 'operativo',
       latenciaMs: 19,
       disponibilidadPorcentaje: 99.9,

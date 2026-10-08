@@ -1,7 +1,9 @@
 <div class="telemetria-contenedor">
   <div class="telemetria-cabecera">
     <div class="telemetria-titulo-grupo">
-      <span class="telemetria-icono">📡</span>
+      <span class="telemetria-icono-envoltorio">
+        <app-icono nombre="red" [tamano]="20"></app-icono>
+      </span>
       <div>
         <h3 class="telemetria-titulo">Salud de Microservicios en Vivo</h3>
         <p class="telemetria-subtitulo">Monitoreo continuo de latencia y estado operacional del ecosistema</p>
@@ -15,11 +17,16 @@
 
   <div class="servicios-cuadricula">
     @for (servicio of servicios(); track servicio.id) {
-      <div class="servicio-tarjeta" [class]="'estado-' + servicio.estado">
+      <div class="servicio-tarjeta" [class]="'estado-' + servicio.estado" appLuzCursor>
         <div class="servicio-encabezado">
           <div class="servicio-info">
-            <span class="servicio-nombre">{{ servicio.nombre }}</span>
-            <span class="servicio-puerto">{{ servicio.puerto }}</span>
+            <div class="servicio-nombre-fila">
+              <span class="servicio-icono-caja">
+                <app-icono [nombre]="servicio.icono" [tamano]="16"></app-icono>
+              </span>
+              <span class="servicio-nombre">{{ servicio.nombre }}</span>
+            </div>
+            <span class="servicio-puerto texto-mono">{{ servicio.puerto }}</span>
           </div>
           <div class="servicio-indicador" [attr.aria-label]="'Estado: ' + servicio.estado">
             <span class="indicador-punto"></span>

@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, OnDestroy, signal } from '@angular/core';
+import { IconoComponente } from '../icono/icono.componente';
+import { LuzCursorDirectiva } from '../../directivas/luz-cursor.directiva';
 
 export type IdentificadorCapa = 'presentacion' | 'logica' | 'datos' | 'microservicios';
 
@@ -31,11 +33,12 @@ export interface InformacionCapa {
 @Component({
   selector: 'app-visor-flujo-arquitectura',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IconoComponente, LuzCursorDirectiva],
   templateUrl: './visor-flujo-arquitectura.componente.html',
   styleUrl: './visor-flujo-arquitectura.componente.scss',
 })
 export class VisorFlujoArquitecturaComponente implements OnDestroy {
+
   readonly pasoActualIndex = signal<number>(0);
   readonly estaReproduciendo = signal<boolean>(false);
   readonly capaSeleccionadaParaInspeccion = signal<IdentificadorCapa | null>(null);

@@ -2,13 +2,14 @@
   position: fixed;
   inset: 0;
   z-index: 8500;
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--espaciado-md);
-  animation: oscurecerFondo var(--duracion-normal) var(--curva-suave) both;
+  animation: oscurecerFondo 240ms var(--curva-suave) both;
 }
 
 .caja-modal {
@@ -17,9 +18,12 @@
   max-height: 80vh;
   display: flex;
   flex-direction: column;
-  border-radius: var(--radio-grande);
+  background: var(--superficie-3, rgba(15, 23, 42, 0.94));
+  border: 1px solid var(--brillo-borde, rgba(255, 255, 255, 0.12));
+  border-radius: var(--radio-grande, 20px);
+  box-shadow: var(--sombra-flotante, 0 24px 60px rgba(0, 0, 0, 0.5));
   overflow: hidden;
-  animation: escalarModal var(--duracion-normal) var(--curva-resorte) both;
+  animation: escalarModal 320ms var(--curva-resorte, cubic-bezier(0.16, 1, 0.3, 1)) both;
 }
 
 .encabezado-modal {
@@ -27,23 +31,36 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--color-borde-cristal);
+  border-bottom: 1px solid var(--brillo-borde, rgba(255, 255, 255, 0.08));
+  background: rgba(255, 255, 255, 0.02);
 
   .titulo-modal {
     font-size: 1.15rem;
     font-weight: 700;
+    letter-spacing: var(--rastreo-titular, -0.015em);
     color: var(--color-texto-primario);
   }
 
   .boton-cerrar-modal {
-    font-size: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     color: var(--color-texto-secundario);
-    padding: 6px;
+    width: 32px;
+    height: 32px;
     border-radius: var(--radio-pildora);
+    border: 1px solid transparent;
+    transition: all 180ms ease;
 
     &:hover {
-      background: var(--color-fondo-entrada);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--brillo-borde, rgba(255, 255, 255, 0.12));
       color: var(--color-texto-primario);
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(0.95);
     }
   }
 }

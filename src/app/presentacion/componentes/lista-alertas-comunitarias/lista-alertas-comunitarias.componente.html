@@ -1,7 +1,9 @@
 <section class="tarjeta-alertas superficie-cristal" role="region" aria-label="Alertas comunitarias activas">
   <header class="encabezado-alertas">
     <div class="izquierda-encabezado">
-      <span class="icono-alerta" aria-hidden="true">🚨</span>
+      <span class="icono-alerta-envoltorio" aria-hidden="true">
+        <app-icono nombre="alerta" [tamano]="16"></app-icono>
+      </span>
       <h4 class="titulo-alertas">Alertas Comunitarias Activas</h4>
     </div>
 
@@ -11,8 +13,10 @@
       (click)="exportar()"
       [disabled]="reportes.length === 0"
       title="Exportar archivo JSON de alertas"
+      appLuzCursor
     >
-      <span>📥 Exportar JSON</span>
+      <app-icono nombre="descargar" [tamano]="14"></app-icono>
+      <span>Exportar JSON</span>
     </button>
   </header>
 
@@ -24,7 +28,7 @@
     } @else {
       <div class="lista-alertas">
         @for (rep of reportes; track rep.url) {
-          <div class="item-alerta">
+          <div class="item-alerta" appLuzCursor>
             <div class="info-alerta">
               <span class="url-alerta texto-mono" [title]="rep.url">{{ rep.url }}</span>
               <span class="meta-alerta">

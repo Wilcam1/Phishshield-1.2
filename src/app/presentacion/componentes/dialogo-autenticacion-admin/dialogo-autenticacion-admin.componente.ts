@@ -2,14 +2,16 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CredencialesAdministrador } from '../../../datos/modelos/administracion.modelo';
+import { IconoComponente } from '../icono/icono.componente';
 
 @Component({
   selector: 'app-dialogo-autenticacion-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, IconoComponente],
   templateUrl: './dialogo-autenticacion-admin.componente.html',
   styleUrl: './dialogo-autenticacion-admin.componente.scss',
 })
+
 export class DialogoAutenticacionAdminComponente {
   @Input() visible = false;
   @Input() estaCargando = false;
