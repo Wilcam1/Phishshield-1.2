@@ -1,0 +1,1 @@
+﻿@call "%~dp0detener_servicios.bat"

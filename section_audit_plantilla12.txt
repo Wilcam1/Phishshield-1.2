@@ -1,0 +1,764 @@
+
+================================================================================
+SECCIÓN: Portada (Párrafos 0 a 34)
+================================================================================
+[P002 | paragraph]: PhishShield: Detección Inteligente de Phishing en PYMES
+
+[P011 | paragraph]: Wilson Camilo Ríos Martínez
+
+[P012 | paragraph]: María Paula Hernández Abelló
+
+[P013 | paragraph]: Nicolas Duran Poveda
+
+[P020 | paragraph]: Ingeniería de Software, Fundación Universitaria Compensar
+
+[P021 | paragraph]: Proyecto fin de grado
+
+[P022 | paragraph]: Ingeniero Carlos Hugo Neiva Reyes
+
+[P023 | paragraph]: 26 de septiembre de 2026
+
+[P032 | paragraph]: Esta obra está bajo una Licencia Creative Commons Atribución-NoComercial-CompartirIgual 4.0 Internacional.
+
+
+================================================================================
+SECCIÓN: Dedicatoria y Agradecimientos (Párrafos 35 a 44)
+================================================================================
+[P035 | Títulos Preliminares 1]: (Dedicatoria o lema)
+
+[P037 | Normal]: Dedicamos este trabajo a nuestras familias por su apoyo incondicional en cada desvelo y reto académico; a los docentes y profesionales que nos inspiraron a construir software con propósito ético y social; y a la comunidad de la ingeniería y la ciberseguridad, cuyo esfuerzo diario protege el tejido empresarial y fortalece un ecosistema digital más seguro y resiliente para todos.
+
+[P038 | Títulos Preliminares 1]: Agradecimientos
+
+[P039 | Normal]: Los autores expresan su sincero y profundo agradecimiento a:
+
+[P040 | Normal]: • Al Ingeniero Carlos Hugo Neiva Reyes, docente y director de este proyecto de grado en la Fundación Universitaria Compensar, por su orientación metodológica, rigor técnico, retroalimentación constructiva y constante motivación a lo largo de cada una de las fases de investigación y desarrollo.
+
+[P041 | Normal]: • A la Fundación Universitaria Compensar y al cuerpo docente del Programa de Ingeniería de Software, por brindar las bases académicas, conceptuales y prácticas que hicieron posible consolidar una solución tecnológica orientada a la resolución de problemas reales del sector productivo.
+
+[P042 | Normal]: • A las pequeñas y medianas empresas (PYMEs) y profesionales de seguridad que colaboraron voluntariamente en las fases de recolección de información, validación empírica y retroalimentación de la interfaz de usuario.
+
+[P043 | Normal]: • A los creadores y mantenedores de los proyectos de código abierto (Node.js, Express, FastAPI, Scikit-Learn, Puppeteer y Chromium), pilares que sustentan la materialización de esta plataforma.
+
+
+================================================================================
+SECCIÓN: Resumen y Abstract (Párrafos 45 a 56)
+================================================================================
+[P045 | Títulos Preliminares 1]: Resumen
+
+[P046 | Normal]: En Animal's S.A.S. existe una problemática que, por falta de buenos hábitos y herramientas especializadas se han producido clics accidentales en enlaces sospechosos permitiendo fuga de información sensible como credenciales, archivos u otro tipo de informes confidenciales.
+
+[P047 | Normal]: Desarrollar un software especializado para el análisis y detección de URLs maliciosas apoyando la parte de Ciberseguridad de la compañía, el sistema está basado bajo una tecnología híbrida entre lenguajes de programación y modelos de IA como Machine Learning. El enfoque para el proyecto está sustentado en el prototipo incremental en 4 fases, usando patrones avanzados y una arquitectura en Microservicios, permitiendo una rápida respuesta en análisis asegurando 19 comprobaciones heurísticas distribuidas en cuatro capas analíticas, con respuesta en tiempo real. Combinando análisis estructural y heurístico, detección de suplantación tipográfica y homógrafos, clasificación predictiva mediante Random Forest y consulta a fuentes externas de reputación.
+
+[P048 | Normal]: La hipótesis se contrastará mediante un protocolo experimental con partición estratificada, validación cruzada con K-Fold, Intervalos de confianza por metodología bootstrap, criterios de aceptación o rechazo y una prueba de usabilidad SUS con sus propios funcionarios.
+
+[P049 | Normal]: Al tratarse de datos sensibles de la compañía se estipula que todo el proyecto se rige bajo la Ley 1581 de 2012 y al Decreto 1377 de 2013, garantizando anonimización, consentimiento informado y confidencialidad. Con esto, PhishShield reduce significativamente la exposición al riesgo, ya que la entidad se apoyará en un análisis técnico y sustentado.
+
+[P051 | Títulos preliminares]: Abstract
+
+[P052 | List Paragraph]: Phishing and social engineering are among the main vectors of cybersecurity incidents worldwide, particularly affecting small and medium-sized enterprises (SMEs), which often lack the financial resources required to implement advanced perimeter security solutions and Security Operations Centers (SOCs). At Animal’s S.A.S., this problem is reflected in accidental clicks on suspicious links, potentially leading to the exposure or leakage of sensitive information, including credentials, files, and confidential reports. In response to this situation, this undergraduate thesis presents PhishShield, a specialized platform for the analysis and detection of malicious URLs designe to support the company’s cybersecurity processes through a decoupled microservices architecture and a hybrid approach that combines programming technologies, heuristic analysis, external reputation sources, Artificial Intelligence, and Machine Learning. The system implements a multilayer inspection pipeline consisting of 19 technical validations distributed across four analytical layers. These validations include lexical and structural URL analysis, edit-distance algorithms such as Levenshtein, detection of typographical impersonation and Unicode homographs through Punycode, and a Python-based FastAPI microservice incorporating a Random Forest classifier trained using a vector of 15 forensic features. The system also calculates Shannon entropy to identify potentially algorithmically generated domains (DGA), performs real-time SSL/TLS certificate auditing, validates domain age below 72 hours, and uses isolated **Document Object Model (DOM) emulation through Puppeteer in a headless environment to detect fraudulent forms designed to capture credentials and credit card information. Additionally, PhishShield incorporates an Artificial Intelligence Educational Assistant that contextualizes technical verdicts and provides interactive micro-quizzes to strengthen user awareness, as well as an administrative SOC-oriented dashboard with monitoring metrics and forensic data export capabilities in CSV and JSON formats. The development process follows an incremental prototype methodology divided into four phases, applying advanced design patterns, asynchronous non-blocking concurrency, and caching mechanisms to provide rapid real-time responses. The research hypothesis is evaluated through an experimental protocol involving stratified data partitioning, K-Fold cross-validation, bootstrap-based confidence intervals, acceptance and rejection criteria, and a System Usability Scale (SUS) assessment involving company employees. Functional and load testing achieved a 96.8% accuracy rate in detecting fraudulent links, with average response times below 1.2 seconds. Given the sensitive nature of the information involved, the project complies with Colombian Law 1581 of 2012 and Decree 1377 of 2013, ensuring data anonymization, informed consent, protection, and confidentiality. Therefore, PhishShield aims to significantly reduce Animal’s S.A.S.’s exposure to phishing and social engineering threats by providing an automated, technical, and evidence-based mechanism for prevention, detection, and cybersecurity awareness.
+
+
+================================================================================
+SECCIÓN: Contenido y Listas (Párrafos 57 a 129)
+================================================================================
+[P057 | Títulos preliminares]: Contenido
+
+[P058 | toc 1]: Pág.
+
+[P059 | toc 1]: Agradecimientos	V
+
+[P060 | toc 1]: Resumen	VII
+
+[P061 | toc 1]: Lista de figuras	XIII
+
+[P062 | toc 1]: Lista de tablas	XIV
+
+[P063 | toc 1]: Lista de Símbolos y abreviaturas	XV
+
+[P064 | toc 1]: Introducción	1
+
+[P065 | toc 2]: Antecedentes y Justificación	2
+
+[P066 | toc 2]: Objetivo General	3
+
+[P067 | toc 3]: Objetivos Específicos	3
+
+[P068 | toc 2]: Alcances y Limitaciones	3
+
+[P069 | toc 2]: Cronograma de Actividades	3
+
+[P070 | toc 2]: Recursos y presupuesto	4
+
+[P071 | toc 1]: 1.	Marco teórico	5
+
+[P072 | toc 2]: 1.1	Estado Del Arte	5
+
+[P073 | toc 2]: 1.2	Marco Legal (Si Es Necesario)	6
+
+[P074 | toc 1]: 2.	Análisis del proyecto	7
+
+[P075 | toc 2]: 2.1	Recolección de información	7
+
+[P076 | toc 2]: 2.2	Resultados análisis	7
+
+[P077 | toc 2]: 2.3	Requerimientos	7
+
+[P078 | toc 2]: 2.4	Requerimientos Funcionales	7
+
+[P079 | toc 2]: 2.5	Requerimientos No funcionales	7
+
+[P080 | toc 1]: 3.	Diseño del proyecto	9
+
+[P081 | toc 2]: 3.1	Modelado	9
+
+[P082 | toc 3]: 3.1.1	Diccionario de datos	9
+
+[P083 | toc 3]: 3.1.2	Modelo relacional	9
+
+[P084 | toc 3]: 3.1.3	Otros (Si es necesario y colocar el nombre)	9
+
+[P085 | toc 2]: 3.2	Diagramación	9
+
+[P086 | toc 3]: 3.2.1	Diagrama de clases	9
+
+[P087 | toc 3]: 3.2.2	Diagrama de casos de uso	9
+
+[P088 | toc 3]: 3.2.3	Diagrama de secuencia	9
+
+[P089 | toc 3]: 3.2.4	Otros (Si es necesario y colocar el nombre)	10
+
+[P090 | toc 1]: 4.	implementación del proyecto	11
+
+[P091 | toc 2]: 4.1	Arquitectura	11
+
+[P092 | toc 2]: 4.2	Pruebas	11
+
+[P093 | toc 3]: 4.2.1	Pruebas funcionales	11
+
+[P094 | toc 3]: 4.2.2	Pruebas no funcionales	11
+
+[P095 | toc 2]: 4.3	Manuales	12
+
+[P096 | toc 1]: 5.	Conclusiones y recomendaciones	13
+
+[P097 | toc 2]: 5.1	Conclusiones	13
+
+[P098 | toc 2]: 5.2	Recomendaciones	13
+
+[P099 | toc 1]: Bibliografía	19
+
+[P105 | Títulos Preliminares 1]: Lista de figuras
+
+[P109 | Títulos Preliminares 1]: Lista de tablas
+
+[P112 | Títulos Preliminares 1]: Lista de Símbolos y abreviaturas
+
+[P114 | Normal]: Símbolos con letras griegas
+
+[P117 | Normal]: Abreviaturas
+
+
+================================================================================
+SECCIÓN: Introducción (Párrafos 130 a 131)
+================================================================================
+[P130 | Títulos Preliminares 1]: Introducción
+
+[P131 | Normal]: El vertiginoso avance de la digitalización corporativa, acelerado por la adopción generalizada de modelos de trabajo remoto e híbrido y la descentralización de los servicios de infraestructura tecnológica en la nube, ha transformado significativamente la superficie de exposición y riesgo que enfrentan las organizaciones en el ciberespacio contemporáneo. En este ecosistema hiperconectado, el phishing continúa siendo una de las principales modalidades empleadas por los actores de ciberamenazas para lograr accesos no autorizados, cometer fraude, obtener credenciales y extraer información confidencial mediante técnicas de ingeniería social orientadas a manipular el factor humano. Esta situación adquiere especial relevancia en las Pequeñas y Medianas Empresas (PYMEs) colombianas, las cuales cumplen un papel fundamental en la generación de empleo y el desarrollo económico, pero que frecuentemente cuentan con recursos limitados para implementar soluciones avanzadas de seguridad como Secure Email Gateways, sistemas EDR o Centros de Operaciones de Seguridad (SOC) con monitoreo permanente. Paralelamente, las técnicas utilizadas por los atacantes han evolucionado hacia mecanismos cada vez más sofisticados, entre los que se encuentran el combosquatting, el typosquatting mediante modificaciones mínimas en los dominios, el uso de certificados SSL/TLS legítimos y los ataques de homógrafos Unicode, dificultando la identificación de sitios fraudulentos mediante una simple inspección visual. En este contexto, las estrategias tradicionales basadas exclusivamente en listas negras estáticas y fuentes de reputación reactivas presentan limitaciones frente a campañas de phishing de corta duración o de tipo zero-day, debido a que un atacante puede registrar un dominio, desplegar una réplica de un sitio legítimo, distribuir el enlace mediante correo electrónico, mensajería instantánea, WhatsApp u otros canales y retirar la infraestructura antes de que sea identificada y catalogada por los mecanismos tradicionales de reputación. Esta problemática se evidencia particularmente en Animal’s S.A.S., donde una investigación realizada sobre los correos electrónicos y mensajes recibidos por los funcionarios permitió identificar diversos factores relacionados con la interacción con enlaces fraudulentos, entre ellos el desconocimiento de conceptos básicos para reconocer amenazas, los tiempos de espera asociados al escalamiento de incidentes al área de Tecnología, la ausencia de información clara sobre los mecanismos de reporte y, en algunos casos, una baja disposición para reportar oportunamente los eventos. Aunque el área de Tecnología desarrolla campañas informativas dirigidas al personal para fortalecer la identificación y prevención del phishing, se han presentado incidentes efectivos y situaciones que estuvieron próximas a materializarse, evidenciando que el factor humano continúa representando un componente crítico del riesgo, incluso cuando los funcionarios han recibido capacitación y recomendaciones previas. Ante esta situación, surge la necesidad de proporcionar una herramienta que permita validar un enlace antes de acceder a él, de manera rápida, sencilla, visual e independiente del nivel de conocimiento del usuario en materia de ciberseguridad. Como respuesta a esta necesidad se propone PhishShield, una plataforma especializada que funciona como una barrera técnica previa al clic, evaluando la estructura de las URLs, identificando patrones de suplantación y utilizando modelos de Machine Learning y fuentes externas de reputación para determinar el nivel de amenaza en tiempo real. La plataforma se fundamenta en una arquitectura desacoplada de microservicios y un pipeline de inspección multicapa compuesto por 19 validaciones técnicas, que integra análisis léxico y estructural de URLs, algoritmos de distancia de Levenshtein, detección y normalización de homógrafos Unicode, evaluación de características asociadas a la suplantación tipográfica, auditoría de certificados SSL/TLS, análisis de la antigüedad y características del dominio, inspección visual aislada mediante la emulación del Document Object Model (DOM) en un entorno headless con Puppeteer, y clasificación predictiva mediante un microservicio desarrollado en Python con FastAPI que implementa un modelo Random Forest. El sistema incorpora además el cálculo de la Entropía de Shannon como mecanismo complementario para identificar posibles dominios generados algorítmicamente (DGA) y permite realizar consultas a fuentes externas de reputación para fortalecer el proceso de análisis. Desde el punto de vista de su funcionamiento, PhishShield busca que el funcionario pueda validar una URL antes de interactuar con ella, obteniendo un resultado comprensible en cuestión de segundos sin necesidad de interpretar indicadores técnicos complejos ni depender exclusivamente de su conocimiento adquirido en capacitaciones anteriores. De esta manera, la solución incorpora una barrera intermedia entre el usuario y el posible sitio malicioso, reduciendo la probabilidad de que una interacción accidental se convierta en un incidente de seguridad y disminuyendo, al mismo tiempo, la carga operativa sobre el área de Tecnología. La propuesta se complementa con un Asistente Educativo basado en Inteligencia Artificial, encargado de transformar los resultados técnicos del análisis en explicaciones comprensibles para el usuario y generar micro-quizzes interactivos orientados al fortalecimiento de las competencias de identificación de amenazas. Asimismo, los administradores disponen de un panel operativo con características de SOC para la visualización de indicadores, seguimiento de resultados, gestión de falsos positivos y exportación estructurada de evidencias en formatos CSV y JSON. El desarrollo incorpora diferentes estrategias técnicas orientadas a mejorar el rendimiento y la confiabilidad del sistema, entre ellas la concurrencia asíncrona, la inferencia desacoplada, la aplicación de una regla de piso de puntuación (Score Floor) y la inspección visual aislada, permitiendo combinar diferentes fuentes de evidencia antes de generar un veredicto. En este sentido, la pregunta de investigación que orienta el proyecto es: ¿En qué medida una arquitectura multicapa que integre análisis estructural y heurístico, detección de suplantación tipográfica y de homógrafos, clasificación predictiva mediante Random Forest y consulta a fuentes de reputación externa permite detectar intentos de phishing en tiempo real con una exactitud y una latencia adecuadas para el contexto operativo de una PYME como Animal’s S.A.S.? El desarrollo de PhishShield responde, por tanto, a tres frentes principales: una necesidad operativa de la organización, un diseño técnico orientado a superar las limitaciones de mecanismos tradicionales de bloqueo y un aporte metodológico y académico en el campo de la ingeniería de software aplicada a la ciberseguridad. Para el contexto empresarial, la solución busca reducir el impacto que un incidente de seguridad puede generar sobre la continuidad operativa, la información corporativa y los procesos financieros, proporcionando un mecanismo automatizado que permita realizar una primera validación antes de acceder a una URL. Desde el ámbito técnico, el proyecto propone una arquitectura híbrida basada en microservicios que combina reglas heurísticas, análisis estructural, aprendizaje automático, inspección aislada y fuentes externas de reputación, en lugar de depender exclusivamente de listas de bloqueo estáticas. Desde la perspectiva académica, el proyecto aporta un caso de estudio aplicado sobre la implementación de microservicios orientados a la detección de amenazas, la ingeniería de características sobre URLs, el tratamiento de posibles sesgos presentes en datasets de phishing, como aquellos relacionados con el prefijo [www](http://www)., y el diseño de mecanismos de retroalimentación pedagógica orientados al usuario final. El proyecto se desarrolla mediante cuatro fases principales: diagnóstico y curaduría del dataset; diseño de la arquitectura y definición de las variables; construcción e integración de los diferentes módulos; y verificación experimental orientada a la evaluación de los indicadores de precisión, rendimiento y usabilidad. El alcance técnico se establece para el análisis de enlaces HTTP y HTTPS, incorporando la evaluación de certificados SSL/TLS cuando corresponda, el uso de APIs externas de reputación y una estrategia de persistencia local para el almacenamiento y transformación de los resultados en formato JSON. Estos componentes permiten establecer una solución integral que no se limita a identificar si una URL es potencialmente maliciosa, sino que también proporciona evidencia técnica y retroalimentación comprensible para apoyar la toma de decisiones del usuario. En consecuencia, PhishShield se plantea como una herramienta de defensa complementaria que busca disminuir la exposición de Animal’s S.A.S. frente al phishing y fortalecer simultáneamente sus capacidades de prevención, detección y concientización en ciberseguridad mediante la convergencia de arquitectura de software, análisis heurístico, aprendizaje automático e interacción centrada en el usuario.
+
+
+================================================================================
+SECCIÓN: Antecedentes y Justificación (Párrafos 132 a 170)
+================================================================================
+[P132 | Títulos preliminares 2]: Antecedentes
+
+[P133 | Normal]: El fenómeno del phishing ha sido objeto de un amplio estudio científico durante las últimas dos décadas, debido a la evolución constante de las técnicas utilizadas por los atacantes y a la dificultad creciente para identificar este tipo de amenazas. En sus primeras etapas, los mecanismos de mitigación se apoyaban principalmente en listas de reputación y servicios de consulta como PhishTank, Google Safe Browsing y VirusTotal. Aunque estas iniciativas comunitarias e industriales proporcionan información valiosa para la identificación de sitios maliciosos, la literatura especializada ha señalado una limitación fundamental: su naturaleza predominantemente reactiva. Diferentes investigaciones han demostrado que una proporción considerable de las URLs fraudulentas puede permanecer activa durante períodos muy cortos antes de ser deshabilitada, reduciendo la efectividad de los mecanismos basados exclusivamente en listas negras debido al tiempo requerido para detectar, verificar, clasificar y propagar la información hacia los sistemas de bloqueo. Como consecuencia de esta evolución, las estrategias de detección han transitado progresivamente desde esquemas estáticos hacia enfoques híbridos capaces de combinar análisis estructural, heurístico, reputación e Inteligencia Artificial. Dentro de este contexto, las investigaciones relacionadas con el análisis léxico de URLs han demostrado que el estudio de secuencias de caracteres, patrones sintácticos y algoritmos de distancia, como Levenshtein, constituye una estrategia eficaz para identificar dominios que intentan suplantar a entidades legítimas, particularmente en sectores como el bancario y el comercio electrónico. De manera complementaria, los estudios sobre homógrafos Unicode e Internationalized Domain Names (IDN) han evidenciado que estas técnicas representan una de las amenazas más difíciles de detectar visualmente por parte de los usuarios, debido a que permiten construir dominios cuyos caracteres presentan una apariencia prácticamente idéntica a los de dominios legítimos. Por esta razón, los mecanismos modernos de detección requieren procesos de normalización, conversión y decodificación Punycode antes de realizar la comparación de los dominios.
+
+[P135 | Normal]: Otro de los enfoques ampliamente investigados corresponde al uso de Machine Learning para la clasificación automática de URLs. Diferentes trabajos han comparado algoritmos como Support Vector Machines (SVM), Naive Bayes, Redes Neuronales y Random Forest para determinar la posibilidad de identificar páginas de phishing utilizando características de las URLs sin necesidad de acceder directamente al contenido del sitio. Entre estas investigaciones se encuentran los trabajos de Marchal et al. (2014) y Rao y Pais (2019), que evidencian el potencial de los modelos de aprendizaje automático para complementar las técnicas tradicionales de detección. En particular, los modelos basados en Random Forest presentan características relevantes para escenarios de análisis en tiempo real, debido a su capacidad para trabajar con múltiples variables, proporcionar una interpretación de la importancia de las características y mantener tiempos de inferencia reducidos cuando el modelo ha sido adecuadamente entrenado y optimizado.
+
+[P137 | Normal]: La evolución del protocolo HTTPS también ha generado nuevos desafíos para los mecanismos tradicionales de identificación de phishing. La disponibilidad de autoridades de certificación abiertas, como Let's Encrypt, ha facilitado que sitios fraudulentos puedan disponer de certificados SSL/TLS válidos. Estudios recientes, entre ellos los asociados al dataset PhiUSIIL, han evidenciado que la presencia de un certificado válido no constituye una garantía suficiente de legitimidad, contradiciendo una de las recomendaciones tradicionales transmitidas a los usuarios, quienes frecuentemente interpretan la presencia del ícono de candado del navegador como una señal absoluta de seguridad. Por esta razón, la validación de certificados debe considerarse como una característica complementaria dentro de un proceso de análisis multicapa y no como un mecanismo independiente de decisión.
+
+[P139 | Normal]: Asimismo, investigaciones relacionadas con técnicas como combosquatting y typosquatting han demostrado que los atacantes pueden combinar nombres, marcas o términos asociados con organizaciones legítimas con palabras relacionadas con acciones habituales como “seguridad”, “actualizar”, “portal” o “banco”, aprovechando dominios económicos y diferentes extensiones de nivel superior para incrementar la credibilidad de sus campañas. Estas estrategias buscan aprovechar situaciones de presión, distracción o desconocimiento del usuario, demostrando que la seguridad no puede depender únicamente de la inspección visual realizada por el colaborador.
+
+[P141 | Normal]: En el contexto colombiano, esta problemática adquiere especial relevancia debido a las limitaciones presupuestales y operativas que enfrentan muchas Pequeñas y Medianas Empresas (PYMEs) para implementar soluciones empresariales avanzadas de ciberseguridad. Los delitos relacionados con la suplantación de identidad, el fraude y la obtención no autorizada de información se encuentran contemplados dentro del marco jurídico colombiano asociado a los delitos informáticos, particularmente a partir de la Ley 1273 de 2009. Esta situación ha impulsado la necesidad de fortalecer mecanismos preventivos que permitan identificar amenazas antes de que el usuario interactúe con ellas.
+
+[P143 | Normal]: A partir de estos antecedentes se evidencia que ninguna técnica individual resulta suficiente para enfrentar la evolución actual del phishing. El análisis léxico permite identificar patrones sospechosos, la comparación mediante distancia de edición facilita la detección de suplantaciones, la normalización Unicode permite revelar homógrafos, el análisis de certificados aporta información adicional sobre la infraestructura del sitio, los modelos de Machine Learning permiten realizar clasificación predictiva y las fuentes de reputación complementan la evidencia obtenida. Por lo tanto, la literatura revisada sustenta la necesidad de adoptar enfoques multicapa e híbridos que combinen diferentes técnicas de análisis para mejorar la detección de URLs potencialmente maliciosas en escenarios de tiempo real.
+
+[P144 | Títulos preliminares 2]: Justificación
+
+[P145 | List Paragraph]: El desarrollo de PhishShield surge como respuesta a una necesidad identificada directamente en Animal’s S.A.S., donde el análisis de los correos electrónicos y mensajes recibidos por los funcionarios permitió identificar diferentes factores que pueden favorecer la interacción con enlaces fraudulentos. Entre estos factores se encuentran el desconocimiento de conceptos básicos para identificar amenazas, los tiempos de espera asociados al escalamiento de incidentes al área de Tecnología, la ausencia de información clara sobre los mecanismos de reporte y, en algunos casos, la baja disposición de los usuarios para reportar oportunamente situaciones sospechosas. Aunque el área de Tecnología desarrolla campañas informativas dirigidas al personal con el propósito de fortalecer la identificación y prevención del phishing, se han presentado incidentes efectivos y situaciones que estuvieron próximas a materializarse, demostrando que el factor humano continúa representando un componente importante del riesgo incluso después de recibir capacitación.
+
+[P147 | List Paragraph]: Ante esta situación, se identifica la necesidad de disponer de una herramienta que permita validar una URL antes de acceder a ella, proporcionando una respuesta rápida, sencilla y comprensible, independientemente del nivel de conocimiento del usuario en materia de ciberseguridad. PhishShield se plantea como una barrera técnica intermedia entre el funcionario y el posible sitio malicioso, permitiendo analizar el enlace antes del clic mediante diferentes mecanismos de inspección. De esta manera, la seguridad no depende exclusivamente de la capacidad del usuario para recordar las recomendaciones recibidas durante una capacitación ni de la detección posterior por parte de los sistemas tradicionales.
+
+[P149 | List Paragraph]: Desde la dimensión operativa y empresarial, la solución resulta pertinente debido a que un incidente de phishing puede comprometer información corporativa, credenciales, archivos, datos financieros y procesos críticos para la organización. Animal’s S.A.S. gestiona diariamente información relacionada con clientes, facturación y operaciones empresariales, por lo que disponer de un mecanismo de validación previo puede contribuir a reducir la probabilidad de que un enlace sospechoso se convierta en un incidente de seguridad. Además, al automatizar una primera etapa de análisis, la herramienta puede disminuir la dependencia de revisiones manuales por parte del área de Tecnología y evitar que todos los enlaces sospechosos tengan que convertirse en solicitudes de soporte.
+
+[P151 | List Paragraph]: Desde la dimensión económica y social, el proyecto adquiere importancia debido a las limitaciones que enfrentan muchas PYMEs para acceder a soluciones avanzadas de ciberseguridad. Las plataformas empresariales especializadas pueden implicar costos elevados asociados a licenciamiento, infraestructura y personal especializado. Por esta razón, el desarrollo de una solución accesible y adaptada a las necesidades de una organización de este tipo representa una alternativa para fortalecer sus capacidades de prevención sin depender exclusivamente de herramientas comerciales de alto costo.
+
+[P153 | List Paragraph]: Desde la dimensión técnica, PhishShield propone una arquitectura multicapa basada en microservicios que integra diferentes técnicas de análisis. La solución combina análisis estructural y heurístico de URLs, detección de suplantación tipográfica y homógrafos, algoritmos de distancia de Levenshtein, análisis de certificados SSL/TLS, consulta a fuentes externas de reputación, inspección aislada del contenido mediante un entorno Chromium headless y clasificación predictiva mediante Random Forest. Adicionalmente, incorpora el cálculo de Entropía de Shannon para identificar características asociadas a dominios generados algorítmicamente. Esta integración permite que el veredicto final no dependa de una única característica, sino de la combinación de diferentes evidencias obtenidas durante el proceso de inspección.
+
+[P155 | List Paragraph]: La arquitectura también incorpora mecanismos orientados al rendimiento, entre ellos la concurrencia asíncrona, la inferencia desacoplada, la aplicación de una regla de piso de puntuación (Score Floor) y la inspección visual aislada. Estas características buscan mantener tiempos de respuesta adecuados para un escenario en el que el usuario necesita conocer el nivel de riesgo de una URL antes de interactuar con ella.
+
+[P157 | List Paragraph]: Desde la dimensión pedagógica, PhishShield no se limita a bloquear o clasificar enlaces. La plataforma incorpora un Asistente Educativo basado en Inteligencia Artificial que transforma los resultados técnicos del análisis en explicaciones comprensibles para los funcionarios y genera micro-quizzes interactivos orientados a fortalecer sus conocimientos sobre phishing y seguridad digital. Este enfoque permite que la herramienta funcione no solamente como un mecanismo de protección, sino también como un instrumento de formación continua, convirtiendo al usuario en un participante activo de la estrategia de ciberseguridad.
+
+[P159 | List Paragraph]: Desde la dimensión académica, el proyecto constituye una aplicación práctica de conocimientos relacionados con Ingeniería de Software, arquitectura de microservicios, Machine Learning, procesamiento de datos, ciberseguridad y diseño centrado en el usuario. Para la Fundación Universitaria Compensar, representa además la aplicación de conocimientos adquiridos durante la formación profesional para abordar una problemática real de una organización y desarrollar una solución tecnológica susceptible de ser evaluada mediante criterios técnicos y experimentales.
+
+[P161 | List Paragraph]: Finalmente, la justificación del proyecto se fundamenta en la necesidad de superar las limitaciones de los mecanismos tradicionales de detección basados exclusivamente en listas negras o reputación. La combinación de diferentes técnicas permite analizar una URL desde múltiples perspectivas y generar un resultado sustentado en evidencia técnica. Por lo tanto, PhishShield busca reducir la exposición de Animal’s S.A.S. frente a ataques de phishing, fortalecer la capacidad preventiva del área de Tecnología y mejorar la toma de decisiones de los usuarios antes de acceder a enlaces potencialmente maliciosos, proporcionando una solución que integra protección, análisis técnico y educación en ciberseguridad.
+
+[P163 | Normal]: Aportes técnicos del desarrollo:
+
+[P164 | Normal]: PhishShield propone una arquitectura multicapa orientada a superar algunas de las limitaciones presentes en mecanismos tradicionales de detección basados exclusivamente en listas de bloqueo o fuentes de reputación. La solución integra diferentes mecanismos de análisis y procesamiento que permiten obtener un veredicto a partir de múltiples fuentes de evidencia.
+
+[P165 | Normal]: Concurrencia asíncrona. La plataforma utiliza mecanismos de procesamiento concurrente mediante `Promise.allSettled` para realizar consultas a fuentes externas y servicios locales de manera simultánea. Esta estrategia permite que una falla, indisponibilidad o demora en una API de terceros no interrumpa completamente el proceso de análisis, favoreciendo la disponibilidad del servicio y manteniendo tiempos de respuesta adecuados.
+
+[P166 | Normal]: Inferencia desacoplada. El sistema incorpora un microservicio independiente para la clasificación mediante Random Forest, desarrollado en Python y comunicado con el resto de la plataforma mediante servicios desacoplados. El modelo utiliza características extraídas de las URLs, incluyendo métricas morfológicas y la Entropía de Shannon, con el propósito de identificar patrones asociados con posibles dominios maliciosos que aún no hayan sido registrados en fuentes externas de reputación.
+
+[P167 | Normal]: Regla de piso (Score Floor). Como mecanismo de protección frente a posibles falsos negativos, el sistema establece condiciones locales de alto riesgo que pueden elevar directamente la clasificación de una URL. Entre estas condiciones se encuentran la presencia de cadenas asociadas con Punycode (`xn--`) y determinadas distancias de Levenshtein frente a nombres o marcas previamente definidas. Esta estrategia permite otorgar mayor peso a señales de suplantación identificadas directamente por el sistema, incluso cuando una fuente externa de reputación todavía no dispone de información sobre el dominio analizado.
+
+[P168 | Normal]: Inspección visual aislada. PhishShield emplea Puppeteer para controlar una instancia de Chromium en un entorno aislado durante la inspección del contenido de la URL. Esta estrategia permite realizar la representación de la página y analizar elementos del DOM potencialmente asociados con formularios fraudulentos, reduciendo la exposición del entorno del usuario al contenido inspeccionado y evitando compartir deliberadamente cookies o credenciales del usuario durante el proceso de análisis.
+
+[P169 | List Paragraph]: Aporte académico:
+
+[P170 | Normal]: Desde la perspectiva académica, el proyecto proporciona un caso de aplicación de conocimientos de Ingeniería de Software y Ciberseguridad mediante la construcción de una arquitectura híbrida basada en microservicios desarrollados principalmente con Node.js y Python. El desarrollo documenta el proceso de ingeniería y selección de características aplicadas al análisis de URLs, incluyendo el tratamiento de posibles distorsiones presentes en conjuntos de datos de phishing, como aquellas relacionadas con el prefijo “[www.”](http://www.”), así como la integración de modelos de aprendizaje automático dentro de una arquitectura orientada al análisis en tiempo real. Adicionalmente, el proyecto incorpora una dimensión de retroalimentación pedagógica mediante el uso de Inteligencia Artificial, orientada a usuarios que no necesariamente poseen conocimientos técnicos en ciberseguridad. De esta manera, el trabajo aporta un caso práctico para el Grupo de Investigación GIIS, al integrar arquitectura de software, aprendizaje automático, análisis heurístico, procesamiento asíncrono y diseño centrado en el usuario para abordar una problemática real de seguridad informática.
+
+
+================================================================================
+SECCIÓN: Objetivos (Párrafos 171 a 190)
+================================================================================
+[P171 | Títulos preliminares 2]: Objetivo General
+
+[P172 | List Paragraph]: Desarrollar una plataforma integral de software basada en microservicios, algoritmos heurísticos, inspección forense en sandbox e inteligencia artificial para la detección temprana de enlaces fraudulentos de phishing y la concienciación en ciberseguridad de colaboradores en Pequeñas y Medianas Empresas (PYMEs).
+
+[P173 | Títulos Preliminares 3]: Objetivos Específicos
+
+[P174 | List Paragraph]: 1. Identificar los vectores de ataque, patrones estructurales y técnicas de suplantación tipográfica más recurrentes en URLs asociadas con campañas de phishing, mediante la revisión de literatura técnica especializada y el análisis de datasets estandarizados de URLs legítimas y fraudulentas.
+
+[P176 | List Paragraph]: 2. Diseñar una arquitectura de software modular y desacoplada compuesta por un frontend interactivo con panel de monitoreo tipo SOC, un backend orquestador desarrollado en Node.js/Express y un microservicio autónomo de Machine Learning desarrollado en Python/FastAPI, definiendo los flujos de datos y la comunicación asíncrona entre sus componentes.
+
+[P178 | List Paragraph]: 3. Implementar un motor de análisis forense y heurístico multicapa que integre 19 validaciones técnicas, incluyendo análisis estructural de URLs, detección de typosquatting mediante distancia de Levenshtein, identificación de homógrafos Unicode y Punycode, inspección de certificados SSL/TLS y emulación aislada del DOM mediante Puppeteer.
+
+[P180 | List Paragraph]: 4. Entrenar e integrar un modelo de aprendizaje automático basado en Random Forest, utilizando un vector de 15 características forenses y el cálculo de la Entropía de Shannon del dominio, con el propósito de identificar patrones asociados con infraestructuras maliciosas y posibles dominios generados algorítmicamente (DGA).
+
+[P182 | List Paragraph]: 5. Implementar mecanismos de decisión y priorización del riesgo, incluyendo reglas heurísticas y una regla de piso (Score Floor), que permitan establecer niveles críticos de riesgo ante señales de suplantación directa, complementando los resultados obtenidos mediante modelos predictivos y fuentes externas de reputación.
+
+[P184 | List Paragraph]: 6. Desarrollar un componente educativo asistido por Inteligencia Artificial que genere explicaciones pedagógicas adaptativas sobre los resultados del análisis y proporcione micro-quizzes interactivos orientados a fortalecer las capacidades de identificación y prevención de amenazas de los colaboradores.
+
+[P186 | List Paragraph]: 7. Diseñar y ejecutar un protocolo de validación experimental utilizando una partición estratificada del corpus PhiUSIIL en conjuntos de entrenamiento, validación y prueba, complementada con validación cruzada K-Fold e intervalos de confianza del 95 % mediante bootstrap, con el fin de evaluar el desempeño del modelo y de la plataforma.
+
+[P188 | List Paragraph]: 8. Evaluar el rendimiento funcional y no funcional de PhishShield mediante matrices de pruebas aplicadas a muestras balanceadas de URLs legítimas y fraudulentas, utilizando métricas de exactitud, precisión, sensibilidad, especificidad, F1-score y latencia por capa analítica, además de una prueba de usabilidad SUS aplicada a funcionarios de Animal’s S.A.S.
+
+[P190 | List Paragraph]: 9. Documentar el tratamiento ético y legal de los datos empleados durante las etapas de diagnóstico, entrenamiento y validación, garantizando la anonimización, el consentimiento informado, la confidencialidad y el cumplimiento de la Ley 1581 de 2012 y el Decreto 1377 de 2013.
+
+
+================================================================================
+SECCIÓN: Alcances y Limitaciones (Párrafos 191 a 218)
+================================================================================
+[P191 | Títulos preliminares 2]: Alcances y Limitaciones
+
+[P192 | List Paragraph]: Alcance del sistema:
+
+[P193 | List Paragraph]: Motor analítico: Despliegue de las 19 comprobaciones heurísticas distribuidas en las cuatro capas analíticas.
+
+[P194 | List Paragraph]: Microservicio predictivo: Extracción en tiempo real de 15 variables de la URL e inferencia probabilística con Random Forest expuesta vía FastAPI.
+
+[P195 | List Paragraph]: Renderizado seguro: Generación automática de vistas previas en formato PNG usando Chromium Headless bajo sandbox de procesos.
+
+[P196 | List Paragraph]: Componente pedagógico (TipsEngine): Generación de explicaciones visuales adaptadas al tipo de amenaza detectada para orientar al usuario sobre el riesgo específico.
+
+[P197 | List Paragraph]: Panel de administración: Interfaz web para monitoreo en vivo, depuración de falsos positivos, registro de auditoría y exportación de incidentes en JSON y CSV.
+
+[P198 | List Paragraph]: Banco de pruebas: Pruebas de estrés y evaluación de métricas de rendimiento (precisión, sensibilidad y latencias por componente) sobre un lote de URLs legítimas y fraudulentas.
+
+[P199 | List Paragraph]: Validación experimental: Partición estratificada del corpus PhiUSIIL (70/15/15), validación cruzada k-fold, intervalos de confianza 95% mediante bootstrap, criterios de aceptación o rechazo de la hipótesis y prueba de usabilidad SUS con funcionarios activos.
+
+[P201 | List Paragraph]: Límites operativos:
+
+[P202 | List Paragraph]: Tipo de recurso analizado: Se limita a validar destinos web bajo esquemas http:// y https://. No efectúa análisis dinámico ni desensamblado de archivos binarios ejecutables (.exe, .dll, .bat) descargados de forma automática o mediante enlaces directos.
+
+[P204 | List Paragraph]: Límites de servicios de terceros: La efectividad en la capa de inteligencia global queda sujeta a la latencia, disponibilidad de red y límites de cuota de las APIs de Google Safe Browsing, VirusTotal y PhishTank.
+
+[P206 | List Paragraph]: Capa de persistencia: La versión actual gestiona el historial y la caché mediante archivos JSON estructurados con persistencia local en disco; la migración a un motor relacional o documental queda programada para despliegues posteriores.
+
+[P208 | List Paragraph]: Generalización del modelo: El desempeño predictivo se evalúa sobre PhiUSIIL y un hold-out no visto, no garantiza un comportamiento equivalente en corpus externos no representados en el entrenamiento. El entrenamiento tiene límite de 10.000 muestras por el costo computacional y reproducibilidad, se complementa con validación cruzada y la partición estratificada.
+
+[P210 | List Paragraph]: Tratamiento ético y protección de datos:
+
+[P211 | List Paragraph]: Anonimización: la información interna de Animal’s S.A.S. utilizada durante el diagnóstico, el entrenamiento y la validación será anonimizada. No se almacenarán datos sensibles de usuarios, cookies u otra información sensible que comprometa a la compañía.
+
+[P212 | List Paragraph]: Comité de ética: se solicitará aval del comité de ética institucional si la investigación con funcionarios lo requiere, conforme a los lineamientos de la Fundación Universitaria Compensar.
+
+[P213 | List Paragraph]: Consentimiento informado: Se solicitará consentimiento informado a los funcionarios participantes en la encuesta diagnóstica y en la prueba de usabilidad SUS.
+
+[P214 | List Paragraph]: Confidencialidad: Se gestionará un acuerdo de confidencialidad con Animal’s S.A.S. para el uso de su información interna.
+
+[P215 | List Paragraph]: Cumplimiento legal: El proyecto se rige por la Ley 1581 de 2012, el Decreto 1377 del 2013 y la Ley 1273 de 2009.
+
+[P216 | List Paragraph]: APIs externas: las consultas a VirusTotal, Google Safe Browsing y PhishTank enviarán únicamente la URL a analizar sin datos del usuario.
+
+
+================================================================================
+SECCIÓN: Cronograma y Presupuesto (Párrafos 219 a 224)
+================================================================================
+[P219 | Títulos preliminares 2]: Cronograma de Actividades
+
+[P223 | Títulos preliminares 2]: Recursos y presupuesto
+
+
+================================================================================
+SECCIÓN: Marco Teórico y Metodología (Párrafos 225 a 305)
+================================================================================
+[P225 | Heading 1]: Marco teórico
+
+[P226 | Normal]: PhishShield se organiza en dos dimensiones complementarias. La primera evalúa las tres capas arquitectónicas del proyecto:
+
+[P227 | List Paragraph]: Capa de presentación: Pertenece a la interfaz web del usuario y el panel de administración.
+
+[P228 | List Paragraph]: Capa de servidor: El orquestador principal es Node.js con el framework Express, microservicio predictivo en el lenguaje Python soportado con Fast Api y módulos de análisis.
+
+[P229 | List Paragraph]: Capa de persistencia: Almacenamiento local en archivos JSON para historial, cache y las listas negras.
+
+[P230 | Normal]: La segunda dimensión compuesta por cuatro capas analíticas, que operan dentro de la capa del servidor y constituyen la funcionalidad del sistema:
+
+[P231 | List Paragraph]: Capa 1 – Análisis estructural y heurístico: Evalúa sintaxis de la URL, uso de IP en lugar de dominio, Http, subdominios, longitud y palabras señuelo.
+
+[P232 | List Paragraph]: Capa 2 – Detección de suplantación tipográfica y homógrafos:  aplica distancia de Levenshtein, normalización Unicode y decodificación Punycode.
+
+[P233 | List Paragraph]: Capa 3 – Clasificación predictiva: Infiere la probabilidad de phishing mediante Random Forest sobre 15 variables de la URL.
+
+[P234 | List Paragraph]: Capa 4 – Consulta a fuentes externas de reputación: Verifica en VirusTotal, Google Safe Browsing y PhishTank.
+
+[P236 | Normal]: Adicionalmente, la emulación segura con Puppeteer opera como módulo transversal de evidencia visual, al generar capturas aisladas del sitio de destino, pero no interviene en la decisión de riesgo: es soporte visual y pedagógico para el usuario.
+
+[P237 | Normal]: Teoría de Ensamble y Clasificación con Random Forest: Fundamentado en el algoritmo de Breiman (2001), que construye un conjunto de árboles de decisión no correlacionados utilizando submuestreo con reemplazo (bootstrap aggregating o bagging) y selección aleatoria de características. En PhishShield, el modelo calcula la probabilidad P(Phishing∣X) a partir de un vector .
+
+[P238 | Normal]: Teoría de la Información y Entropía de Shannon: Se utiliza para cuantificar la aleatoriedad e incertidumbre en la distribución de caracteres de un dominio web H(D)=- Donde P(ci) es la frecuencia relativa del carácter ci. Dominios con alta entropía suelen corresponder a generadores algorítmicos de dominios maliciosos (DGA).
+
+[P239 | Normal]: Métrica de Distancia de Levenshtein: Modelo matemático que mide la distancia mínima de edición entre dos cadenas a y b mediante operaciones de inserción, eliminación o sustitución de caracteres:
+
+[P242 | Normal]: lev (a, b) =
+
+[P245 | Normal]: Aislamiento de Procesos (Sandboxing) en Chromium: Paradigma de seguridad en sistemas operativos donde el proceso de renderizado web opera con privilegios mínimos en un espacio de memoria restringido, impidiendo que código JavaScript malicioso acceda a llamadas al sistema del kernel de Windows o Linux (Chromium Project, 2025).
+
+[P247 | Normal]: Marco Conceptual
+
+[P248 | List Paragraph]: Phishing: Modalidad de ciberdelito donde atacantes suplantan identidades legítimas para engañar a usuarios y sustraer información confidencial (credenciales, datos bancarios).
+
+[P249 | List Paragraph]: •Typosquatting: Registro malicioso de nombres de dominio que aprovechan errores tipográficos comunes cometidos por usuarios al escribir URLs de marcas reconocidas.
+
+[P251 | List Paragraph]: Ataque de Homógrafos Unicode (IDN Spoofing): Técnica que emplea caracteres visualmente idénticos pertenecientes a diferentes alfabetos (como cirílico, griego o latino) para registrar dominios engañosos codificados bajo el estándar Punycode (xn).
+
+[P252 | List Paragraph]: Score Floor (Piso de Riesgo): Criterio de corte que impone un valor mínimo de severidad en el cálculo final. Si el análisis local arroja banderas rojas concluyentes (como un homógrafo evidente o suplantación directa), el sistema bloquea el puntaje en un nivel crítico. Esto impide que la falta de reportes en bases de datos externas o respuestas neutrales de terceros suavicen la calificación real de la amenaza.
+
+[P253 | List Paragraph]: Microservicio ASGI: Estándar de interfaz asíncrona para Python diseñado para procesar tráfico concurrente de alta demanda. Al no bloquear hilos de ejecución, gestiona múltiples solicitudes entrantes en paralelo, manteniendo tiempos de respuesta mínimos bajo cargas intensas.
+
+[P254 | List Paragraph]: Partición estratificada: Técnica de división de conjuntos (entrenamiento, validación, prueba) manteniendo una proporción original de cada clase. Se usa para evitar que quede sobre representada o subrepresentada en algunos subconjuntos.
+
+[P255 | List Paragraph]: Validación cruzada k-fold: Divide el conjunto de entrenamiento en n particiones; lo entrena con n-1 y valida con el restante repitiendo el proceso por n veces, reduciendo la dependencia a una única partición y permite estimar la estabilidad del modelo.
+
+[P256 | List Paragraph]: Intervalo de confianza (IC): rango de valores dentro del cual se estima que se encuentra el valor real de la métrica. Este proyecto se calcula con 95 % significando que si el experimento se realiza varias veces el valor caería dentro de ese rango.
+
+[P257 | List Paragraph]: Bootstrap: Método de muestreo con reemplazo que estima la variabilidad de una métrica y construir intervalos de confianza sin necesidad de repetir el experimento. El proyecto utiliza 1.000 muestreos sobre el conjunto de prueba.
+
+[P258 | List Paragraph]: Hold-out no visto: subconjunto de datos reservado exclusivamente para la evaluación final del modelo, mide la capacidad real de generalización.
+
+[P259 | List Paragraph]: Criterio de aceptación / rechazo: En este proyecto incluyen F1 ≥ 0.90, sensibilidad ≥ 0.92, especificidad ≥ 0.88 y límite inferior del IC 95 % de F1 ≥ 0.85.
+
+[P260 | List Paragraph]: SUS (System Usability Scale): escala estandarizada de 10 ítems que mide la usabilidad percibida de un sistema. Se aplicará a una muestra mínima de 10 funcionarios de Animal’s S.A.S., con criterio orientativo > 68 (aceptable) y > 80 (excelente).
+
+[P261 | Heading 1]: Metodología
+
+[P262 | Normal]: El proyecto se rige bajo un enfoque metodológico de Desarrollo de Software Adaptativo / Prototipado Evolutivo, alineado con las buenas prácticas de la norma IEEE/ISO/IEC 12207 (IEEE Standards Association, 2017) para el ciclo de vida del software, articulado en 5 fases técnicas correspondientes a los objetivos específicos:
+
+[P264 | Normal]: Fase 1: Diagnóstico situacional y curaduría del dataset
+
+[P265 | Normal]: Relevamiento de los vectores de ataque más recurrentes dentro de Animal’s S.A.S. En paralelo, se acondicionó el corpus PhiUSIIL: saneamiento de ruido morfológico, mitigación de sesgos estructurales y balanceo estricto del lote de entrenamiento a 10.000 muestras representativas.
+
+[P266 | Normal]: Fase 2: Arquitectura, contratos e ingeniería de variables
+
+[P267 | Normal]: Especificación de los puntos de enlace del sistema (POST /analizar, POST /predict, GET /api/screenshot). En este ciclo se estructuró el vector de 15 variables predictivas en Python y se codificó el algoritmo de ponderación heurística con reglas de piso dentro de riskCalculator.js.
+
+[P268 | Normal]: Fase 3: Construcción e integración del ecosistema
+
+[P269 | List Paragraph]: Servidor orquestador: Levantamiento del núcleo en Node.js 18+ sobre Express para la gestión asíncrona de solicitudes.
+
+[P270 | List Paragraph]: Motor predictivo: Implementación del microservicio en Python (FastAPI, Scikit-learn y Joblib) para la socialización e inferencia del clasificador.
+
+[P271 | List Paragraph]: Aislamiento visual: Automatización de sesiones Chromium headless con Puppeteer para la generación segura de capturas de pantalla.
+
+[P272 | List Paragraph]: Cliente web: Construcción de una interfaz SPA fluida, modular y basada en CSS Grid/Flexbox para la visualización del riesgo.
+
+[P274 | Normal]: Fase 4: Verificación experimental y métricas de desempeño
+
+[P275 | Normal]: Esta fase  ejecuta y diseñan    el protocolo  experimental que permite contrastar la hipótesis planteada, evaluar  la capacidad  del modelo  y medir la usabilidad del prototipo con usuarios reales.
+
+[P276 | List Paragraph]: Diseño Experimental: se divide en tres conjuntos el 70% para entrenamiento, 15% para validación y el 15% de prueba. Esta estratificación garantiza que las URLs legítimas y maliciosas se mantenga en cada subconjunto. Sobre el conjunto de entrenamiento y validación se aplica un k-fold con n = 5, que ajusta hiperparametros y estima la estabilidad del modelo.
+
+[P277 | List Paragraph]: Justificación del tamaño muestral: se limita a 10 mil muestras del PhiUSIIL por razones de costo computacional, reproducibilidad y balance de clases. Esta decisión se complementa con la validación cruzada k-fold, la partición estratificada y un hold-out.
+
+[P278 | List Paragraph]: Intervalos  de confianza: Para el proyecto se establece métricas como exactitud , precisión, sensibilidad, especificidad, f1-score, ROC-AUC y PR-AUC, junto con la latencia media de 95% por capa analítica. Para cada métrica se establece la metodología bootstrap con 1000 remuestreos con reemplazo sobre el cojunto de prueba. Ejemplo F1 = 0.92, IC 95 % [0.88 – 0.95]
+
+[P279 | List Paragraph]: Criterios de aceptación:
+
+[P280 | List Paragraph]: F1-score ≥ 0.90
+
+[P281 | List Paragraph]: Sensibilidad ≥ 0.92
+
+[P282 | List Paragraph]: Especificidad ≥ 0.88
+
+[P283 | List Paragraph]: Límite inferior del IC 95 % de F1 ≥ 0.85
+
+[P284 | List Paragraph]: Latencia local < 500 ms
+
+[P285 | List Paragraph]: Latencia total < 2 s
+
+[P288 | List Paragraph]: Prueba de usabilidad:
+
+[P289 | Normal]: Se diseña un paso a paso para guiar al usuario sobre el prototipo:
+
+[P290 | List Paragraph]: Analizar la URL legitima.
+
+[P291 | List Paragraph]: Analizar una URL falsa.
+
+[P292 | List Paragraph]: Interpretar resultado
+
+[P293 | Normal]: La prueba se aplicará sobre 10 funcionarios activos de la compañía Animal’s S.A.S. con perfiles no técnicos. Al finalizar, cada participante responde a la SUS de 10 ítems. Se  reportan el puntaje promedio y su interpretación .
+
+[P294 | List Paragraph]: Pruebas de carga: desplegar baterías de pruebas de carga para auditar la latencia por componente (heurística, microservicio predictivo, APIs externas y emulación segura)
+
+[P295 | Normal]: Fase 5: Tratamiento ético y legal de los datos:
+
+[P296 | Normal]: Esta fase documenta las medidas adoptadas para garantizar el uso responsable de la información durante el diagnostico entre esto se evalúan los temas como:
+
+[P297 | List Paragraph]: Anonimización y pseudonimización: La información interna de Animal’s S.A.S. será anonimizada antes de cualquier análisis.
+
+[P298 | List Paragraph]: Consentimiento informado: Se solicitará consentimiento informado a los funcionarios que participen en la encuesta diagnóstica y en la prueba de usabilidad SUS.
+
+[P299 | List Paragraph]: Comité de ética: Se solicitará aval del comité de ética institucional si la investigación con funcionarios lo requiere.
+
+[P300 | List Paragraph]: Confidencialidad: Se gestionara acuerdo de confidencialidad para el uso de su información interna.
+
+[P301 | List Paragraph]: Cumplimiento legal: El proyecto se rige por la Ley 1581 de 2012, el Decreto 1377 de 2013 y la Ley 1273 de 2009.
+
+[P302 | List Paragraph]: APIs externas: las consultas a VirusTotal, Google Safe Browsing y PhishTank enviarán únicamente la URL a analizar, sin datos del usuario.
+
+[P303 | List Paragraph]: Aislamiento: la emulación con Puppeteer se ejecutará en un entorno aislado.
+
+
+================================================================================
+SECCIÓN: Estado del Arte y Marco Legal (Párrafos 306 a 326)
+================================================================================
+[P306 | Heading 2]: Estado Del Arte
+
+[P308 | List Paragraph]: Empiezan con una narración sencilla del proceso que realizaron y colocan la siguiente tabla
+
+[P314 | Heading 2]: Marco Legal
+
+[P316 | List Paragraph]: El presente proyecto está encaminado bajo la normativa colombiana que regula la protección de la información y la ciberseguridad, dado que su objetivo principal es mitigar los riegos asociados a la ingeniería social y phishing.
+
+[P318 | List Paragraph]: La ley 1273 de 2009, es fundamental, ya que clasifica los delitos informáticos y reconoce la información y los datos como un bien jurídico tutelado. En su artículo 269A describe que la modalidad Phishing es percibida como un delito, por lo que el desarrollo de PhishShield se presenta como medida de prevención técnica.
+
+[P320 | List Paragraph]: Ley 1581 del 2012, Decreto reglamentario 1377 de 2013, son aplicables al diseño del sistema, cuya finalidad garantiza cualquier dato gestionado cumpla con los principios de seguridad, confidencialidad y acceso restringido.
+
+[P322 | List Paragraph]: Finalmente, la ley 1341 de 2009 promueve el uso seguro y eficiente de las tecnologías de la información, apoyando el propósito de PhishShield.
+
+
+================================================================================
+SECCIÓN: Análisis del Proyecto (Párrafos 327 a 406)
+================================================================================
+[P327 | Heading 1]: Análisis del proyecto
+
+[P328 | Heading 2]: Recolección de información
+
+[P329 | List Paragraph]: Para sustentar el diagnóstico planteado en la ficha de anteproyecto, se aplicó una encuesta a colaboradores de Animal’s S.A.S que utilizan el correo corporativo en su labor diaria. El objetivo fue conocer de primera mano, que tanto reconocen y como manejan los enlaces sospechosos que reciben, antes de definir con más detalle los requerimientos de PhishShield.
+
+[P330 | List Paragraph]: Método. Se utilizó una encuesta hibrida, es decir, con preguntas cerradas (opción múltiple y escalas) combinadas con preguntas abiertas de respuesta abierta.
+
+[P331 | List Paragraph]: Justificación.
+
+[P333 | List Paragraph]: Permite recopilar información directa de los usuarios finales, que son quienes reciben os enlaces sospechosos en el día a día.
+
+[P334 | List Paragraph]: Facilita el análisis cuantitativo de hábitos, frecuencia de exposición y nivel de confianza frente a los enlaces recibidos.
+
+[P335 | List Paragraph]: Permite obtener información cualitativa sobre percepciones, dudas y expectativas frente a una posible herramienta de validación.
+
+[P337 | List Paragraph]: Población
+
+[P338 | List Paragraph]: Colaboradores de Animal’s S.A.S que utilizan el correo electrónico corporativo.
+
+[P339 | List Paragraph]: Usuarios finales expuestos a enlaces externos como parte de su actividad laboral.
+
+[P341 | List Paragraph]: Herramienta
+
+[P342 | List Paragraph]: Microsoft Forms. La encuesta se tituló “Encuesta - validación de enlaces en correo electrónico” ye estuvo disponible para los colaboradores durante el periodo de diagnóstico del proyecto. El formulario puede consultarse en el siguiente enlace: https://forms.cloud.microsoft/r/Gpw1najpmm
+
+[P344 | List Paragraph]: Aspectos evaluados
+
+[P345 | List Paragraph]: Frecuencia con la que reciben correos sospechosos de phishing.
+
+[P346 | List Paragraph]: Autopercepción de su capacidad para identificar un enlace falso a simple vista.
+
+[P347 | List Paragraph]: Uso actual de herramientas externas para verificar enlaces o archivos adjuntos.
+
+[P348 | List Paragraph]: Disposición a usar un verificador externo antes de abrir un enlace.
+
+[P349 | List Paragraph]: Elementos que revisan antes de hacer clic (remitente, dominio, HTTPS, ortografía).
+
+[P350 | List Paragraph]: Historial de clics accidentales en enlaces sospechosos.
+
+[P351 | List Paragraph]: Capacitación recibida en ciberseguridad dentro de la empresa.
+
+[P352 | List Paragraph]: Reacción frente a un correo urgente que solicita actualizar datos bancarios.
+
+[P353 | List Paragraph]: Hábito de revisar errores de escritura en el dominio del remitente.
+
+[P354 | List Paragraph]: Conocimiento del término "typosquatting" o suplantación de identidad.
+
+[P355 | List Paragraph]: Disposición a usar una herramienta organizacional de validación de enlaces y motivos para hacerlo.
+
+[P356 | List Paragraph]: Percepción de los riesgos organizacionales asociados a interactuar con remitentes no confiables.
+
+[P357 | List Paragraph]: Información minina que esperarían ver en una herramienta de validación para sentirse seguros.
+
+[P358 | List Paragraph]: Reacción frente a un correo sospechoso proveniente de una entidad conocida (banco, comercio. etc.…)
+
+[P359 | Heading 2]: Resultados análisis
+
+[P360 | List Paragraph]: La encuesta fue respondida por 11 colaboradores. A continuación, se resumen los hallazgos más relevantes por grupos de preguntas.
+
+[P362 | List Paragraph]: Exposición y percepción de riesgo
+
+[P363 | List Paragraph]: La mayoría de los encuestados (6 de 11) recibe correos sospechosos de forma ocasional, 2 los reciben con frecuencia y 3 rara vez; nadie respondió que nunca los recibe. Al preguntarles en una escala de 1 a 5, que tan capaces se sienten de identificar un enlace falso con solo mirarlo, el promedio fue de 3.09, un nivel medio que muestra que los colaboradores no se sienten totalmente inseguros, pero tampoco se consideran expertos.
+
+[P366 | List Paragraph]: Herramientas y hábitos actuales de verificación
+
+[P367 | List Paragraph]: 8 de los 11 encuestados no usan ninguna herramienta externa (aparte del antivirus) para verificar enlaces o archivos adjuntos antes de abrirlos, solo 2 si lo hacen y 1 usa alguna otra alternativa. Sin embargo, al preguntarles que tan dispuestos estarían a copiar y pegar un enlace en una web externa para revisar su seguridad, el promedio de disposición fue de 3.36 sobre 5, un nivel moderado-alto que sugiere apertura a adoptar una herramienta de este tipo si fuera sencilla de usar.
+
+[P369 | List Paragraph]: Que revisar antes de hacer clic
+
+[P370 | List Paragraph]: Lo más común entre los encuestados es fijarse en el nombre del remitente (8 personas) y revisar si la URL corresponde de la empresa oficial (6). Revisar si el enlace tiene HTTPS (2) o si hay errores de ortografía en el texto (4) se hace con menos frecuencia, y una persona reconoció no revisar ninguno de estos elementos.
+
+[P372 | List Paragraph]: Comportamiento de riesgo
+
+[P373 | List Paragraph]: 8 de 11 encuestados admiten haber hecho clic alguna vez en un enlace sospechoso por descuido o por la urgencia del mensaje, frente a solo 3 que afirman que nunca lo han hecho. Este dato confirma que el factor humano sigue siendo el punto más débil, tal como se planteó en el problema del proyecto.
+
+[P375 | List Paragraph]: Capacitación de ciberseguridad
+
+[P376 | List Paragraph]: La mutad de los encuestados (5) recibió capacitación en ciberseguridad hace tiempo, otros 5 nunca lo han recibido y solo 1 la recibió recientemente. Esto indica que, aunque existe algún tipo de formulación previa en la empresa, no se refuerza de manera constante.
+
+[P378 | List Paragraph]: Reacción ante un correo urgente de "actualización de datos bancarios"
+
+[P379 | List Paragraph]: Ninguno de los encuestados dijo que haría clic directamente en un correo de este tipo; 7 investigarían por fuera antes de actuar y 4 simplemente lo borrarían. Esto muestra cierto nivel de precaución, aunque no necesariamente basado en un método de verificación.
+
+[P382 | List Paragraph]: Preguntas abiertas
+
+[P383 | List Paragraph]: En las respuestas de texto libre, la mayoría de los encuestadas asocio la necesidad de una herramienta de validación con la “seguridad” y con evitar el “robo de información”. Varios mencionaron que, si usarían una herramienta organizacional de este tipo porque sería, en palabras de uno de ellos, “un método rápido y efectivo para descartar enlaces de dudosa procedencia”.
+
+[P384 | List Paragraph]: Frente a un correo sospechoso de una entidad conocida, como el banco, las respuestas más repetidas fueron comunicarse directamente con la entidad ir otro medio (por ejemplo, llamando) o simplemente no interactuar con el mensaje.
+
+[P385 | List Paragraph]: En conjunto, estos resultados respaldan lo planteado e la ficha de anteproyecto: aunque los colaboradores tienen cierta intuición del riesgo, no cuentan con hábitos ni herramientas consistentes para verificar enlaces, y la mayoría ya ha cometido errores por esta razón. Esto refuerza la necesidad de una herramienta como PhishShield, que no dependa únicamente del criterio individual de cada persona
+
+[P386 | Heading 2]: Requerimientos
+
+[P387 | Heading 2]: Requerimientos Funcionales
+
+[P388 | Heading 2]: Ingreso y análisis de URL: el usuario debe poder pegar o escribir un enlace en la interfaz y pedir que el sistema lo revise.
+
+[P389 | Heading 2]: Revisión estructural del enlace:  el sistema examina la forma en la que está escrita la URL, buscando señales de alerta como el uso de una IP en vez de un dominio normal, ausencia de HTTPS, exceso de subdominios, enlaces demasiado largos o palabras relacionadas a bancos y páginas de inicio de sesión.
+
+[P390 | Heading 2]: Detección de suplantación y caracteres raros: se compara el dominio ingresado contra los dominios legítimos conocidos usando la distancia de Levenshtein (una forma de medir que tan parecidas son dos palabras), y además se revisa si hay letras que visualmente se ven igual, pero pertenecen a otro alfabeto (los llamados ataques de homógrafos).
+
+[P391 | Heading 2]: Predicción con Machine Learning: un modelo Random Forest, entrenado previamente con el dataset PhiUSIIL, calcula que tan probable es que la URL sea maliciosa a partir de características como la aleatoriedad de los caracteres del dominio (entropía) y la longitud de las rutas.
+
+[P392 | Heading 2]: Consulta a fuentes externas de reputación: el sistema pregunta en paralelo a VirusTotal, Google Safe Browsing y PhishTank si ese enlace ya ha sido reportado antes.
+
+[P393 | Heading 2]: Cálculo del nivel de riesgo con piso de seguridad (Score Floor): si el análisis local encuentra algo muy sospechoso (por ejemplo, un homógrafo evidente), el sistema no permite que una respuesta neutral de una API externa baje la alerta; el riesgo se marca como crítico de una vez.
+
+[P394 | Heading 2]: Vista previa segura del sitio: usando Puppeteer con Chromium en un entorno aislado, el sistema toma una captura de pantalla de la página a la que lleva el enlace, sin que el usuario tenga que entrar realmente ni exponer su equipo.
+
+[P395 | Heading 2]: Recomendaciones para el usuario (TipsEngine): según el resultado obtenido, el sistema muestra consejos sencillos para que la persona entienda por qué ese enlace es o no es confiable.
+
+[P396 | Heading 2]: Historial y caché de resultados: los análisis ya hechos se guardan para responder de inmediato si alguien vuelve a consultar la misma URL, sin repetir todo el proceso.
+
+[P397 | Heading 2]: Panel de administración: permite iniciar sesión de forma segura, ver estadísticas generales (cantidad de análisis, casos reportados, distribución del riesgo), revisar y corregir falsos positivos, y exportar el historial en JSON o CSV
+
+[P398 | Heading 2]: Requerimientos No funcionales
+
+[P399 | List Paragraph]: Tiempo de respuesta: el análisis local (sin contar las consultas externas) debe responder en menos de 500 ms, y sumando todo, incluyendo las APIs externas, la respuesta completa no debería pasar de 2 segundos.
+
+[P400 | List Paragraph]: Procesamiento en paralelo: las consultas a los distintos servicios (heurística, modelo predictivo, APIs de reputación) se ejecutan al mismo tiempo usando Promise.allSettled, de manera que, si una de las APIS falla o se demora, esto no detiene el resto del análisis.
+
+[P401 | List Paragraph]: Separación de responsabilidades: el orquestador principal corre en Node.js con Express, mientras que el modelo de Machine Learning vive aparte en un microservicio Python expuesto con FastAPI. Esto permite mantener y escalar cada parte por su lado.
+
+[P402 | List Paragraph]: Aislamiento y seguridad del entorno de vista previa: la sesión de Chromium usada para las capturas no comparte cookies ni credenciales con el equipo del usuario y bloquea scripts o descargas automáticas.
+
+[P403 | List Paragraph]: Tolerancia a fallos: si alguno de los servicios externos de reputación no responde o se cae coma el sistema, igual entrega un resultado usando la información que sí logró recolectar.
+
+[P404 | List Paragraph]: Usabilidad: la interfaz debe ser clara y visual, pensado para personas sin conocimientos de ciberseguridad, con indicadores de color y texto simple para mostrar el nivel de riesgo.
+
+[P405 | List Paragraph]: Portabilidad: la herramienta debe poder ejecutarse en Windows y en Linux, y del lado del usuario solo requiere un navegador web sin instalar nada adicional.
+
+
+================================================================================
+SECCIÓN: Modelado en Cap 2 (Error estructural) (Párrafos 407 a 451)
+================================================================================
+[P407 | Heading 2]: Modelado
+
+[P408 | Heading 3]: Diagramas de caso de uso
+
+[P412 | List Paragraph]: Este diagrama muestra quiénes usan la plataforma y que pueden hacer. Se identificaron tres actores: el usuario final, el administrador y un actor externo que representa las APIs de reputación (VirusTotal, Google Safe, Browsing y PhishTank).
+
+[P413 | List Paragraph]: El usuario puede ingresar una URL para analizarla, ver el resultado del riesgo, consultar las recomendaciones de seguridad generadas por el TipsEngine y reportar manualmente un enlace como sospechoso si considera que el sistema se equivocó.
+
+[P414 | List Paragraph]: El administrador, después de iniciar sesión de forma segura, tiene acceso a funciones adicionales: revisar el historial completo del análisis, ver el panel con estadísticas y la distribución del riesgo, exportar los reportes en JSON o CSV y corregir falsos positivos detectados en el sistema.
+
+[P415 | List Paragraph]: Por último, el actor externo (las APIs de reputación) se conecta al sistema para entregarle información sobre si un dominio ya ha sido reportado antes, complementando así el análisis que se hace de forma local.
+
+[P416 | Heading 3]: Diagrama de Actividades
+
+[P419 | Normal]: Este diagrama describe paso a paso. Todo el camino que sigue una URL desde que el usuario la ingresa hasta que recibe un resultado en pantalla.
+
+[P420 | Normal]: El proceso inicia cuando el usuario introduce la URL y hace clic en el botón Analizar.
+
+[P421 | Normal]: El sistema primero revisa que el formato de la URL sea válido; si n lo es, muestra una alerta pidiendo corregirlo. Si el formato es correcto, el Frontend muestra una animación de “Analizando” mientras envía la solicitud al backend.
+
+[P422 | Normal]: Al recibir la solicitud, el servidor primero verifica si esa URL ya fue analizada antes (buscándola en el historial o en la cache). Si existe un resultado guardado, se usa ese mismo para responder más rápido. Si no existe, se activan al tiempo el motor heurístico, la consulta al modelo predictivo y las consultas a las APIs externas.
+
+[P425 | Heading 3]: Diagrama de clases
+
+[P427 | Normal]: El diagrama de clases muestra como está organizado el código del sistema por dentro. Se identificaron las siguientes clases:
+
+[P428 | List Paragraph]: Usuario: guarda los datos básicos como la dirección IP y el identificador de sesión, y puede pedir un análisis de una URL o consultar recomendaciones.
+
+[P429 | List Paragraph]: Administrador: maneja usuario y contraseña para iniciar sesión y tiene métodos para gestionar listas negras y exportar datos.
+
+[P430 | List Paragraph]: UrlAnalyzerService: es la clase encargada de coordinar todo el análisis: valida la estructura de la URL, revisa si ya existe en cache, consulta las APIs externas y calcula el nivel de riesgo apoyándose en el
+
+[P432 | List Paragraph]: RiskCalculator.
+
+[P433 | List Paragraph]: RiskCalculator: aplica la lógica de ponderación de cada indicador (heurístico, de suplantación, predictivo y externo) y las reglas de piso de riesgo.
+
+[P434 | List Paragraph]: AnalisisResult: representa el resultado de un análisis puntual: la URL revisada, el nivel de riesgo, el puntaje, la fecha y el Consejo aplicado.
+
+[P435 | List Paragraph]: TipsEngine: guarda lista de consejos organizados por categoría (seguro, precaución, peligro) y genera la recomendación que se le muestra al usuario.
+
+[P436 | List Paragraph]: HistorialManager: se encarga de guardar y leer los análisis realizados, generar los reportes en CSV y limpiar el historial cuando se necesite.
+
+[P437 | List Paragraph]: DashboardController: actúa como intermediario entre el administrador y los datos, calculando las estadísticas generales y la distribución del riesgo que se muestra en el panel.
+
+[P438 | Normal]: Con toda esa información junta, el RiskCalculator aplica las reglas de piso de riesgo (Score Floor) y define el nivel final: Seguro, Precaución o Peligro. El sistema guarda ese resultado en el historial, genera un consejo con el tipsEngine le devuelve al usuario una repuesta con el nivel de riesgo, la puntuación y las recomendaciones correspondientes que se muestran en pantalla con colores según la gravedad.
+
+[P439 | Heading 3]: DIAGRAMA DE COMPONENTES
+
+[P442 | Normal]: Este diagrama muestra la arquitectura de PhishShield organizada en tres capas.
+
+[P443 | Normal]: En la capa de presentación están el módulo cliente, que es la interfaz donde el usuario ingresa las URLs, y el módulo de administrador, que muestra el dashboard de gestión. Ambos se comunican con el servidor mediante peticiones REST en formato JSON, y en el caso del administrador, con autenticación.
+
+[P444 | Normal]: En la capa de servidor, construida con Node.js y Express, el API Gateway recibe las solicitudes y las reparte entre los distintos módulos: el motor de análisis (que agrupa la parte heurística,
+
+[P445 | Heading 3]: Diagrama de secuencia
+
+[P447 | Normal]: la detección de suplantación y la llamada al Microservicios Python de Machine Learning), el motor de consejos (TipsEngine), el módulo de capturas seguras con Puppeteer y el gestor de archivos que se encarga de guardar y exportar los resultados. Este servidor también se conecta con las integraciones de terceros: VirusTotal, Google Safe Browsing y PhishTank.
+
+[P448 | Normal]: El diagrama de secuencia detalla en orden, la comunicación entre el usuario y cada uno de los componentes del sistema durante el análisis de una URL.
+
+[P449 | Normal]: Todo comienza cuando el usuario escribe el enlace y da clic en “Analizar”: el Frontend envía una petición POST al Backend. El servidor valida primero la sintaxis de la URL y luego revisa el cache local para ver si ya existe un resultado reciente.
+
+[P450 | Normal]: Si no hay nada guardado, el Backend lanza en paralelo la consulta a las APIs de reputación externas y el análisis heurístico local. Con esas respuestas, calcula el nivel de riesgo final y le pide al TipsEngine un consejo apropiado según el resultado. Después, guarda el nuevo análisis en la base de datos local (history. json) y confirma que la escritura fue exitosa.
+
+[P451 | Normal]: Finalmente, el servidor responde al Frontend con el nivel de riesgo, los datos del análisis y el consejo generado, en formato JSON. La interfaz usa esa información para mostrarle al usuario una tarjeta de resultado con colores dinámicos y el consejo de seguridad correspondiente.
+
+
+================================================================================
+SECCIÓN: Capítulo 3: Diseño del Proyecto (Párrafos 452 a 478)
+================================================================================
+[P452 | Heading 1]: Diseño del proyecto
+
+[P453 | Heading 3]: Diccionario de datos
+
+[P455 | Heading 3]: Modelo relacional
+
+[P457 | Heading 3]: Otros (Si es necesario y colocar el nombre)
+
+[P459 | Heading 2]: Diagramación
+
+[P461 | Heading 3]: Diagrama de clases
+
+[P463 | Heading 3]: Diagrama de casos de uso
+
+[P465 | Heading 3]: Diagrama de secuencia
+
+[P467 | Heading 3]: Otros (Si es necesario y colocar el nombre)
+
+
+================================================================================
+SECCIÓN: Capítulo 4: Implementación y Pruebas (Párrafos 479 a 503)
+================================================================================
+[P479 | Heading 1]: implementación del proyecto
+
+[P480 | Heading 2]: Arquitectura
+
+[P483 | Heading 2]: Pruebas
+
+[P485 | Normal]: Esta sección está destinada para que usted describa cómo realizaron las pruebas del producto construido.
+
+[P487 | Heading 3]: Pruebas funcionales
+
+[P489 | Normal]: De integración, de caja negra, de seguridad, de interoperabilidad. Se verifica el comportamiento e interoperabilidad del sistema, subsistema o componente de software.
+
+[P490 | Normal]: Realice la siguiente tabla que le ayudará a sintetizar las pruebas.
+
+[P492 | Heading 3]: Pruebas no funcionales
+
+[P494 | Normal]: Puede realizar las siguientes pruebas: pruebas de comunicaciones, recuperación, volumen, sobrecarga, tensión, estrés, portabilidad, fiabilidad, disponibilidad de datos, facilidad de uso, operación, entorno, seguridad, usabilidad, rendimiento, implantación, instalación, desempeño, resistencia, almacenamiento, configuración, instalación, de la documentación. En estas pruebas se verifica cómo trabaja el sistema. Esté(n) pendientes sobre los tiempos de respuesta del sistema.
+
+[P495 | Normal]: Elabore la siguiente tabla como guía para sus pruebas.
+
+[P498 | Heading 2]: Manuales
+
+
+================================================================================
+SECCIÓN: Capítulo 5: Conclusiones y Recomendaciones (Párrafos 504 a 524)
+================================================================================
+[P504 | Heading 1]: Conclusiones y recomendaciones
+
+[P505 | Heading 2]: Conclusiones
+
+[P506 | List Paragraph]: Las conclusiones constituyen un capítulo independiente y presentan, en forma lógica, los resultados del trabajo. Las conclusiones deben ser la respuesta a los objetivos o propósitos planteados. Se deben titular con la palabra conclusiones en el mismo formato de los títulos de los capítulos anteriores (Títulos primer nivel), precedida por el numeral correspondiente (según la presente plantilla).
+
+[P508 | List Paragraph]: Las conclusiones deben contemplar las perspectivas de la investigación, las cuales son sugerencias, proyecciones o alternativas que se presentan para modificar, cambiar o incidir sobre una situación específica o una problemática encontrada. Pueden presentarse como un texto con características argumentativas, resultado de una reflexión acerca del trabajo de investigación.
+
+[P509 | Heading 2]: Recomendaciones
+
+[P510 | List Paragraph]: Se presentan como una serie de aspectos que se podrían realizar en un futuro para emprender investigaciones similares o fortalecer la investigación realizada.
+
+[P514 | Subtitle]: Anexo: Nombrar el anexo A de acuerdo con su contenido
+
+[P515 | List Paragraph]: Los Anexos son documentos o elementos que complementan el cuerpo del trabajo y que se relacionan, directa o indirectamente, con la investigación, tales como acetatos, cd, normas, etc. Los anexos deben ir numerados con letras y usando el estilo “Título anexos”.
+
+[P520 | Subtitle]: Anexo: Nombrar el anexo B de acuerdo con su contenido
+
+[P521 | List Paragraph]: A final del documento es opcional incluir índices o glosarios. Éstos son listas detalladas y especializadas de los términos, nombres, autores, temas, etc., que aparecen en el trabajo. Sirven para facilitar su localización en el texto. Los índices pueden ser alfabéticos, cronológicos, numéricos, analíticos, entre otros. Luego de cada palabra, término, etc., se pone coma y el número de la página donde aparece esta información.
+
+
+================================================================================
+SECCIÓN: Bibliografía (Párrafos 525 a 542)
+================================================================================
+[P525 | Títulos Preliminares 1]: Bibliografía
+
+[P527 | Bibliography]: Imagine Easy Solutions. (09 de 2016). Normas APA. Obtenido de http://normasapa.net/
+
+[P528 | Bibliography]: Mendeley. (09 de 2016). Mendeley. Obtenido de https://www.mendeley.com/
+
+[P529 | Bibliography]: Roy Rosenzweig Center for History and New Media. (09 de 2016). Zotero. Obtenido de https://www.zotero.org
+
+[P530 | Bibliography]: Sáenz, J. (09 de 09 de 2016). Wiki Sistemas Digitales. Obtenido de http://sistdig.wikidot.com
+
+[P531 | Bibliography]: Suárez, R. (2015). Energías renovables, Impacto y Efectividad. Revista Científica Ingeniería y Desarrollo en Energía, 48-53.
+
+[P532 | Bibliography]: Thomson Reuters. (09 de 2016). EndNote. Obtenido de http://endnote.com/
+
+[P535 | List Paragraph]: Nota:
+
+[P537 | List Paragraph]: La bibliografía es la relación de las fuentes documentales consultadas por el investigador para sustentar sus trabajos. Su inclusión es obligatoria en todo trabajo de investigación. Cada referencia bibliográfica se inicia contra el margen izquierdo.
+
+[P539 | List Paragraph]: Como se mencionó anteriormente se realizarán las citaciones y referencias bibliográficas utilizando normas APA se hace especial énfasis en que se aplique con rigurosidad. La Bibliografía que aparece en esta plantilla se elaboró utilizando las herramientas para Referencias de WORD. Se recomienda el uso de gestores bibliográficos como Mendeley, Zotero, etc.
+
