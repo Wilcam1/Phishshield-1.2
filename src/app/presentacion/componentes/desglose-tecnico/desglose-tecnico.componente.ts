@@ -27,105 +27,149 @@ export class DesgloseTecnicoComponente {
   get listaDetalles(): ElementoDetalle[] {
     const detalles: ElementoDetalle[] = [];
 
+    const urlBruta = this.resultado.url || '';
     let objetoUrl: URL | null = null;
     try {
       objetoUrl = new URL(
-        this.resultado.url.startsWith('http')
-          ? this.resultado.url
-          : `https://${this.resultado.url}`
+        urlBruta.startsWith('http') ? urlBruta : `https://${urlBruta}`
       );
     } catch {
       // Ignorar error de parsing
     }
 
-    const dominio = objetoUrl ? objetoUrl.hostname : this.resultado.url;
+    const dominio = objetoUrl ? objetoUrl.hostname : urlBruta;
     const protocolo = objetoUrl ? objetoUrl.protocol.replace(':', '') : 'HTTP';
-    const tieneSubdominios = objetoUrl ? objetoUrl.hostname.split('.').length > 2 : false;
+    const tieneSubdominio = objetoUrl ? objetoUrl.hostname.split('.').length > 2 : false;
     const esHttps = protocolo.toLowerCase() === 'https';
+    const longitudUrl = urlBruta.length;
+    const caracteresEspeciales = (urlBruta.match(/[^a-zA-Z0-9.:/]/g) || []).length;
 
+    // 1. Dominio analizado
     detalles.push({
-      etiqueta: 'Dominio Analizado',
+      etiqueta: 'Dominio analizado',
       valor: dominio,
       estado: 'seguro',
     });
 
+    // 2. Protocolo
     detalles.push({
-      etiqueta: 'Protocolo de Red',
+      etiqueta: 'Protocolo',
       valor: protocolo.toUpperCase(),
       estado: esHttps ? 'seguro' : 'advertencia',
     });
 
+    // 3. Subdominios
     detalles.push({
-      etiqueta: 'Subdominios Anidados',
-      valor: tieneSubdominios ? 'Sí (Múltiples)' : 'No (Estándar)',
-      estado: tieneSubdominios ? 'advertencia' : 'seguro',
+      etiqueta: 'Subdominios',
+      valor: tieneSubdominio ? 'Sí' : 'No',
+      estado: tieneSubdominio ? 'advertencia' : 'seguro',
     });
 
+    // 4. Longitud de URL
     detalles.push({
-      etiqueta: 'Longitud de Enlace',
-      valor: `${this.resultado.url.length} caracteres (${this.resultado.url.length > 50 ? 'Extensa' : 'Normal'})`,
-      estado: this.resultado.url.length > 50 ? 'advertencia' : 'seguro',
+      etiqueta: 'Longitud de URL',
+      valor: longitudUrl > 50 ? 'Larga' : 'Normal',
+      estado: longitudUrl > 50 ? 'advertencia' : 'seguro',
     });
 
+    // 5. Caracteres especiales
     detalles.push({
-      etiqueta: 'Puntuación Total',
+      etiqueta: 'Caracteres especiales',
+      valor: `${caracteresEspeciales}`,
+      estado: 'seguro',
+    });
+
+    // 6. Nivel de riesgo
+    const nivelRiesgoTexto = this.resultado.riesgo.toUpperCase();
+    detalles.push({
+      etiqueta: 'Nivel de riesgo',
+      valor: nivelRiesgoTexto,
+      estado:
+        this.resultado.riesgo === 'alto'
+          ? 'peligro'
+          : this.resultado.riesgo === 'medio'
+            ? 'advertencia'
+            : 'seguro',
+    });
+
+    // 7. Puntuación de Riesgo
+    detalles.push({
+      etiqueta: 'Puntuación de Riesgo',
       valor: `${this.resultado.puntuacion}/10`,
       estado:
         this.resultado.puntuacion <= 3
           ? 'seguro'
-          : this.resultado.puntuacion <= 6
+          : this.resultado.puntuacion <= 7
             ? 'advertencia'
             : 'peligro',
     });
 
-    if (this.resultado.probabilidadAprendizajeAutomatico !== null) {
-      const prob = this.resultado.probabilidadAprendizajeAutomatico;
-      const textoPorcentaje = `${(prob <= 1 ? prob * 100 : prob).toFixed(1)}%`;
-      detalles.push({
-        etiqueta: 'Probabilidad ML (Random Forest)',
-        valor: textoPorcentaje,
-        estado: prob > 0.5 ? 'peligro' : 'seguro',
-      });
-    }
+    // 8. Probabilidad IA (ML)
+    const probMl = this.resultado.probabilidadAprendizajeAutomatico;
+    const tieneProbMl = probMl !== null && probMl !== undefined;
+    const textoMl = tieneProbMl
+      ? `${(probMl <= 1 ? probMl * 100 : probMl).toFixed(1)}%`
+      : 'N/A';
+    detalles.push({
+      etiqueta: 'Probabilidad IA (ML)',
+      valor: textoMl,
+      estado: tieneProbMl && probMl > 0.5 ? 'peligro' : 'seguro',
+    });
 
+    // 9. 🔒 Certificado SSL
     if (this.resultado.inspeccionSsl) {
       const ssl = this.resultado.inspeccionSsl;
-      detalles.push({
-        etiqueta: 'Certificado Criptográfico SSL',
-        valor: ssl.esAutofirmado
-          ? 'Autofirmado (Inseguro)'
-          : ssl.esValido
+      if (ssl.tieneSsl) {
+        const textoSsl = ssl.esAutofirmado
+          ? 'Autofirmado'
+          : ssl.esConfiable || ssl.esValido
             ? `Válido (${ssl.emisor || 'Emisor Reconocido'})`
-            : 'Sin SSL o No Confiable',
-        estado: ssl.esValido && !ssl.esAutofirmado ? 'seguro' : 'peligro',
-      });
+            : 'No confiable';
 
-      if (ssl.diasActivo !== undefined) {
         detalles.push({
-          etiqueta: 'Antigüedad Certificado SSL',
-          valor: `${ssl.diasActivo} días (${ssl.esReciente ? 'Reciente < 30 días' : 'Estable'})`,
+          etiqueta: '🔒 Certificado SSL',
+          valor: textoSsl,
+          estado: (ssl.esConfiable || ssl.esValido) && !ssl.esAutofirmado
+            ? (ssl.esReciente ? 'advertencia' : 'seguro')
+            : 'peligro',
+        });
+
+        // 10. 📅 Antigüedad SSL
+        detalles.push({
+          etiqueta: '📅 Antigüedad SSL',
+          valor: ssl.diasActivo !== undefined ? `${ssl.diasActivo} días` : 'N/A',
           estado: ssl.esReciente ? 'advertencia' : 'seguro',
         });
-      }
-    }
-
-    if (this.resultado.inspeccionDom && this.resultado.inspeccionDom.fueAnalizado) {
-      const dom = this.resultado.inspeccionDom;
-      if (dom.titulo) {
+      } else {
         detalles.push({
-          etiqueta: 'Título Capturado en DOM',
-          valor: dom.titulo,
-          estado: dom.marcaEnTitulo ? 'peligro' : 'seguro',
-        });
-      }
-
-      if (dom.tieneCampoClave || dom.tieneCampoTarjeta) {
-        detalles.push({
-          etiqueta: 'Formularios Sensibles Detectados',
-          valor: dom.tieneCampoTarjeta ? 'Captura de Tarjeta/CVV' : 'Formulario de Contraseña',
+          etiqueta: '🔒 Certificado SSL',
+          valor: 'Sin SSL / Inseguro',
           estado: 'peligro',
         });
       }
+    } else {
+      detalles.push({
+        etiqueta: '🔒 Certificado SSL',
+        valor: esHttps ? 'Válido' : 'Sin SSL / Inseguro',
+        estado: esHttps ? 'seguro' : 'peligro',
+      });
+    }
+
+    // 11. 📄 Título de la página
+    if (this.resultado.inspeccionDom && this.resultado.inspeccionDom.fueAnalizado && this.resultado.inspeccionDom.titulo) {
+      const titulo = this.resultado.inspeccionDom.titulo;
+      const tituloCorto = titulo.length > 30 ? titulo.substring(0, 30) + '...' : titulo;
+      detalles.push({
+        etiqueta: '📄 Título de la página',
+        valor: tituloCorto,
+        estado: this.resultado.inspeccionDom.marcaEnTitulo ? 'peligro' : 'seguro',
+      });
+    } else {
+      detalles.push({
+        etiqueta: '📄 Título de la página',
+        valor: 'No detectado',
+        estado: 'seguro',
+      });
     }
 
     return detalles;

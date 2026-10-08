@@ -71,15 +71,15 @@
     color: var(--color-texto-primario);
 
     &.estado-seguro {
-      color: var(--color-seguro);
+      color: var(--color-exito, var(--color-seguro, #30d158));
     }
 
     &.estado-advertencia {
-      color: var(--color-advertencia);
+      color: var(--color-alerta, var(--color-advertencia, #ff9f0a));
     }
 
     &.estado-peligro {
-      color: var(--color-peligro);
+      color: var(--color-peligro, #ff453a);
     }
   }
 }
