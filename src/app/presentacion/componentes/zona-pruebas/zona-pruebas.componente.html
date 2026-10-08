@@ -1,0 +1,26 @@
+<section class="tarjeta-pruebas superficie-cristal" role="region" aria-label="Escenarios de prueba rápida">
+  <header class="encabezado-pruebas">
+    <div class="icono-matraz" aria-hidden="true">🧪</div>
+    <div>
+      <h3 class="titulo-pruebas">Zona de Pruebas Rápidas</h3>
+      <p class="subtitulo-pruebas">
+        Selecciona un escenario de muestra para evaluar la respuesta multicapa del motor de detección y las tarjetas pedagógicas:
+      </p>
+    </div>
+  </header>
+
+  <div class="cuadricula-escenarios">
+    @for (escenario of escenarios; track escenario.url) {
+      <button
+        type="button"
+        class="boton-escenario"
+        [ngClass]="'categoria-' + escenario.categoria"
+        (click)="seleccionar(escenario.url)"
+        [title]="'Cargar ' + escenario.titulo"
+      >
+        <span class="icono-escenario" aria-hidden="true">{{ escenario.icono }}</span>
+        <span class="titulo-escenario">{{ escenario.titulo }}</span>
+      </button>
+    }
+  </div>
+</section>

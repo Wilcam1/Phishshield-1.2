@@ -1,0 +1,120 @@
+.tarjeta-metricas {
+  padding: var(--espaciado-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaciado-md);
+  border-radius: var(--radio-grande);
+}
+
+.encabezado-metricas {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .izquierda-metricas {
+    display: flex;
+    align-items: center;
+    gap: var(--espaciado-sm);
+  }
+
+  .icono-grafico {
+    font-size: 1.3rem;
+  }
+
+  .titulo-metricas {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--color-texto-primario);
+    letter-spacing: -0.01em;
+  }
+}
+
+.boton-actualizar-metricas {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--radio-mediano);
+  background: var(--color-fondo-entrada);
+  border: 1px solid var(--color-borde-cristal);
+  color: var(--color-texto-primario);
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.08);
+  }
+}
+
+.cuadricula-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--espaciado-md);
+}
+
+.tarjeta-kpi {
+  padding: var(--espaciado-md) var(--espaciado-lg);
+  border-radius: var(--radio-mediano);
+  background: var(--color-fondo-entrada);
+  border: 1px solid var(--color-borde-cristal);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  position: relative;
+  border-left: 4px solid var(--color-primario);
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+  }
+
+  &.kpi-total {
+    border-left-color: var(--color-primario);
+  }
+
+  &.kpi-peligro {
+    border-left-color: var(--color-peligro);
+    .valor-kpi {
+      color: var(--color-peligro);
+    }
+  }
+
+  &.kpi-advertencia {
+    border-left-color: var(--color-advertencia);
+    .valor-kpi {
+      color: var(--color-advertencia);
+    }
+  }
+
+  &.kpi-seguro {
+    border-left-color: var(--color-seguro);
+    .valor-kpi {
+      color: var(--color-seguro);
+    }
+  }
+
+  &.kpi-reportes {
+    border-left-color: #8b5cf6;
+    .valor-kpi {
+      color: #8b5cf6;
+    }
+  }
+
+  .etiqueta-kpi {
+    font-size: 0.8rem;
+    color: var(--color-texto-secundario);
+    font-weight: 600;
+  }
+
+  .valor-kpi {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--color-texto-primario);
+    letter-spacing: var(--rastreo-titular);
+    line-height: 1.1;
+  }
+
+  .pista-clic {
+    font-size: 0.7rem;
+    color: var(--color-texto-terciario);
+    margin-top: 4px;
+  }
+}

@@ -1,0 +1,130 @@
+.diseno-analizador {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.banner-aviso-educativo {
+  background: var(--color-advertencia-fondo);
+  border-bottom: 1px solid rgba(255, 149, 0, 0.25);
+  color: var(--color-texto-primario);
+  padding: 10px var(--espaciado-lg);
+  font-size: 0.82rem;
+
+  .contenido-aviso {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: var(--espaciado-sm);
+  }
+
+  .icono-aviso {
+    font-size: 1.1rem;
+  }
+
+  .texto-aviso {
+    flex: 1;
+    line-height: 1.35;
+  }
+
+  .boton-cerrar-aviso {
+    padding: 4px 8px;
+    font-size: 0.85rem;
+    color: var(--color-texto-secundario);
+    border-radius: var(--radio-pequeno);
+
+    &:hover {
+      color: var(--color-texto-primario);
+      background: rgba(0, 0, 0, 0.05);
+    }
+  }
+}
+
+.barra-navegacion-superior {
+  max-width: 1080px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--espaciado-lg) var(--espaciado-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--espaciado-md);
+
+  .marca-sistema {
+    display: flex;
+    align-items: center;
+    gap: var(--espaciado-sm);
+
+    .logo-escudo {
+      font-size: 2.2rem;
+      filter: drop-shadow(0 4px 10px rgba(0, 113, 227, 0.3));
+    }
+
+    .titulo-sistema {
+      margin: 0;
+      line-height: 1;
+    }
+
+    .subtitulo-sistema {
+      font-size: 0.75rem;
+      color: var(--color-texto-terciario);
+    }
+  }
+
+  .acciones-navegacion {
+    display: flex;
+    align-items: center;
+    gap: var(--espaciado-sm);
+  }
+}
+
+.contenedor-principal {
+  max-width: 1080px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--espaciado-md) var(--espaciado-2xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaciado-xl);
+}
+
+.seccion-hero {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaciado-sm);
+  padding: var(--espaciado-md) 0;
+
+  .titular-grande {
+    background: linear-gradient(135deg, var(--color-texto-primario) 30%, var(--color-primario));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitulo {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+}
+
+.seccion-resultados {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaciado-lg);
+}
+
+.animate-fade-in {
+  animation: aparicionSuave var(--duracion-normal) var(--curva-resorte) both;
+}
+
+@keyframes aparicionSuave {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

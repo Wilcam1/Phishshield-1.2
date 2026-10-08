@@ -1,1 +1,166 @@
-/* You can add global styles to this file, and also import other style files */
+@use 'src/app/presentacion/diseno/tokens.scss';
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  min-height: 100vh;
+  font-family: var(--fuente-sistema);
+  background-color: var(--color-fondo);
+  color: var(--color-texto-primario);
+  letter-spacing: var(--rastreo-cuerpo);
+  line-height: 1.47059;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--duracion-normal) var(--curva-suave),
+              color var(--duracion-normal) var(--curva-suave);
+}
+
+/* Microinteracciones Físicas con Feedback Inmediato (:active) */
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  touch-action: manipulation;
+  transition: transform var(--duracion-rapida) var(--curva-resorte),
+              opacity var(--duracion-rapida) var(--curva-suave),
+              background-color var(--duracion-rapida) var(--curva-suave);
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Foco Visible Accesible (Human Interface Guidelines) */
+:focus-visible {
+  outline: 3px solid var(--color-primario);
+  outline-offset: 2px;
+}
+
+/* Clases de Superficie y Material Translúcido */
+.superficie-cristal {
+  background: var(--color-fondo-superficie);
+  backdrop-filter: var(--desenfoque-material);
+  -webkit-backdrop-filter: var(--desenfoque-material);
+  border: 1px solid var(--color-borde-cristal);
+  box-shadow: var(--sombra-tarjeta);
+  border-radius: var(--radio-grande);
+}
+
+.superficie-elevada {
+  background: var(--color-fondo-elevado);
+  backdrop-filter: var(--desenfoque-material);
+  -webkit-backdrop-filter: var(--desenfoque-material);
+  border: 1px solid var(--color-borde-cristal);
+  box-shadow: var(--sombra-flotante);
+  border-radius: var(--radio-grande);
+}
+
+/* Tipografía de Escala Óptica */
+.titular-grande {
+  font-size: clamp(1.8rem, 4vw, 2.75rem);
+  font-weight: 700;
+  letter-spacing: var(--rastreo-titular);
+  line-height: 1.1;
+}
+
+.titular-mediano {
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+.subtitulo {
+  color: var(--color-texto-secundario);
+  font-size: 1.05rem;
+  line-height: 1.4;
+}
+
+.texto-mono {
+  font-family: var(--fuente-monoespaciada);
+}
+
+/* Insignias Semánticas Píldora */
+.insignia-pildora {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espaciado-xs);
+  padding: 4px 12px;
+  border-radius: var(--radio-pildora);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: var(--rastreo-etiqueta);
+  text-transform: uppercase;
+}
+
+.insignia-pildora.seguro {
+  background: var(--color-seguro-fondo);
+  color: var(--color-seguro);
+  border: 1px solid rgba(52, 199, 89, 0.25);
+}
+
+.insignia-pildora.advertencia {
+  background: var(--color-advertencia-fondo);
+  color: var(--color-advertencia);
+  border: 1px solid rgba(255, 149, 0, 0.25);
+}
+
+.insignia-pildora.peligro {
+  background: var(--color-peligro-fondo);
+  color: var(--color-peligro);
+  border: 1px solid rgba(255, 59, 48, 0.25);
+}
+
+/* Botones Apple Estándar */
+.boton-primario {
+  background-color: var(--color-primario);
+  color: #ffffff;
+  font-weight: 600;
+  padding: 12px 20px;
+  border-radius: var(--radio-mediano);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espaciado-sm);
+  box-shadow: 0 4px 14px rgba(0, 113, 227, 0.25);
+}
+
+.boton-primario:hover:not(:disabled) {
+  background-color: var(--color-primario-activo);
+}
+
+.boton-secundario {
+  background-color: var(--color-fondo-entrada);
+  color: var(--color-texto-primario);
+  font-weight: 600;
+  padding: 12px 18px;
+  border-radius: var(--radio-mediano);
+  border: 1px solid var(--color-borde-cristal);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espaciado-sm);
+}
+
+.boton-secundario:hover:not(:disabled) {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+body.modo-oscuro .boton-secundario:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.12);
+}

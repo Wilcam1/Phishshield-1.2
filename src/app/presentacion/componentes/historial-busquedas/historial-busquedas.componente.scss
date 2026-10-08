@@ -1,0 +1,104 @@
+.tarjeta-historial {
+  padding: var(--espaciado-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaciado-md);
+  border-radius: var(--radio-grande);
+}
+
+.encabezado-historial {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .izquierda-historial {
+    display: flex;
+    align-items: center;
+    gap: var(--espaciado-sm);
+  }
+
+  .icono-reloj {
+    font-size: 1.3rem;
+  }
+
+  .titulo-historial {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--color-texto-primario);
+    letter-spacing: -0.01em;
+  }
+}
+
+.boton-limpiar-historial {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--radio-mediano);
+  background: var(--color-fondo-entrada);
+  border: 1px solid var(--color-borde-cristal);
+  color: var(--color-texto-secundario);
+
+  &:hover {
+    color: var(--color-peligro);
+    background: rgba(255, 59, 48, 0.1);
+    border-color: var(--color-peligro);
+  }
+}
+
+.cuerpo-historial {
+  .estado-vacio {
+    font-size: 0.9rem;
+    color: var(--color-texto-terciario);
+    text-align: center;
+    padding: var(--espaciado-md) 0;
+  }
+}
+
+.lista-entradas {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaciado-sm);
+}
+
+.item-entrada {
+  display: flex;
+}
+
+.boton-item-url {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--espaciado-md);
+  padding: 12px 14px;
+  background: var(--color-fondo-entrada);
+  border: 1px solid var(--color-borde-cristal);
+  border-radius: var(--radio-mediano);
+  text-align: left;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.06);
+  }
+
+  .url-texto {
+    font-size: 0.88rem;
+    color: var(--color-texto-primario);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 65%;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: var(--espaciado-sm);
+    flex-shrink: 0;
+  }
+
+  .fecha-item {
+    font-size: 0.75rem;
+    color: var(--color-texto-terciario);
+  }
+}

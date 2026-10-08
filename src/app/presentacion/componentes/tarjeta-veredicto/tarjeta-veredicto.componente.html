@@ -1,0 +1,91 @@
+<section class="tarjeta-veredicto superficie-cristal" role="region" aria-label="Resultado del análisis forense">
+  <header class="encabezado-veredicto">
+    <div class="informacion-url">
+      <span class="etiqueta-pequena">URL Analizada</span>
+      <span class="url-texto texto-mono" [title]="resultado.url">{{ resultado.url }}</span>
+    </div>
+
+    <div class="acciones-encabezado">
+      <span class="insignia-pildora" [ngClass]="resultado.riesgo | riesgoColor">
+        @switch (resultado.riesgo) {
+          @case ('bajo') { 🟢 RIESGO BAJO }
+          @case ('medio') { 🟡 RIESGO MEDIO }
+          @case ('alto') { 🔴 RIESGO ALTO }
+        }
+      </span>
+
+      <button
+        type="button"
+        class="boton-copiar"
+        (click)="copiarAlPortapapeles()"
+        [title]="estaCopiado ? 'Copiado al portapapeles' : 'Copiar reporte técnico'"
+        aria-label="Copiar reporte técnico del análisis"
+      >
+        @if (estaCopiado) {
+          <span>✅ Copiado</span>
+        } @else {
+          <span>📋 Copiar</span>
+        }
+      </button>
+    </div>
+  </header>
+
+  <div class="cuerpo-veredicto" [ngClass]="'borde-' + (resultado.riesgo | riesgoColor)">
+    <div class="icono-estado" aria-hidden="true">
+      @switch (resultado.riesgo) {
+        @case ('bajo') { 🛡️ }
+        @case ('medio') { ⚠️ }
+        @case ('alto') { 🚨 }
+      }
+    </div>
+    <div class="texto-veredicto">
+      <h3 class="titulo-estado">{{ tituloVeredicto }}</h3>
+      <p class="descripcion-estado">{{ resumenVeredicto }}</p>
+    </div>
+  </div>
+
+  <div class="medidor-puntuacion">
+    <div class="etiquetas-medidor">
+      <span class="etiqueta-nivel">Seguro (0/10)</span>
+      <span class="puntuacion-central">
+        Puntuación: <strong>{{ resultado.puntuacion }}/10</strong>
+      </span>
+      <span class="etiqueta-nivel">Peligroso (10/10)</span>
+    </div>
+
+    <div
+      class="pista-progreso"
+      role="progressbar"
+      [attr.aria-valuenow]="resultado.puntuacion"
+      aria-valuemin="0"
+      aria-valuemax="10"
+      [attr.aria-valuetext]="'Puntuación de riesgo ' + resultado.puntuacion + ' de 10'"
+    >
+      <div
+        class="relleno-progreso"
+        [ngClass]="'color-' + (resultado.riesgo | riesgoColor)"
+        [style.width.%]="porcentajePuntuacion"
+      ></div>
+    </div>
+  </div>
+
+  @if (resultado.indicadores.length > 0) {
+    <footer class="lista-indicadores">
+      <h4 class="titulo-indicadores">
+        <span>Factores técnicos identificados</span>
+        <span class="contador-indicadores">{{ resultado.indicadores.length }}</span>
+      </h4>
+      <ul class="items-indicadores">
+        @for (indicador of resultado.indicadores; track indicador) {
+          <li class="item-indicador">
+            <span class="icono-bullet" aria-hidden="true">›</span>
+            <span>{{ indicador }}</span>
+          </li>
+        }
+      </ul>
+      <div class="pie-fecha-analisis">
+        <small class="fecha-analisis">Auditoría registrada: {{ resultado.marcaTiempo | formatoFecha }}</small>
+      </div>
+    </footer>
+  }
+</section>

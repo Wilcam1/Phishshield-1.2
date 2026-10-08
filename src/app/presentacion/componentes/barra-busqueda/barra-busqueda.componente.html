@@ -1,0 +1,54 @@
+<div class="contenedor-barra-busqueda superficie-cristal" role="search" aria-label="Analizador de URLs">
+  <div class="campo-entrada-envoltorio">
+    <span class="icono-enlace" aria-hidden="true">🔗</span>
+    <input
+      type="url"
+      class="entrada-url texto-mono"
+      placeholder="https://ejemplo-banco.com/login?token=..."
+      [(ngModel)]="url"
+      (keydown)="alPresionarEnter($event)"
+      [disabled]="estaCargando"
+      aria-label="URL a analizar para detección de phishing"
+    />
+    @if (url) {
+      <button
+        type="button"
+        class="boton-limpiar"
+        (click)="limpiar()"
+        title="Limpiar campo"
+        aria-label="Limpiar campo de texto"
+      >
+        ✕
+      </button>
+    }
+  </div>
+
+  <div class="acciones-barra">
+    <button
+      type="button"
+      class="boton-primario"
+      (click)="emitirAnalisis()"
+      [disabled]="!url || estaCargando"
+      aria-live="polite"
+    >
+      @if (estaCargando) {
+        <span class="indicador-giratorio" aria-hidden="true"></span>
+        <span>Analizando...</span>
+      } @else {
+        <span aria-hidden="true">🔍</span>
+        <span>Analizar</span>
+      }
+    </button>
+
+    <button
+      type="button"
+      class="boton-secundario boton-alerta"
+      (click)="emitirReporte()"
+      [disabled]="!url || estaCargando"
+      title="Reportar esta URL como fraude a la comunidad"
+    >
+      <span aria-hidden="true">🚩</span>
+      <span>Reportar</span>
+    </button>
+  </div>
+</div>

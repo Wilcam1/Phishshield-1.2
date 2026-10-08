@@ -1,0 +1,11 @@
+<button
+  type="button"
+  class="boton-tema"
+  (click)="alternarTema()"
+  [title]="temaEstado.tema() === 'oscuro' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+  [attr.aria-label]="temaEstado.tema() === 'oscuro' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+>
+  <span class="icono-tema" aria-hidden="true">
+    {{ temaEstado.tema() === 'oscuro' ? '☀️' : '🌙' }}
+  </span>
+</button>

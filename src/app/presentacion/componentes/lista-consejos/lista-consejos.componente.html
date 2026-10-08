@@ -1,0 +1,16 @@
+@if (consejos.length > 0) {
+  <section class="seccion-consejos" role="region" aria-label="Consejos educativos de ciberseguridad">
+    <div class="cuadricula-consejos">
+      @for (consejo of consejos; track consejo.titulo; let i = $index) {
+        <article
+          class="tarjeta-consejo superficie-cristal"
+          [ngClass]="'tipo-' + consejo.tipo"
+          [style.animation-delay.ms]="i * 80"
+        >
+          <h4 class="titulo-consejo">{{ consejo.titulo }}</h4>
+          <p class="texto-consejo">{{ consejo.texto }}</p>
+        </article>
+      }
+    </div>
+  </section>
+}

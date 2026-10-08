@@ -1,0 +1,67 @@
+@if (visible) {
+  <div
+    class="telon-modal"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="titulo"
+    tabindex="-1"
+    (click)="alHacerClicFondo($event)"
+    (keydown.escape)="cerrar()"
+  >
+    <div class="caja-modal superficie-elevada">
+      <header class="encabezado-modal">
+        <h3 class="titulo-modal">{{ titulo }}</h3>
+        <button
+          type="button"
+          class="boton-cerrar-modal"
+          (click)="cerrar()"
+          aria-label="Cerrar ventana"
+        >
+          ✕
+        </button>
+      </header>
+
+      <div class="cuerpo-modal">
+        @if (esModoReportes) {
+          @if (reportes.length === 0) {
+            <p class="estado-vacio">No hay alertas comunitarias activas.</p>
+          } @else {
+            <div class="lista-items">
+              @for (rep of reportes; track rep.url) {
+                <div class="item-registro">
+                  <span class="url-registro texto-mono" [title]="rep.url">{{ rep.url }}</span>
+                  <div class="meta-registro">
+                    <span class="insignia-pildora peligro">REPORTE</span>
+                    <span class="info-adicional">
+                      Por: {{ rep.reportero }} · {{ rep.marcaTiempo | formatoFecha:'corta' }}
+                    </span>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        } @else {
+          @if (elementosHistorial.length === 0) {
+            <p class="estado-vacio">No hay URLs registradas en esta categoría aún.</p>
+          } @else {
+            <div class="lista-items">
+              @for (item of elementosHistorial; track item.url) {
+                <div class="item-registro">
+                  <span class="url-registro texto-mono" [title]="item.url">{{ item.url }}</span>
+                  <div class="meta-registro">
+                    <span class="insignia-pildora" [ngClass]="item.riesgo | riesgoColor">
+                      {{ item.riesgo | uppercase }}
+                    </span>
+                    <span class="info-adicional">
+                      {{ item.puntuacion }}/10 · {{ item.marcaTiempo | formatoFecha:'corta' }}
+                    </span>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        }
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,163 @@
+.telon-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9200;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espaciado-md);
+  animation: oscurecerFondo var(--duracion-normal) var(--curva-suave) both;
+}
+
+.caja-modal {
+  width: 100%;
+  max-width: 440px;
+  border-radius: var(--radio-grande);
+  overflow: hidden;
+  animation: escalarModal var(--duracion-normal) var(--curva-resorte) both;
+}
+
+.encabezado-modal {
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-borde-cristal);
+
+  .logo-modal {
+    display: flex;
+    align-items: center;
+    gap: var(--espaciado-sm);
+
+    .icono-llave {
+      font-size: 1.6rem;
+    }
+
+    .titulo-modal {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--color-texto-primario);
+    }
+
+    .subtitulo-modal {
+      font-size: 0.75rem;
+      color: var(--color-texto-terciario);
+    }
+  }
+
+  .boton-cerrar-modal {
+    font-size: 1.1rem;
+    color: var(--color-texto-secundario);
+    padding: 6px;
+    border-radius: var(--radio-pildora);
+
+    &:hover {
+      background: var(--color-fondo-entrada);
+      color: var(--color-texto-primario);
+    }
+  }
+}
+
+.cuerpo-modal {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaciado-md);
+}
+
+.campo-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  .etiqueta-campo {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-texto-secundario);
+  }
+
+  .campo-texto {
+    background: var(--color-fondo-entrada);
+    border: 1px solid var(--color-borde-cristal);
+    border-radius: var(--radio-mediano);
+    padding: 12px 14px;
+    color: var(--color-texto-primario);
+    font-size: 0.95rem;
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-primario);
+      background: var(--color-fondo-elevado);
+    }
+  }
+}
+
+.requisitos-contrasena {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+  background: var(--color-fondo-entrada);
+  border-radius: var(--radio-pequeno);
+  margin-top: 4px;
+
+  .item-requisito {
+    font-size: 0.75rem;
+    color: var(--color-texto-secundario);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    &.cumplido {
+      color: var(--color-seguro);
+      font-weight: 600;
+    }
+  }
+}
+
+.error-coincidencia {
+  font-size: 0.75rem;
+  color: var(--color-peligro);
+  font-weight: 600;
+}
+
+.alerta-error {
+  display: flex;
+  align-items: center;
+  gap: var(--espaciado-sm);
+  padding: 10px 14px;
+  background: var(--color-peligro-fondo);
+  border: 1px solid var(--color-peligro);
+  color: var(--color-peligro);
+  border-radius: var(--radio-mediano);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.pie-modal {
+  margin-top: var(--espaciado-sm);
+
+  .boton-bloque {
+    width: 100%;
+    min-height: 48px;
+    font-size: 1rem;
+  }
+}
+
+@keyframes oscurecerFondo {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes escalarModal {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

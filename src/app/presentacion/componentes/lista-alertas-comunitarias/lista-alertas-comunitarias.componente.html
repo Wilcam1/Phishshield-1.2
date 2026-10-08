@@ -1,0 +1,48 @@
+<section class="tarjeta-alertas superficie-cristal" role="region" aria-label="Alertas comunitarias activas">
+  <header class="encabezado-alertas">
+    <div class="izquierda-encabezado">
+      <span class="icono-alerta" aria-hidden="true">🚨</span>
+      <h4 class="titulo-alertas">Alertas Comunitarias Activas</h4>
+    </div>
+
+    <button
+      type="button"
+      class="boton-exportar-json"
+      (click)="exportar()"
+      [disabled]="reportes.length === 0"
+      title="Exportar archivo JSON de alertas"
+    >
+      <span>📥 Exportar JSON</span>
+    </button>
+  </header>
+
+  <div class="cuerpo-alertas">
+    @if (estaCargando) {
+      <p class="estado-vacio">Cargando alertas de la comunidad...</p>
+    } @else if (reportes.length === 0) {
+      <p class="estado-vacio">No hay alertas comunitarias pendientes de revisión.</p>
+    } @else {
+      <div class="lista-alertas">
+        @for (rep of reportes; track rep.url) {
+          <div class="item-alerta">
+            <div class="info-alerta">
+              <span class="url-alerta texto-mono" [title]="rep.url">{{ rep.url }}</span>
+              <span class="meta-alerta">
+                Reportado por: <strong>{{ rep.reportero }}</strong> · {{ rep.marcaTiempo | formatoFecha:'corta' }}
+              </span>
+            </div>
+            <button
+              type="button"
+              class="boton-descartar"
+              (click)="descartar(rep.url)"
+              title="Descartar reporte"
+              aria-label="Descartar alerta de phishing"
+            >
+              Descartar
+            </button>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>

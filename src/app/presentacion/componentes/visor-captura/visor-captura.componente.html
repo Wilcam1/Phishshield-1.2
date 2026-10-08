@@ -1,0 +1,37 @@
+<section class="visor-captura superficie-cristal" role="region" aria-label="Vista previa de la página analizada">
+  <header class="encabezado-visor">
+    <span class="icono-dispositivo" aria-hidden="true">📱</span>
+    <h4 class="titulo-visor">Vista Previa de la Página (Emulación Headless)</h4>
+  </header>
+
+  <div class="cuerpo-visor">
+    @if (estaCargando) {
+      <div class="indicador-carga" aria-live="polite">
+        <span class="animacion-giro" aria-hidden="true">⏳</span>
+        <span>Generando captura de pantalla segura...</span>
+      </div>
+    }
+
+    @if (tieneError) {
+      <div class="mensaje-error" role="alert">
+        <span aria-hidden="true">⚠️</span>
+        <p>No se pudo generar la vista previa (el servidor bloqueó agentes automatizados o está fuera de línea).</p>
+      </div>
+    }
+
+    <img
+      [src]="urlCaptura"
+      [alt]="'Vista previa capturada de ' + urlDestino"
+      class="imagen-captura"
+      [class.visible]="!estaCargando && !tieneError"
+      (load)="alCargarImagen()"
+      (error)="alFallarImagen()"
+    />
+  </div>
+
+  <footer class="pie-visor">
+    <p>
+      💡 <strong>Nota Técnica SOC:</strong> Si la captura falla o devuelve <em>403 Forbidden</em> pero el sitio carga en tu navegador, el destino aplica técnicas de ofuscación o antibot para evadir analizadores de ciberseguridad.
+    </p>
+  </footer>
+</section>

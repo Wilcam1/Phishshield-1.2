@@ -1,0 +1,26 @@
+<section class="tarjeta-asistente superficie-cristal" role="region" aria-label="Asistente educativo inteligente">
+  <header class="encabezado-asistente">
+    <div class="identidad-asistente">
+      <span class="icono-robot" aria-hidden="true">🤖</span>
+      <div>
+        <h4 class="titulo-asistente">Asistente Educativo con IA</h4>
+        <span class="fuente-asistente">{{ asistente.fuente }}</span>
+      </div>
+    </div>
+    <span class="etiqueta-vivo">✨ Explicación Forense</span>
+  </header>
+
+  <div class="cuerpo-asistente">
+    <p class="resumen-texto">{{ asistente.resumenExplicativo }}</p>
+  </div>
+
+  @if (asistente.recomendacion) {
+    <footer class="caja-recomendacion">
+      <span class="icono-bombilla" aria-hidden="true">💡</span>
+      <div class="contenido-recomendacion">
+        <strong>Acción recomendada:</strong>
+        <p>{{ asistente.recomendacion }}</p>
+      </div>
+    </footer>
+  }
+</section>

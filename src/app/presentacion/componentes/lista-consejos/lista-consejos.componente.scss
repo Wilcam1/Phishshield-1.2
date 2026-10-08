@@ -1,0 +1,59 @@
+.seccion-consejos {
+  display: flex;
+  flex-direction: column;
+}
+
+.cuadricula-consejos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--espaciado-md);
+}
+
+.tarjeta-consejo {
+  padding: var(--espaciado-md) var(--espaciado-lg);
+  border-radius: var(--radio-grande);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaciado-xs);
+  border-left: 4px solid;
+  animation: aparicionSuave var(--duracion-normal) var(--curva-resorte) both;
+
+  &.tipo-seguro {
+    border-left-color: var(--color-seguro);
+    background: var(--color-seguro-fondo);
+  }
+
+  &.tipo-advertencia {
+    border-left-color: var(--color-advertencia);
+    background: var(--color-advertencia-fondo);
+  }
+
+  &.tipo-peligro {
+    border-left-color: var(--color-peligro);
+    background: var(--color-peligro-fondo);
+  }
+
+  .titulo-consejo {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-texto-primario);
+    letter-spacing: -0.01em;
+  }
+
+  .texto-consejo {
+    font-size: 0.88rem;
+    color: var(--color-texto-secundario);
+    line-height: 1.45;
+  }
+}
+
+@keyframes aparicionSuave {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

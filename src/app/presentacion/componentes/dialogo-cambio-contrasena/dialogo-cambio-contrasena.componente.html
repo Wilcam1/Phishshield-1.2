@@ -1,0 +1,115 @@
+@if (visible) {
+  <div
+    class="telon-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="titulo-cambio-clave"
+    tabindex="-1"
+    (click)="alHacerClicFondo($event)"
+    (keydown.escape)="cerrar()"
+  >
+    <div class="caja-modal superficie-elevada">
+      <header class="encabezado-modal">
+        <div class="logo-modal">
+          <span class="icono-llave" aria-hidden="true">🔑</span>
+          <div>
+            <h3 id="titulo-cambio-clave" class="titulo-modal">Seguridad de la Cuenta</h3>
+            <span class="subtitulo-modal">Actualizar Credencial de Administrador</span>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="boton-cerrar-modal"
+          (click)="cerrar()"
+          aria-label="Cerrar ventana modal"
+        >
+          ✕
+        </button>
+      </header>
+
+      <form class="cuerpo-modal" (submit)="enviar(); $event.preventDefault()">
+        <div class="campo-grupo">
+          <label for="cp-actual" class="etiqueta-campo">Contraseña Actual</label>
+          <input
+            id="cp-actual"
+            type="password"
+            class="campo-texto"
+            [(ngModel)]="contrasenaActual"
+            name="contrasenaActual"
+            required
+            [disabled]="estaCargando"
+          />
+        </div>
+
+        <div class="campo-grupo">
+          <label for="cp-nueva" class="etiqueta-campo">Nueva Contraseña</label>
+          <input
+            id="cp-nueva"
+            type="password"
+            class="campo-texto"
+            [(ngModel)]="nuevaContrasena"
+            name="nuevaContrasena"
+            required
+            [disabled]="estaCargando"
+          />
+
+          <div class="requisitos-contrasena" role="status">
+            <div class="item-requisito" [class.cumplido]="evaluacion.longitudValida">
+              <span>{{ evaluacion.longitudValida ? '✅' : '❌' }}</span>
+              <span>Mínimo 8 caracteres</span>
+            </div>
+            <div class="item-requisito" [class.cumplido]="evaluacion.tieneMayuscula">
+              <span>{{ evaluacion.tieneMayuscula ? '✅' : '❌' }}</span>
+              <span>Mínimo una letra mayúscula</span>
+            </div>
+            <div class="item-requisito" [class.cumplido]="evaluacion.tieneNumero">
+              <span>{{ evaluacion.tieneNumero ? '✅' : '❌' }}</span>
+              <span>Mínimo un número</span>
+            </div>
+            <div class="item-requisito" [class.cumplido]="evaluacion.tieneEspecial">
+              <span>{{ evaluacion.tieneEspecial ? '✅' : '❌' }}</span>
+              <span>Mínimo un carácter especial (&#64;$!%*?&#38;#...)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="campo-grupo">
+          <label for="cp-confirmar" class="etiqueta-campo">Confirmar Nueva Contraseña</label>
+          <input
+            id="cp-confirmar"
+            type="password"
+            class="campo-texto"
+            [(ngModel)]="confirmarContrasena"
+            name="confirmarContrasena"
+            required
+            [disabled]="estaCargando"
+          />
+          @if (confirmarContrasena && !coincidenContrasenas) {
+            <span class="error-coincidencia">Las contraseñas no coinciden.</span>
+          }
+        </div>
+
+        @if (mensajeError) {
+          <div class="alerta-error" role="alert">
+            <span>❌</span>
+            <span>{{ mensajeError }}</span>
+          </div>
+        }
+
+        <footer class="pie-modal">
+          <button
+            type="submit"
+            class="boton-primario boton-bloque"
+            [disabled]="!formularioEsValido"
+          >
+            @if (estaCargando) {
+              <span>Actualizando contraseña...</span>
+            } @else {
+              <span>Guardar Nueva Contraseña</span>
+            }
+          </button>
+        </footer>
+      </form>
+    </div>
+  </div>
+}

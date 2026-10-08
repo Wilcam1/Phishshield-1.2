@@ -1,0 +1,110 @@
+<div class="diseno-panel-soc">
+  <app-notificacion-flotante />
+
+  <header class="barra-navegacion-soc" role="banner">
+    <div class="identidad-soc">
+      <button
+        type="button"
+        class="boton-volver"
+        (click)="volverAlAnalizador()"
+        title="Volver al verificador público"
+      >
+        ← Verificador
+      </button>
+      <div class="titulo-grupo">
+        <span class="icono-soc" aria-hidden="true">📊</span>
+        <div>
+          <h1 class="titulo-soc titular-mediano">Panel SOC & Auditoría</h1>
+          <span class="subtitulo-soc">Centro de Operaciones de Ciberseguridad</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="acciones-soc">
+      <button
+        type="button"
+        class="boton-secundario"
+        (click)="cargarDatos()"
+        title="Recargar métricas e historiales"
+      >
+        <span>🔄 Refrescar</span>
+      </button>
+
+      <button
+        type="button"
+        class="boton-secundario"
+        (click)="abrirModalSeguridad()"
+        title="Cambiar contraseña de administrador"
+      >
+        <span>🔑 Seguridad</span>
+      </button>
+
+      <button
+        type="button"
+        class="boton-secundario boton-peligro"
+        (click)="cerrarSesion()"
+        title="Finalizar sesión"
+      >
+        <span>🚪 Salir</span>
+      </button>
+
+      <app-selector-tema />
+    </div>
+  </header>
+
+  <main class="contenedor-soc" role="main">
+    <!-- Fila de Métricas del SOC -->
+    <app-panel-metricas
+      [estadisticas]="servicioAdmin.estadisticas()"
+      [modoAdmin]="true"
+      (alSeleccionarFiltro)="abrirModalCategoria($event)"
+      (alActualizar)="cargarDatos()"
+    />
+
+    <!-- Cuadrícula Principal del SOC -->
+    <div class="rejilla-soc">
+      <!-- Columna Izquierda: Auditoría Histórica Global -->
+      <div class="columna-principal">
+        <app-tabla-historial-global
+          [historial]="servicioAdmin.historial()"
+          [estaCargando]="servicioAdmin.estaCargando()"
+          (alEliminar)="eliminarRegistro($event)"
+          (alExportarCsv)="exportarCsv()"
+        />
+      </div>
+
+      <!-- Columna Derecha: Donut y Alertas Comunitarias -->
+      <aside class="columna-lateral">
+        <app-grafico-distribucion-riesgo
+          [distribucion]="servicioAdmin.estadisticas()?.distribucionRiesgo || { alto: 0, medio: 0, bajo: 0 }"
+        />
+
+        <app-lista-alertas-comunitarias
+          [reportes]="servicioAdmin.reportes()"
+          [estaCargando]="servicioAdmin.estaCargando()"
+          (alDescartar)="descartarReporte($event)"
+          (alExportarJson)="exportarJson()"
+        />
+      </aside>
+    </div>
+  </main>
+
+  <!-- Diálogo para Cambio de Contraseña -->
+  <app-dialogo-cambio-contrasena
+    [visible]="modalSeguridadVisible"
+    [estaCargando]="servicioAdmin.estaCargando()"
+    [mensajeError]="servicioAdmin.mensajeError()"
+    (alCambiarContrasena)="cambiarContrasena($event)"
+    (alCerrar)="modalSeguridadVisible = false"
+  />
+
+  <!-- Diálogo Explorador de URLs por Categoría -->
+  <app-dialogo-urls-categoria
+    [visible]="modalCategoriaVisible"
+    [titulo]="tituloModalCategoria"
+    [elementosHistorial]="itemsHistorialFiltrados"
+    [reportes]="servicioAdmin.reportes()"
+    [esModoReportes]="filtroActualCategoria === 'reportes'"
+    (alCerrar)="modalCategoriaVisible = false"
+  />
+</div>

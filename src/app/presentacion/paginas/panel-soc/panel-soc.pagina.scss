@@ -1,0 +1,104 @@
+.diseno-panel-soc {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.barra-navegacion-soc {
+  width: 100%;
+  padding: var(--espaciado-md) var(--espaciado-xl);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--espaciado-md);
+  background: var(--color-fondo-superficie);
+  backdrop-filter: var(--desenfoque-material);
+  -webkit-backdrop-filter: var(--desenfoque-material);
+  border-bottom: 1px solid var(--color-borde-cristal);
+
+  .identidad-soc {
+    display: flex;
+    align-items: center;
+    gap: var(--espaciado-md);
+
+    .boton-volver {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--color-primario);
+      padding: 6px 12px;
+      border-radius: var(--radio-mediano);
+      background: var(--color-primario-fondo);
+
+      &:hover {
+        opacity: 0.85;
+      }
+    }
+
+    .titulo-grupo {
+      display: flex;
+      align-items: center;
+      gap: var(--espaciado-sm);
+    }
+
+    .icono-soc {
+      font-size: 1.8rem;
+    }
+
+    .titulo-soc {
+      margin: 0;
+      line-height: 1;
+    }
+
+    .subtitulo-soc {
+      font-size: 0.75rem;
+      color: var(--color-texto-terciario);
+    }
+  }
+
+  .acciones-soc {
+    display: flex;
+    align-items: center;
+    gap: var(--espaciado-sm);
+    flex-wrap: wrap;
+
+    .boton-peligro {
+      color: var(--color-peligro);
+      &:hover {
+        background: var(--color-peligro-fondo);
+      }
+    }
+  }
+}
+
+.contenedor-soc {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--espaciado-xl) var(--espaciado-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaciado-xl);
+  flex: 1;
+}
+
+.rejilla-soc {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espaciado-lg);
+
+  @media (min-width: 960px) {
+    grid-template-columns: 1.7fr 1fr;
+  }
+}
+
+.columna-principal {
+  min-width: 0;
+}
+
+.columna-lateral {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaciado-lg);
+  min-width: 0;
+}

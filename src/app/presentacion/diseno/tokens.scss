@@ -1,0 +1,121 @@
+/* ==========================================================================
+   Tokens de Diseño de Apple Design — PhishShield
+   Inspirado en los principios de WWDC: Materiales, Tipografía Óptica y Físicas
+   ========================================================================== */
+
+:root {
+  /* Tipografía y Escala Óptica */
+  --fuente-sistema: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+  --fuente-monoespaciada: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  
+  --rastreo-titular: -0.02em; /* Tracking negativo para títulos grandes */
+  --rastreo-cuerpo: 0em;
+  --rastreo-etiqueta: 0.04em;  /* Tracking positivo para texto microscópico */
+
+  /* Espaciados Atómicos */
+  --espaciado-xs: 4px;
+  --espaciado-sm: 8px;
+  --espaciado-md: 16px;
+  --espaciado-lg: 24px;
+  --espaciado-xl: 32px;
+  --espaciado-2xl: 48px;
+
+  /* Radios de Esquina Suaves (Continuous Apple Squircle Curves) */
+  --radio-pequeno: 8px;
+  --radio-mediano: 14px;
+  --radio-grande: 20px;
+  --radio-pildora: 9999px;
+
+  /* Transiciones y Físicas de Resorte */
+  --curva-resorte: cubic-bezier(0.16, 1, 0.3, 1);
+  --curva-suave: cubic-bezier(0.4, 0, 0.2, 1);
+  --duracion-rapida: 150ms;
+  --duracion-normal: 280ms;
+  --duracion-lenta: 420ms;
+
+  /* Modo Claro por Defecto (Materiales Translúcidos & Vibrancy) */
+  --color-fondo: #f5f5f7;
+  --color-fondo-superficie: rgba(255, 255, 255, 0.72);
+  --color-fondo-elevado: rgba(255, 255, 255, 0.88);
+  --color-fondo-entrada: rgba(0, 0, 0, 0.04);
+  
+  --color-texto-primario: #1d1d1f;
+  --color-texto-secundario: #86868b;
+  --color-texto-terciario: #a1a1a6;
+
+  --color-borde-cristal: rgba(0, 0, 0, 0.08);
+  --color-borde-resaltado: rgba(255, 255, 255, 0.6);
+
+  --desenfoque-material: blur(20px) saturate(180%);
+
+  /* Paleta Semántica del Sistema */
+  --color-primario: #0071e3;
+  --color-primario-activo: #0077ed;
+  --color-primario-fondo: rgba(0, 113, 227, 0.1);
+
+  --color-seguro: #34c759;
+  --color-seguro-fondo: rgba(52, 199, 89, 0.12);
+
+  --color-advertencia: #ff9500;
+  --color-advertencia-fondo: rgba(255, 149, 0, 0.12);
+
+  --color-peligro: #ff3b30;
+  --color-peligro-fondo: rgba(255, 59, 48, 0.12);
+
+  /* Sombras Profundas Multicapa */
+  --sombra-tarjeta: 0 4px 20px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03);
+  --sombra-flotante: 0 16px 36px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* Modo Oscuro (Pure Dark Materiales) */
+body.modo-oscuro {
+  --color-fondo: #000000;
+  --color-fondo-superficie: rgba(28, 28, 30, 0.75);
+  --color-fondo-elevado: rgba(44, 44, 46, 0.85);
+  --color-fondo-entrada: rgba(255, 255, 255, 0.07);
+
+  --color-texto-primario: #f5f5f7;
+  --color-texto-secundario: #86868b;
+  --color-texto-terciario: #6e6e73;
+
+  --color-borde-cristal: rgba(255, 255, 255, 0.12);
+  --color-borde-resaltado: rgba(255, 255, 255, 0.15);
+
+  --color-primario: #2997ff;
+  --color-primario-activo: #47a6ff;
+  --color-primario-fondo: rgba(41, 151, 255, 0.15);
+
+  --color-seguro: #30d158;
+  --color-seguro-fondo: rgba(48, 209, 88, 0.15);
+
+  --color-advertencia: #ff9f0a;
+  --color-advertencia-fondo: rgba(255, 159, 10, 0.15);
+
+  --color-peligro: #ff453a;
+  --color-peligro-fondo: rgba(255, 69, 58, 0.18);
+
+  --sombra-tarjeta: 0 4px 24px rgba(0, 0, 0, 0.45);
+  --sombra-flotante: 0 20px 48px rgba(0, 0, 0, 0.75);
+}
+
+/* Reglas de Accesibilidad de Apple */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root, body.modo-oscuro {
+    --desenfoque-material: none !important;
+    --color-fondo-superficie: #ffffff !important;
+    --color-fondo-elevado: #ffffff !important;
+  }
+  body.modo-oscuro {
+    --color-fondo-superficie: #1c1c1e !important;
+    --color-fondo-elevado: #2c2c2e !important;
+  }
+}

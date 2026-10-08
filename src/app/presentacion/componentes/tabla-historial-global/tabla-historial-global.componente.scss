@@ -1,0 +1,119 @@
+.tarjeta-tabla {
+  border-radius: var(--radio-grande);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.encabezado-tabla {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-borde-cristal);
+
+  .izquierda-encabezado {
+    display: flex;
+    align-items: center;
+    gap: var(--espaciado-sm);
+  }
+
+  .icono-tabla {
+    font-size: 1.2rem;
+  }
+
+  .titulo-tabla {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-texto-primario);
+  }
+}
+
+.boton-exportar {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--radio-mediano);
+  background: var(--color-primario);
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: var(--color-primario-activo);
+  }
+}
+
+.cuerpo-tabla-envoltorio {
+  overflow-x: auto;
+  max-height: 440px;
+}
+
+.tabla-datos {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.88rem;
+
+  thead {
+    background: var(--color-fondo-entrada);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+
+    th {
+      padding: 12px 16px;
+      font-weight: 600;
+      color: var(--color-texto-secundario);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: var(--rastreo-etiqueta);
+      border-bottom: 1px solid var(--color-borde-cristal);
+    }
+  }
+
+  tbody tr {
+    border-bottom: 1px solid var(--color-borde-cristal);
+    transition: background var(--duracion-rapida) var(--curva-suave);
+
+    &:hover {
+      background: var(--color-fondo-entrada);
+    }
+
+    td {
+      padding: 12px 16px;
+      color: var(--color-texto-primario);
+    }
+  }
+
+  .celda-url {
+    max-width: 280px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .celda-fecha {
+    color: var(--color-texto-secundario);
+    font-size: 0.8rem;
+  }
+
+  .celda-vacia {
+    text-align: center;
+    padding: 30px;
+    color: var(--color-texto-terciario);
+  }
+
+  .columna-acciones {
+    text-align: right;
+  }
+}
+
+.boton-eliminar-fila {
+  opacity: 0.7;
+  padding: 4px;
+  border-radius: var(--radio-pequeno);
+
+  &:hover {
+    opacity: 1;
+    background: var(--color-peligro-fondo);
+  }
+}

@@ -1,0 +1,30 @@
+<section class="tarjeta-desglose superficie-cristal" role="region" aria-label="Desglose técnico de comprobaciones">
+  <button
+    type="button"
+    class="boton-alternar"
+    (click)="alternarExpandido()"
+    [attr.aria-expanded]="estaExpandido"
+    aria-controls="contenido-desglose"
+  >
+    <div class="izquierda-boton">
+      <span class="icono-grafico" aria-hidden="true">📊</span>
+      <span class="texto-boton">
+        {{ estaExpandido ? 'Ocultar análisis técnico profundo' : 'Ver análisis técnico detallado (19 comprobaciones)' }}
+      </span>
+    </div>
+    <span class="flecha-indicador" [class.rotada]="estaExpandido" aria-hidden="true">▼</span>
+  </button>
+
+  @if (estaExpandido) {
+    <div id="contenido-desglose" class="contenido-desglose" role="region">
+      <div class="cuadricula-detalles">
+        @for (item of listaDetalles; track item.etiqueta) {
+          <div class="item-detalle">
+            <span class="etiqueta-item">{{ item.etiqueta }}</span>
+            <span class="valor-item" [ngClass]="'estado-' + item.estado">{{ item.valor }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</section>

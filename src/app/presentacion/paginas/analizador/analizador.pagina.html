@@ -1,0 +1,130 @@
+<div class="diseno-analizador">
+  <app-notificacion-flotante />
+
+  @if (mostrarAvisoEducativo) {
+    <aside class="banner-aviso-educativo" role="note" aria-label="Aviso de uso educativo">
+      <div class="contenido-aviso">
+        <span class="icono-aviso" aria-hidden="true">⚠️</span>
+        <div class="texto-aviso">
+          <strong>USO EDUCATIVO & PREVENTIVO:</strong> Las heurísticas son modelos probabilísticos. Este analizador no sustituye los controles oficiales de tu entidad bancaria.
+        </div>
+        <button
+          type="button"
+          class="boton-cerrar-aviso"
+          (click)="cerrarAvisoEducativo()"
+          aria-label="Cerrar aviso informativo"
+        >
+          ✕
+        </button>
+      </div>
+    </aside>
+  }
+
+  <header class="barra-navegacion-superior" role="banner">
+    <div class="marca-sistema">
+      <span class="logo-escudo" aria-hidden="true">🛡️</span>
+      <div>
+        <h1 class="titulo-sistema titular-mediano">PhishShield</h1>
+        <span class="subtitulo-sistema">Verificador Forense de URLs & Detección de Fraude</span>
+      </div>
+    </div>
+
+    <div class="acciones-navegacion">
+      <button
+        type="button"
+        class="boton-secundario boton-acceso-admin"
+        (click)="abrirPanelAdmin()"
+        title="Acceso para analistas SOC"
+      >
+        <span aria-hidden="true">👮</span>
+        <span>Panel SOC</span>
+      </button>
+
+      <app-selector-tema />
+    </div>
+  </header>
+
+  <main class="contenedor-principal" role="main">
+    <section class="seccion-hero">
+      <h2 class="titular-grande">Protege tu Entorno contra Phishing</h2>
+      <p class="subtitulo">
+        Inspección multicapa asistida por Machine Learning, emulación DOM y análisis de entropía para detectar suplantaciones antes de que comprometan tus datos.
+      </p>
+    </section>
+
+    <!-- Barra de Búsqueda -->
+    <app-barra-busqueda
+      [estaCargando]="servicioAnalisis.estaCargando()"
+      [valorInicial]="urlParaBarra"
+      (alAnalizar)="analizarUrl($event)"
+      (alReportar)="reportarUrl($event)"
+    />
+
+    <!-- Resultados Dinámicos del Análisis -->
+    @if (servicioAnalisis.resultadoActual(); as resultado) {
+      <div class="seccion-resultados animate-fade-in">
+        <app-tarjeta-veredicto
+          [resultado]="resultado"
+        />
+
+        @if (resultado.url.startsWith('http')) {
+          <app-visor-captura
+            [urlCaptura]="servicioAnalisis.obtenerUrlCaptura(resultado.url)"
+            [urlDestino]="resultado.url"
+          />
+        }
+
+        @if (resultado.asistenteEducativo; as asistente) {
+          <app-asistente-educativo [asistente]="asistente" />
+
+          @if (asistente.cuestionario; as quiz) {
+            <app-cuestionario-interactivo [pregunta]="quiz" />
+          }
+        }
+
+        @if (resultado.consejos.length > 0) {
+          <app-lista-consejos [consejos]="resultado.consejos" />
+        }
+
+        <app-desglose-tecnico [resultado]="resultado" />
+      </div>
+    }
+
+    <!-- Zona de Pruebas Rápidas con Ejemplos Típicos -->
+    <app-zona-pruebas (alSeleccionarUrl)="cargarUrlDemo($event)" />
+
+    <!-- Historial de Búsquedas Locales -->
+    <app-historial-busquedas
+      [historial]="servicioAnalisis.historialLocal()"
+      (alSeleccionarUrl)="cargarUrlDemo($event)"
+      (alLimpiar)="servicioAnalisis.limpiarHistorialLocal()"
+    />
+
+    <!-- Métricas del SOC en Vivo -->
+    <app-panel-metricas
+      [estadisticas]="servicioAdmin.estadisticas()"
+      [modoAdmin]="false"
+      (alSeleccionarFiltro)="abrirModalCategoria($event)"
+      (alActualizar)="servicioAdmin.cargarEstadisticasPublicas().subscribe()"
+    />
+  </main>
+
+  <!-- Diálogo de Inicio de Sesión Administrativo -->
+  <app-dialogo-autenticacion-admin
+    [visible]="modalLoginVisible"
+    [estaCargando]="servicioAdmin.estaCargando()"
+    [mensajeError]="servicioAdmin.mensajeError()"
+    (alIniciarSesion)="iniciarSesionAdmin($event)"
+    (alCerrar)="modalLoginVisible = false"
+  />
+
+  <!-- Diálogo Explorador de URLs por Categoría -->
+  <app-dialogo-urls-categoria
+    [visible]="modalCategoriaVisible"
+    [titulo]="tituloModalCategoria"
+    [elementosHistorial]="itemsHistorialFiltrados"
+    [reportes]="servicioAdmin.reportes()"
+    [esModoReportes]="filtroActualCategoria === 'reportes'"
+    (alCerrar)="modalCategoriaVisible = false"
+  />
+</div>

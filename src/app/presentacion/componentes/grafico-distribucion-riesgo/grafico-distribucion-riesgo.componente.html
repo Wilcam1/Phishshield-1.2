@@ -1,0 +1,36 @@
+<section class="tarjeta-grafico superficie-cristal" role="region" aria-label="Distribución global de riesgos">
+  <header class="encabezado-grafico">
+    <h4 class="titulo-grafico">Distribución Proporcional de Amenazas</h4>
+  </header>
+
+  <div class="cuerpo-grafico">
+    <div class="envoltorio-donut">
+      <div class="circulo-donut" [style.background]="estiloGradiente">
+        <div class="centro-donut">
+          <span class="total-numero">{{ total }}</span>
+          <span class="total-texto">Total</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="leyenda-grafico">
+      <div class="item-leyenda seguro">
+        <span class="punto-color" aria-hidden="true"></span>
+        <span class="texto-etiqueta">Bajo Riesgo</span>
+        <strong class="porcentaje-texto">{{ porcentajeBajo }}%</strong>
+      </div>
+
+      <div class="item-leyenda advertencia">
+        <span class="punto-color" aria-hidden="true"></span>
+        <span class="texto-etiqueta">Riesgo Medio</span>
+        <strong class="porcentaje-texto">{{ porcentajeMedio }}%</strong>
+      </div>
+
+      <div class="item-leyenda peligro">
+        <span class="punto-color" aria-hidden="true"></span>
+        <span class="texto-etiqueta">Riesgo Alto</span>
+        <strong class="porcentaje-texto">{{ porcentajeAlto }}%</strong>
+      </div>
+    </div>
+  </div>
+</section>

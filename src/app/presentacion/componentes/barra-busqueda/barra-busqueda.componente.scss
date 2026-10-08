@@ -1,0 +1,100 @@
+.contenedor-barra-busqueda {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaciado-md);
+  padding: var(--espaciado-md);
+  border-radius: var(--radio-grande);
+  transition: box-shadow var(--duracion-normal) var(--curva-suave);
+
+  @media (min-width: 680px) {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.campo-entrada-envoltorio {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  background: var(--color-fondo-entrada);
+  border: 1px solid var(--color-borde-cristal);
+  border-radius: var(--radio-mediano);
+  padding: 0 var(--espaciado-md);
+  min-height: 52px;
+  transition: border-color var(--duracion-rapida) var(--curva-suave),
+              background var(--duracion-rapida) var(--curva-suave);
+
+  &:focus-within {
+    border-color: var(--color-primario);
+    background: var(--color-fondo-elevado);
+  }
+}
+
+.icono-enlace {
+  font-size: 1.1rem;
+  margin-right: var(--espaciado-sm);
+  opacity: 0.7;
+}
+
+.entrada-url {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-texto-primario);
+  font-size: 0.95rem;
+  padding: 12px 0;
+  width: 100%;
+
+  &::placeholder {
+    color: var(--color-texto-terciario);
+  }
+}
+
+.boton-limpiar {
+  color: var(--color-texto-secundario);
+  font-size: 0.85rem;
+  padding: 6px;
+  border-radius: var(--radio-pildora);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.08);
+    color: var(--color-texto-primario);
+  }
+}
+
+.acciones-barra {
+  display: flex;
+  gap: var(--espaciado-sm);
+  align-items: center;
+
+  .boton-primario,
+  .boton-secundario {
+    flex: 1;
+    min-height: 52px;
+    white-space: nowrap;
+
+    @media (min-width: 680px) {
+      flex: initial;
+    }
+  }
+}
+
+.indicador-giratorio {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: giro 0.8s linear infinite;
+}
+
+@keyframes giro {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,117 @@
+.telon-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 8500;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espaciado-md);
+  animation: oscurecerFondo var(--duracion-normal) var(--curva-suave) both;
+}
+
+.caja-modal {
+  width: 100%;
+  max-width: 600px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radio-grande);
+  overflow: hidden;
+  animation: escalarModal var(--duracion-normal) var(--curva-resorte) both;
+}
+
+.encabezado-modal {
+  padding: 18px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-borde-cristal);
+
+  .titulo-modal {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--color-texto-primario);
+  }
+
+  .boton-cerrar-modal {
+    font-size: 1.1rem;
+    color: var(--color-texto-secundario);
+    padding: 6px;
+    border-radius: var(--radio-pildora);
+
+    &:hover {
+      background: var(--color-fondo-entrada);
+      color: var(--color-texto-primario);
+    }
+  }
+}
+
+.cuerpo-modal {
+  padding: 20px 24px;
+  overflow-y: auto;
+  flex: 1;
+
+  .estado-vacio {
+    text-align: center;
+    color: var(--color-texto-terciario);
+    padding: 30px 0;
+    font-size: 0.95rem;
+  }
+}
+
+.lista-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaciado-sm);
+}
+
+.item-registro {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--espaciado-md);
+  padding: 12px 14px;
+  background: var(--color-fondo-entrada);
+  border: 1px solid var(--color-borde-cristal);
+  border-radius: var(--radio-mediano);
+
+  .url-registro {
+    font-size: 0.88rem;
+    color: var(--color-texto-primario);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 60%;
+  }
+
+  .meta-registro {
+    display: flex;
+    align-items: center;
+    gap: var(--espaciado-sm);
+    flex-shrink: 0;
+
+    .info-adicional {
+      font-size: 0.75rem;
+      color: var(--color-texto-terciario);
+    }
+  }
+}
+
+@keyframes oscurecerFondo {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes escalarModal {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

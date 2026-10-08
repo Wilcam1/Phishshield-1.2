@@ -1,0 +1,26 @@
+@if (servicio.notificacion(); as actual) {
+  <aside
+    class="banner-notificacion superficie-elevada"
+    [ngClass]="'tipo-' + actual.tipo"
+    role="status"
+    aria-live="polite"
+  >
+    <span class="icono-tipo" aria-hidden="true">
+      @switch (actual.tipo) {
+        @case ('exito') { ✅ }
+        @case ('error') { ❌ }
+        @case ('advertencia') { ⚠️ }
+      }
+    </span>
+    <span class="mensaje-texto">{{ actual.mensaje }}</span>
+    <button
+      type="button"
+      class="boton-cerrar-notif"
+      (click)="servicio.cerrar()"
+      title="Cerrar notificación"
+      aria-label="Cerrar notificación"
+    >
+      ✕
+    </button>
+  </aside>
+}

@@ -1,0 +1,88 @@
+@if (visible) {
+  <div
+    class="telon-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="titulo-login-admin"
+    tabindex="-1"
+    (click)="alHacerClicFondo($event)"
+    (keydown.escape)="cerrar()"
+  >
+    <div class="caja-modal superficie-elevada">
+      <header class="encabezado-modal">
+        <div class="logo-modal">
+          <span class="icono-escudo" aria-hidden="true">🛡️</span>
+          <div>
+            <h3 id="titulo-login-admin" class="titulo-modal">Acceso Seguro SOC</h3>
+            <span class="subtitulo-modal">Panel de Control Administrativo</span>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="boton-cerrar-modal"
+          (click)="cerrar()"
+          aria-label="Cerrar ventana modal"
+        >
+          ✕
+        </button>
+      </header>
+
+      <form class="cuerpo-modal" (submit)="enviar(); $event.preventDefault()">
+        <div class="campo-grupo">
+          <label for="admin-usuario" class="etiqueta-campo">Usuario</label>
+          <div class="input-con-icono">
+            <span class="icono-input" aria-hidden="true">👤</span>
+            <input
+              id="admin-usuario"
+              type="text"
+              class="campo-texto"
+              placeholder="admin"
+              [(ngModel)]="usuario"
+              name="usuario"
+              required
+              [disabled]="estaCargando"
+            />
+          </div>
+        </div>
+
+        <div class="campo-grupo">
+          <label for="admin-contrasena" class="etiqueta-campo">Contraseña</label>
+          <div class="input-con-icono">
+            <span class="icono-input" aria-hidden="true">🔑</span>
+            <input
+              id="admin-contrasena"
+              type="password"
+              class="campo-texto"
+              placeholder="••••••••••••"
+              [(ngModel)]="contrasena"
+              name="contrasena"
+              required
+              [disabled]="estaCargando"
+            />
+          </div>
+        </div>
+
+        @if (mensajeError) {
+          <div class="alerta-error" role="alert">
+            <span>❌</span>
+            <span>{{ mensajeError }}</span>
+          </div>
+        }
+
+        <footer class="pie-modal">
+          <button
+            type="submit"
+            class="boton-primario boton-bloque"
+            [disabled]="!usuario || !contrasena || estaCargando"
+          >
+            @if (estaCargando) {
+              <span>Verificando credenciales...</span>
+            } @else {
+              <span>Ingresar al Panel SOC</span>
+            }
+          </button>
+        </footer>
+      </form>
+    </div>
+  </div>
+}

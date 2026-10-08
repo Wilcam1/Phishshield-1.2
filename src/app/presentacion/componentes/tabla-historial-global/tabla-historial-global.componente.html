@@ -1,0 +1,73 @@
+<section class="tarjeta-tabla superficie-cristal" role="region" aria-label="Historial global de análisis">
+  <header class="encabezado-tabla">
+    <div class="izquierda-encabezado">
+      <span class="icono-tabla" aria-hidden="true">📋</span>
+      <h4 class="titulo-tabla">Auditoría Global de Análisis SOC</h4>
+    </div>
+
+    <button
+      type="button"
+      class="boton-exportar"
+      (click)="exportar()"
+      [disabled]="historial.length === 0"
+      title="Exportar archivo CSV con los análisis"
+    >
+      <span>📥 Exportar CSV</span>
+    </button>
+  </header>
+
+  <div class="cuerpo-tabla-envoltorio">
+    <table class="tabla-datos">
+      <thead>
+        <tr>
+          <th scope="col">Estado</th>
+          <th scope="col">URL Analizada</th>
+          <th scope="col">Puntuación</th>
+          <th scope="col">Fecha y Hora</th>
+          <th scope="col" class="columna-acciones">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (estaCargando) {
+          <tr>
+            <td colspan="5" class="celda-vacia">Cargando registros forenses...</td>
+          </tr>
+        } @else if (historial.length === 0) {
+          <tr>
+            <td colspan="5" class="celda-vacia">No hay análisis en el historial global.</td>
+          </tr>
+        } @else {
+          @for (item of historial; track item.url) {
+            <tr>
+              <td>
+                <span class="insignia-pildora" [ngClass]="item.riesgo | riesgoColor">
+                  {{ item.riesgo | uppercase }}
+                </span>
+              </td>
+              <td class="celda-url texto-mono" [title]="item.url">
+                {{ item.url }}
+              </td>
+              <td>
+                <strong>{{ item.puntuacion }}</strong><small>/10</small>
+              </td>
+              <td class="celda-fecha">
+                {{ item.marcaTiempo | formatoFecha }}
+              </td>
+              <td class="columna-acciones">
+                <button
+                  type="button"
+                  class="boton-eliminar-fila"
+                  (click)="eliminar(item.url)"
+                  title="Eliminar registro"
+                  aria-label="Eliminar registro"
+                >
+                  🗑️
+                </button>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

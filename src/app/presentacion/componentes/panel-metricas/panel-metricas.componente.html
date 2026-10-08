@@ -1,0 +1,77 @@
+<section class="tarjeta-metricas superficie-cristal" role="region" aria-label="Métricas en vivo de ciberseguridad">
+  <header class="encabezado-metricas">
+    <div class="izquierda-metricas">
+      <span class="icono-grafico" aria-hidden="true">📊</span>
+      <h3 class="titulo-metricas">Estadísticas Forenses en Vivo</h3>
+    </div>
+
+    <button
+      type="button"
+      class="boton-actualizar-metricas"
+      (click)="actualizar()"
+      title="Refrescar contadores"
+      aria-label="Actualizar métricas forenses"
+    >
+      <span>🔄 Actualizar</span>
+    </button>
+  </header>
+
+  <div class="cuadricula-kpis">
+    <button
+      type="button"
+      class="tarjeta-kpi kpi-total"
+      (click)="seleccionar('todas')"
+      title="Explorar todas las URLs analizadas"
+    >
+      <span class="etiqueta-kpi">Total Analizado</span>
+      <span class="valor-kpi">{{ estadisticas?.totalAnalizados ?? 0 }}</span>
+      <span class="pista-clic">👁️ Explorar</span>
+    </button>
+
+    <button
+      type="button"
+      class="tarjeta-kpi kpi-peligro"
+      (click)="seleccionar('alto')"
+      title="Explorar amenazas confirmadas"
+    >
+      <span class="etiqueta-kpi">Riesgo Alto</span>
+      <span class="valor-kpi">{{ estadisticas?.distribucionRiesgo?.alto ?? 0 }}</span>
+      <span class="pista-clic">👁️ Explorar</span>
+    </button>
+
+    <button
+      type="button"
+      class="tarjeta-kpi kpi-advertencia"
+      (click)="seleccionar('medio')"
+      title="Explorar sitios con advertencias"
+    >
+      <span class="etiqueta-kpi">Riesgo Medio</span>
+      <span class="valor-kpi">{{ estadisticas?.distribucionRiesgo?.medio ?? 0 }}</span>
+      <span class="pista-clic">👁️ Explorar</span>
+    </button>
+
+    <button
+      type="button"
+      class="tarjeta-kpi kpi-seguro"
+      (click)="seleccionar('bajo')"
+      title="Explorar sitios legítimos"
+    >
+      <span class="etiqueta-kpi">Riesgo Bajo</span>
+      <span class="valor-kpi">{{ estadisticas?.distribucionRiesgo?.bajo ?? 0 }}</span>
+      <span class="pista-clic">👁️ Explorar</span>
+    </button>
+
+    @if (modoAdmin) {
+      <button
+        type="button"
+        class="tarjeta-kpi kpi-reportes"
+        (click)="seleccionar('reportes')"
+        title="Explorar reportes de la comunidad"
+      >
+        <span class="etiqueta-kpi">Reportes Comunidad</span>
+        <span class="valor-kpi">{{ estadisticas?.totalReportesComunidad ?? 0 }}</span>
+        <span class="pista-clic">👁️ Explorar</span>
+      </button>
+    }
+  </div>
+</section>

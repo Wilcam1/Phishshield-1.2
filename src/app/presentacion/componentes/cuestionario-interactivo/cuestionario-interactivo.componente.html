@@ -1,0 +1,47 @@
+<section class="tarjeta-cuestionario superficie-cristal" role="region" aria-label="Micro-entrenamiento interactivo">
+  <header class="encabezado-cuestionario">
+    <span class="icono-dardo" aria-hidden="true">🎯</span>
+    <h4 class="titulo-cuestionario">Micro-Entrenamiento (Desafío de 30 segundos)</h4>
+  </header>
+
+  <div class="cuerpo-cuestionario">
+    <p class="pregunta-texto">{{ pregunta.pregunta }}</p>
+
+    <div class="lista-opciones" role="group" aria-label="Opciones de respuesta">
+      @for (opcion of pregunta.opciones; track opcion; let i = $index) {
+        <button
+          type="button"
+          class="boton-opcion"
+          [class.correcta]="esCorrecto(i)"
+          [class.incorrecta]="esIncorrecto(i)"
+          [disabled]="haRespondido"
+          (click)="seleccionarOpcion(i)"
+        >
+          <span class="letra-opcion">{{ obtenerLetraOpcion(i) }})</span>
+          <span class="texto-opcion">{{ opcion }}</span>
+        </button>
+      }
+    </div>
+
+    @if (haRespondido) {
+      <div
+        class="retroalimentacion"
+        [class.exito]="indiceSeleccionado === pregunta.respuestaCorrecta"
+        [class.fallo]="indiceSeleccionado !== pregunta.respuestaCorrecta"
+        role="status"
+        aria-live="polite"
+      >
+        <strong>
+          @if (indiceSeleccionado === pregunta.respuestaCorrecta) {
+            🎉 ¡Excelente! Respuesta correcta.
+          } @else {
+            ❌ Respuesta incorrecta.
+          }
+        </strong>
+        @if (pregunta.explicacion) {
+          <p class="explicacion-texto">{{ pregunta.explicacion }}</p>
+        }
+      </div>
+    }
+  </div>
+</section>
