@@ -1,0 +1,338 @@
+<div class="visor-flujo-contenedor" role="region" aria-label="Simulador y Visualizador de Flujo de Capas">
+  <!-- CABECERA DEL VISOR -->
+  <header class="visor-cabecera">
+    <div class="visor-titulo-bloque">
+      <div class="icono-flujo" aria-hidden="true">🧬</div>
+      <div>
+        <h2 class="visor-titulo">Trazador de Arquitectura y Flujo entre Capas</h2>
+        <p class="visor-subtitulo">
+          Visualización interactiva paso a paso de cómo viajan los datos entre Presentación, Lógica, Datos y Microservicios.
+        </p>
+      </div>
+    </div>
+
+    <!-- Selector de Escenario -->
+    <div class="selector-escenario">
+      <span class="escenario-etiqueta">Escenario de prueba:</span>
+      <div class="botones-escenario">
+        <button
+          type="button"
+          class="boton-escenario"
+          [class.activo]="urlSeleccionada() === 'https://banco-login-falso.xyz/login'"
+          (click)="establecerUrlEjemplo('https://banco-login-falso.xyz/login')"
+        >
+          🚨 Phishing Bancario
+        </button>
+        <button
+          type="button"
+          class="boton-escenario"
+          [class.activo]="urlSeleccionada() === 'https://portal-seguro.com/cuenta'"
+          (click)="establecerUrlEjemplo('https://portal-seguro.com/cuenta')"
+        >
+          🟢 Sitio Legítimo
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAPA VISUAL DE CAPAS (FLOW GRAPH) -->
+  <div class="mapa-capas-diagrama">
+    <!-- Capa 1: Presentación -->
+    <div
+      class="nodo-capa"
+      [class.activo-origen]="capaActivaOrigen() === 'presentacion'"
+      [class.activo-destino]="capaActivaDestino() === 'presentacion'"
+      (click)="inspeccionarCapa('presentacion')"
+      tabindex="0"
+      role="button"
+      (keydown.enter)="inspeccionarCapa('presentacion')"
+      aria-label="Capa de Presentación. Clic para ver especificaciones."
+    >
+      <div class="nodo-icono">🖥️</div>
+      <div class="nodo-cuerpo">
+        <span class="nodo-tipo">FRONT-END UI</span>
+        <h4 class="nodo-nombre">Presentación</h4>
+        <span class="nodo-detalle">Signals & Componentes</span>
+      </div>
+      @if (capaActivaOrigen() === 'presentacion' || capaActivaDestino() === 'presentacion') {
+        <span class="pulso-nodo"></span>
+      }
+    </div>
+
+    <!-- Conector 1 -->
+    <div class="conector-capas" [class.animando]="pasoActual().numero === 1 || pasoActual().numero === 6">
+      <div class="linea-conexion"></div>
+      <span class="flecha-direccion">{{ pasoActual().numero === 6 ? '◀' : '▶' }}</span>
+      <span class="etiqueta-conector">Eventos / Signals</span>
+    </div>
+
+    <!-- Capa 2: Lógica de Negocio -->
+    <div
+      class="nodo-capa"
+      [class.activo-origen]="capaActivaOrigen() === 'logica'"
+      [class.activo-destino]="capaActivaDestino() === 'logica'"
+      (click)="inspeccionarCapa('logica')"
+      tabindex="0"
+      role="button"
+      (keydown.enter)="inspeccionarCapa('logica')"
+      aria-label="Capa de Lógica de Negocio. Clic para ver especificaciones."
+    >
+      <div class="nodo-icono">⚙️</div>
+      <div class="nodo-cuerpo">
+        <span class="nodo-tipo">DOMAIN LOGIC</span>
+        <h4 class="nodo-nombre">Lógica</h4>
+        <span class="nodo-detalle">Servicios & Reglas</span>
+      </div>
+      @if (capaActivaOrigen() === 'logica' || capaActivaDestino() === 'logica') {
+        <span class="pulso-nodo"></span>
+      }
+    </div>
+
+    <!-- Conector 2 -->
+    <div class="conector-capas" [class.animando]="pasoActual().numero === 2 || pasoActual().numero === 5">
+      <div class="linea-conexion"></div>
+      <span class="flecha-direccion">{{ pasoActual().numero === 5 ? '◀' : '▶' }}</span>
+      <span class="etiqueta-conector">Repositorio / Modelos</span>
+    </div>
+
+    <!-- Capa 3: Acceso a Datos -->
+    <div
+      class="nodo-capa"
+      [class.activo-origen]="capaActivaOrigen() === 'datos'"
+      [class.activo-destino]="capaActivaDestino() === 'datos'"
+      (click)="inspeccionarCapa('datos')"
+      tabindex="0"
+      role="button"
+      (keydown.enter)="inspeccionarCapa('datos')"
+      aria-label="Capa de Datos. Clic para ver especificaciones."
+    >
+      <div class="nodo-icono">🗄️</div>
+      <div class="nodo-cuerpo">
+        <span class="nodo-tipo">DATA ACCESS</span>
+        <h4 class="nodo-nombre">Datos</h4>
+        <span class="nodo-detalle">Repositorio & Mapeador</span>
+      </div>
+      @if (capaActivaOrigen() === 'datos' || capaActivaDestino() === 'datos') {
+        <span class="pulso-nodo"></span>
+      }
+    </div>
+
+    <!-- Conector 3 -->
+    <div class="conector-capas" [class.animando]="pasoActual().numero === 3 || pasoActual().numero === 4">
+      <div class="linea-conexion"></div>
+      <span class="flecha-direccion">{{ pasoActual().numero === 4 ? '◀' : '▶' }}</span>
+      <span class="etiqueta-conector">HTTP REST / JSON</span>
+    </div>
+
+    <!-- Capa 4: Microservicios -->
+    <div
+      class="nodo-capa"
+      [class.activo-origen]="capaActivaOrigen() === 'microservicios'"
+      [class.activo-destino]="capaActivaDestino() === 'microservicios'"
+      (click)="inspeccionarCapa('microservicios')"
+      tabindex="0"
+      role="button"
+      (keydown.enter)="inspeccionarCapa('microservicios')"
+      aria-label="Ecosistema de Microservicios. Clic para ver especificaciones."
+    >
+      <div class="nodo-icono">📡</div>
+      <div class="nodo-cuerpo">
+        <span class="nodo-tipo">BACKEND SERVICES</span>
+        <h4 class="nodo-nombre">Microservicios</h4>
+        <span class="nodo-detalle">:3001 | :8000 | :6000</span>
+      </div>
+      @if (capaActivaOrigen() === 'microservicios' || capaActivaDestino() === 'microservicios') {
+        <span class="pulso-nodo"></span>
+      }
+    </div>
+  </div>
+
+  <!-- BARRA DE CONTROLES DE REPRODUCCIÓN -->
+  <div class="controles-flujo">
+    <div class="botones-reproduccion">
+      @if (!estaReproduciendo()) {
+        <button
+          type="button"
+          class="boton-control boton-primario"
+          (click)="iniciarReproduccion()"
+          title="Iniciar animación automática"
+        >
+          ▶ Reproducir
+        </button>
+      } @else {
+        <button
+          type="button"
+          class="boton-control boton-pausa"
+          (click)="pausarReproduccion()"
+          title="Pausar animación"
+        >
+          ⏸ Pausar
+        </button>
+      }
+
+      <button
+        type="button"
+        class="boton-control"
+        (click)="pasoAnterior()"
+        title="Paso anterior"
+      >
+        ⏮ Anterior
+      </button>
+
+      <button
+        type="button"
+        class="boton-control"
+        (click)="pasoSiguiente()"
+        title="Paso siguiente"
+      >
+        ⏭ Siguiente
+      </button>
+
+      <button
+        type="button"
+        class="boton-control boton-secundario"
+        (click)="reiniciarFlujo()"
+        title="Volver al paso inicial"
+      >
+        🔄 Reiniciar
+      </button>
+    </div>
+
+    <!-- Selector de Paso por Puntos -->
+    <div class="pasos-progreso" role="tablist" aria-label="Pasos del flujo">
+      @for (paso of listaPasos; track paso.numero; let idx = $index) {
+        <button
+          type="button"
+          class="punto-paso"
+          [class.activo]="pasoActualIndex() === idx"
+          (click)="irAPaso(idx)"
+          [title]="paso.titulo"
+          [attr.aria-label]="paso.titulo"
+        >
+          <span class="punto-numero">{{ paso.numero }}</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- PANEL DE DETALLES DEL PASO ACTIVO -->
+  <div class="detalle-paso-panel">
+    <div class="detalle-paso-cabecera">
+      <div class="paso-etiqueta-grupo">
+        <span class="insignia-paso">PASO {{ pasoActual().numero }} DE {{ listaPasos.length }}</span>
+        <span class="archivo-insignia">📁 {{ pasoActual().archivoResponsable }}</span>
+      </div>
+      <h3 class="paso-titulo">{{ pasoActual().titulo }}</h3>
+      <p class="paso-subtitulo">{{ pasoActual().subtitulo }}</p>
+    </div>
+
+    <div class="detalle-paso-grid">
+      <!-- Columna Izquierda: Explicación y Regla Arquitectónica -->
+      <div class="paso-info-columna">
+        <div class="bloque-descripcion">
+          <h4 class="subtitulo-seccion">Mecánica de la Interacción</h4>
+          <p class="texto-descripcion">{{ pasoActual().descripcion }}</p>
+        </div>
+
+        <div class="bloque-regla-arquitectura">
+          <div class="regla-icono">🛡️</div>
+          <div>
+            <h5 class="regla-titulo">Regla de Separación de Capas</h5>
+            <p class="regla-texto">{{ pasoActual().reglaArquitectura }}</p>
+          </div>
+        </div>
+
+        <div class="bloque-payload">
+          <h5 class="payload-titulo">Payload en Memoria / Red:</h5>
+          <pre class="codigo-payload"><code>{{ pasoActual().payloadEjemplo }}</code></pre>
+        </div>
+      </div>
+
+      <!-- Columna Derecha: Código Fuente Tipado en Español -->
+      <div class="paso-codigo-columna">
+        <div class="codigo-tarjeta">
+          <div class="codigo-cabecera">
+            <span class="circulo-mac mac-rojo"></span>
+            <span class="circulo-mac mac-amarillo"></span>
+            <span class="circulo-mac mac-verde"></span>
+            <span class="codigo-archivo">{{ pasoActual().archivoResponsable }}</span>
+          </div>
+          <pre class="codigo-cuerpo"><code>{{ pasoActual().codigoSnippet }}</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL / DRAWER DE INSPECCIÓN DE CAPA -->
+  @if (capaSeleccionadaParaInspeccion(); as capaKey) {
+    @let info = capasInfo[capaKey];
+    <div
+      class="inspeccion-overlay"
+      (click)="alHacerClicFondo($event)"
+      tabindex="-1"
+      role="dialog"
+      aria-modal="true"
+      (keydown.escape)="cerrarInspeccionCapa()"
+    >
+      <div class="inspeccion-modal">
+        <header class="inspeccion-cabecera">
+          <div class="inspeccion-titulo-grupo">
+            <span class="inspeccion-icono">{{ info.icono }}</span>
+            <div>
+              <h3 class="inspeccion-nombre">{{ info.nombre }}</h3>
+              <span class="inspeccion-subtitulo">{{ info.subtitulo }}</span>
+            </div>
+          </div>
+          <button
+            type="button"
+            class="boton-cerrar-inspeccion"
+            (click)="cerrarInspeccionCapa()"
+            aria-label="Cerrar modal"
+          >
+            ✕
+          </button>
+        </header>
+
+        <div class="inspeccion-cuerpo">
+          <div class="inspeccion-seccion">
+            <h4 class="seccion-subtitulo">Responsabilidades Principales</h4>
+            <ul class="lista-items">
+              @for (item of info.responsabilidades; track item) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+          </div>
+
+          <div class="inspeccion-seccion">
+            <h4 class="seccion-subtitulo">Archivos del Proyecto</h4>
+            <div class="chips-archivos">
+              @for (archivo of info.archivosClave; track archivo) {
+                <span class="chip-archivo texto-mono">{{ archivo }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="inspeccion-grid-reglas">
+            <div class="caja-regla caja-permitido">
+              <span class="titulo-regla">✅ Permitido Importar:</span>
+              <ul>
+                @for (imp of info.importacionesPermitidas; track imp) {
+                  <li>{{ imp }}</li>
+                }
+              </ul>
+            </div>
+
+            <div class="caja-regla caja-prohibido">
+              <span class="titulo-regla">🚫 Prohibido Importar:</span>
+              <ul>
+                @for (imp of info.importacionesProhibidas; track imp) {
+                  <li>{{ imp }}</li>
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

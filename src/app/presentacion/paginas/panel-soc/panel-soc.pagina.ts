@@ -20,9 +20,10 @@ import {
   SelectorTemaComponente,
   TablaHistorialGlobalComponente,
   TelemetriaServiciosComponente,
+  VisorFlujoArquitecturaComponente,
 } from '../../componentes';
 
-export type PestanaSoc = 'general' | 'auditoria' | 'alertas' | 'telemetria';
+export type PestanaSoc = 'general' | 'auditoria' | 'alertas' | 'telemetria' | 'arquitectura';
 
 @Component({
   selector: 'app-panel-soc-pagina',
@@ -37,6 +38,7 @@ export type PestanaSoc = 'general' | 'auditoria' | 'alertas' | 'telemetria';
     DialogoUrlsCategoriaComponente,
     DrawerIncidenteComponente,
     TelemetriaServiciosComponente,
+    VisorFlujoArquitecturaComponente,
     SelectorTemaComponente,
     NotificacionFlotanteComponente,
   ],

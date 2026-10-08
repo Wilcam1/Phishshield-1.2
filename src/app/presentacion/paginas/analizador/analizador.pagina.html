@@ -34,6 +34,16 @@
 
       <button
         type="button"
+        class="boton-secundario boton-flujo-capas"
+        (click)="irAArquitectura()"
+        title="Ver el flujo y proceso entre capas en tiempo real"
+      >
+        <span aria-hidden="true">🧬</span>
+        <span>Flujo de Capas</span>
+      </button>
+
+      <button
+        type="button"
         class="boton-secundario boton-acceso-admin"
         (click)="abrirPanelAdmin()"
         title="Acceso para analistas SOC"

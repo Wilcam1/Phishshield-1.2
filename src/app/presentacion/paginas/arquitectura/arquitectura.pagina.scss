@@ -1,0 +1,103 @@
+@use '../../diseno/tokens' as *;
+
+.diseno-pagina-arquitectura {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-fondo);
+  color: var(--color-texto);
+}
+
+.barra-superior-arquitectura {
+  width: 100%;
+  padding: var(--espaciado-md) var(--espaciado-xl);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--espaciado-md);
+  background: var(--color-superficie);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--color-borde);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.identidad-seccion {
+  display: flex;
+  align-items: center;
+  gap: var(--espaciado-md);
+}
+
+.boton-retorno {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-primario);
+  padding: 6px 14px;
+  border-radius: var(--radio-md);
+  background: var(--color-superficie-elevada);
+  border: 1px solid var(--color-borde);
+  cursor: pointer;
+  transition: all var(--transicion-rapida);
+
+  &:hover {
+    border-color: var(--color-primario);
+    transform: translateY(-1px);
+  }
+}
+
+.marca-grupo {
+  display: flex;
+  align-items: center;
+  gap: var(--espaciado-sm);
+}
+
+.icono-marca {
+  font-size: 1.8rem;
+}
+
+.titulo-marca {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-texto);
+  letter-spacing: -0.02em;
+}
+
+.subtitulo-marca {
+  font-size: 0.75rem;
+  color: var(--color-texto-secundario);
+}
+
+.acciones-seccion {
+  display: flex;
+  align-items: center;
+  gap: var(--espaciado-sm);
+}
+
+.boton-soc-acceso {
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: var(--radio-md);
+  background: var(--color-superficie-elevada);
+  border: 1px solid var(--color-borde);
+  color: var(--color-texto);
+  cursor: pointer;
+  transition: all var(--transicion-rapida);
+
+  &:hover {
+    border-color: var(--color-primario);
+    transform: translateY(-1px);
+  }
+}
+
+.contenedor-principal-arquitectura {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--espaciado-xl) var(--espaciado-lg);
+  flex: 1;
+}

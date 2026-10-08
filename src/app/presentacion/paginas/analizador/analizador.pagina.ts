@@ -97,6 +97,10 @@ export class AnalizadorPaginaComponente implements OnInit {
     this.analizarUrl(url);
   }
 
+  irAArquitectura(): void {
+    this.enrutador.navigate(['/arquitectura']);
+  }
+
   abrirPanelAdmin(): void {
     if (this.sesionEstado.estaAutenticado()) {
       this.enrutador.navigate(['/panel-soc']);

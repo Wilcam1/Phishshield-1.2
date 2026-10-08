@@ -1,0 +1,43 @@
+<div class="diseno-pagina-arquitectura">
+  <app-notificacion-flotante />
+
+  <!-- BARRA DE NAVEGACIÓN SUPERIOR -->
+  <header class="barra-superior-arquitectura" role="banner">
+    <div class="identidad-seccion">
+      <button
+        type="button"
+        class="boton-retorno"
+        (click)="volverAlAnalizador()"
+        title="Volver al verificador público"
+      >
+        ← Verificador
+      </button>
+
+      <div class="marca-grupo">
+        <span class="icono-marca">🏛️</span>
+        <div>
+          <h1 class="titulo-marca">Arquitectura PhishShield</h1>
+          <span class="subtitulo-marca">Separación Estricta de Responsabilidades en 3 Capas</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="acciones-seccion">
+      <button
+        type="button"
+        class="boton-soc-acceso"
+        (click)="irAlPanelSoc()"
+        title="Ir al Centro de Operaciones SOC"
+      >
+        📊 Panel SOC
+      </button>
+
+      <app-selector-tema />
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="contenedor-principal-arquitectura" role="main">
+    <app-visor-flujo-arquitectura />
+  </main>
+</div>

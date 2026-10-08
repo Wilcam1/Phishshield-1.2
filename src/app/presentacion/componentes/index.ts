@@ -19,3 +19,4 @@ export * from './tabla-historial-global/tabla-historial-global.componente';
 export * from './lista-alertas-comunitarias/lista-alertas-comunitarias.componente';
 export * from './drawer-incidente/drawer-incidente.componente';
 export * from './telemetria-servicios/telemetria-servicios.componente';
+export * from './visor-flujo-arquitectura/visor-flujo-arquitectura.componente';

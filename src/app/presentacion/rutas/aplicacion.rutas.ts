@@ -25,6 +25,14 @@ export const RUTAS_APLICACION: Routes = [
     title: 'PhishShield — Centro de Operaciones SOC',
   },
   {
+    path: 'arquitectura',
+    loadComponent: () =>
+      import('../paginas/arquitectura/arquitectura.pagina').then(
+        (m) => m.ArquitecturaPaginaComponente
+      ),
+    title: 'PhishShield — Trazador de Flujo y Arquitectura de Capas',
+  },
+  {
     path: '**',
     redirectTo: 'analizador',
   },

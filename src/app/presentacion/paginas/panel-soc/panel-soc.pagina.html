@@ -84,6 +84,19 @@
           <span class="pulso-verde-menu"></span>
         }
       </button>
+
+      <button
+        type="button"
+        class="menu-item"
+        [class.activo]="pestanaActiva() === 'arquitectura'"
+        (click)="establecerPestana('arquitectura')"
+        title="Trazador de Flujo entre Capas"
+      >
+        <span class="menu-icono">🧬</span>
+        @if (!sidebarColapsado()) {
+          <span class="menu-texto">Flujo de Capas</span>
+        }
+      </button>
     </nav>
 
     <!-- Pie del Sidebar con Estado del Operador -->
@@ -123,6 +136,7 @@
             @case ('auditoria') { Registro Forense de Incidentes }
             @case ('alertas') { Centro de Inteligencia & Alertas Comunitarias }
             @case ('telemetria') { Estado y Latencia de Microservicios }
+            @case ('arquitectura') { Trazador de Arquitectura y Flujo entre Capas }
           }
         </h2>
         <span class="topbar-badge-en-linea">
@@ -264,6 +278,13 @@
           </div>
 
           <app-telemetria-servicios />
+        </section>
+      }
+
+      <!-- 5. PESTAÑA: ARQUITECTURA Y FLUJO ENTRE CAPAS -->
+      @if (pestanaActiva() === 'arquitectura') {
+        <section class="vista-seccion animacion-aparecer">
+          <app-visor-flujo-arquitectura />
         </section>
       }
     </main>
