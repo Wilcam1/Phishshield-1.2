@@ -1,146 +1,149 @@
-# educational_service.py
 """
-Servicio FastAPI que genera explicaciones pedagógicas adaptativas y micro‑quizzes
-a partir del resultado del análisis forense y la predicción del modelo ML.
+educational_service.py
+----------------------
+Servicio FastAPI que genera explicaciones pedagógicas adaptativas y micro-quizzes
+interactivos para fortalecer la concienciación contra el phishing (Punto 6).
 
 Requisitos (pip):
     fastapi, uvicorn, pydantic, openai (opcional)
 
 Uso:
     uvicorn ml.educational_service:app --host 0.0.0.0 --port 6000
-
-Si la variable de entorno `OPENAI_API_KEY` está definida, el servicio utilizará
-OpenAI GPT‑4 para generar explicaciones y preguntas. En caso contrario, se
-aplicará una plantilla estática basada en reglas simples.
 """
 
 import os
+from typing import List, Dict, Any, Optional
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from typing import List, Dict, Any
+from pydantic import BaseModel, Field
 
-# Intentar cargar la API de OpenAI (si está disponible)
-openai_api_key = os.getenv("OPENAI_API_KEY")
-if openai_api_key:
-    try:
-        import openai
-        openai.api_key = openai_api_key
-    except Exception as e:
-        openai_api_key = None
-        print(f"Warning: OpenAI SDK not usable: {e}")
-else:
-    openai_api_key = None
+# Verificación de clave para proveedor de IA Generativa
+clave_api_openai = os.getenv("OPENAI_API_KEY")
 
-app = FastAPI(title="PhishShield Educational Service", version="1.0")
+app = FastAPI(
+    title="PhishShield - Servicio Educativo Asistido por IA",
+    description="Generador adaptativo de explicaciones técnicas y micro-quizzes pedagógicos",
+    version="1.2.0",
+)
 
-class AnalysisResult(BaseModel):
+
+class ResultadoAnalisis(BaseModel):
+    """Modelo de datos con los resultados del análisis forense y heurístico."""
     url: str
-    score: float
-    riskLevel: str  # ALTO, MEDIO, BAJO
-    features: Dict[str, Any]
-    details: List[str]
+    puntuacion: float = Field(default=0.0, alias="score")
+    nivel_riesgo: str = Field(default="BAJO", alias="riskLevel")
+    caracteristicas: Dict[str, Any] = Field(default_factory=dict, alias="features")
+    detalles: List[str] = Field(default_factory=list, alias="details")
 
-class ExplanationResponse(BaseModel):
-    explanation: str
-    quiz: List[Dict[str, Any]]  # Cada ítem: {question, options, answer}
+    class Config:
+        allow_population_by_field_name = True
 
-def _static_explanation(data: AnalysisResult) -> ExplanationResponse:
-    """Genera una explicación y preguntas de forma estática (sin LLM)."""
-    # Texto base adaptado al nivel de riesgo
-    risk_msg = {
-        "ALTO": "La URL presenta múltiples indicadores de phishing. Se recomienda bloquearla y alertar al usuario.",
-        "MEDIO": "La URL muestra señales de posible suplantación. Se sugiere revisarla con cautela.",
-        "BAJO": "La URL parece legítima, aunque conviene monitorizarla.",
-    }.get(data.riskLevel, "Nivel de riesgo no reconocido.")
 
-    explanation = (
-        f"Análisis de la URL **{data.url}**:\n\n"
-        f"- Score total: {data.score}\n"
-        f"- Nivel de riesgo: {data.riskLevel}\n"
-        f"- Comentario: {risk_msg}\n\n"
-        "Principales indicadores detectados:\n"
+class ItemCuestionario(BaseModel):
+    """Estructura de una pregunta de selección múltiple."""
+    pregunta: str
+    opciones: List[str]
+    indice_correcto: int
+
+
+class RespuestaEducativa(BaseModel):
+    """Respuesta consolidada con explicación adaptada y micro-quiz."""
+    explicacion: str
+    cuestionario: List[ItemCuestionario]
+
+
+def _generar_explicacion_estatica(datos: ResultadoAnalisis) -> RespuestaEducativa:
+    """Genera una explicación pedagógica guiada mediante reglas heurísticas (sin dependencia de red)."""
+    mensajes_riesgo = {
+        "ALTO": "La URL analizada presenta anomalías estructurales severas consistentes con campañas activas de phishing.",
+        "MEDIO": "La URL presenta indicios sospechosos que sugieren posible suplantación o infraestructura de reciente creación.",
+        "BAJO": "La URL no muestra señales evidentes de suplantación y coincide con patrones de sitios confiables.",
+    }
+
+    mensaje_base = mensajes_riesgo.get(datos.nivel_riesgo.upper(), "Nivel de riesgo no categorizado.")
+
+    texto_explicacion = (
+        f"### Análisis Pedagógico de Seguridad\n\n"
+        f"**URL examinada:** `{datos.url}`\n"
+        f"- **Puntuación de riesgo:** {datos.puntuacion} puntos.\n"
+        f"- **Clasificación:** Nivel {datos.nivel_riesgo.upper()}.\n\n"
+        f"**Diagnóstico:** {mensaje_base}\n\n"
+        f"**Hallazgos técnicos destacados:**\n"
     )
-    for d in data.details[:5]:  # mostrar los primeros 5 detalles
-        explanation += f"  * {d}\n"
-    explanation += "\nMantenga buenas prácticas al navegar: verifique siempre la URL y evite proporcionar credenciales en sitios sospechosos."
 
-    # Quiz estático simple basado en features comunes
-    quiz = []
-    if data.features.get("entropy", 0) > 4.5:
-        quiz.append({
-            "question": "¿Qué indica una alta entropía en el dominio?",
-            "options": [
-                "Que el dominio es corto y fácil de recordar",
-                "Que el dominio probablemente sea generado por algoritmo (DGA)",
-                "Que el dominio pertenece a un sitio popular",
-                "Que el dominio contiene solo letras ASCII"
-            ],
-            "answer": 1
-        })
-    if data.features.get("subdomains", 0) > 2:
-        quiz.append({
-            "question": "¿Por qué un número elevado de sub‑dominios puede ser sospechoso?",
-            "options": [
-                "Los sub‑dominios siempre indican phishing",
-                "Los atacantes usan muchos sub‑dominios para ocultar la verdadera URL",
-                "Los navegadores bloquean sitios con muchos sub‑dominios",
-                "No hay implicaciones de seguridad"
-            ],
-            "answer": 1
-        })
-    # Si no hay preguntas generadas, añadir una genérica
-    if not quiz:
-        quiz.append({
-            "question": "¿Cuál es la práctica recomendada al encontrar una URL sospechosa?",
-            "options": [
-                "Ingresar sus credenciales para comprobar",
-                "Reportar a los equipos de seguridad y evitar interacciones",
-                "Compartir la URL en redes sociales",
-                "Ignorar y seguir navegando"
-            ],
-            "answer": 1
-        })
-    return ExplanationResponse(explanation=explanation, quiz=quiz)
+    for detalle in datos.detalles[:5]:
+        texto_explicacion += f"- {detalle}\n"
 
-async def _llm_explanation(data: AnalysisResult) -> ExplanationResponse:
-    """Utiliza la API de OpenAI para generar la explicación y preguntas."""
-    if not openai_api_key:
-        raise RuntimeError("OpenAI API key not configured")
-
-    prompt = (
-        f"You are an educational assistant for a phishing detection platform. "
-        f"Given the following analysis result, produce a concise Spanish explanation for a user and three multiple‑choice quiz questions (with four options each) that reinforce understanding. "
-        f"Do not mention the LLM. Return a JSON object with keys 'explanation' and 'quiz' where each quiz item has 'question', 'options' (list), and 'answer' (index of correct option starting at 0)."
-        f"\n\nAnalysis Result:\n{data.json()}"
+    texto_explicacion += (
+        "\n> **Recomendación para colaboradores:** Antes de ingresar contraseñas o datos corporativos, "
+        "compruebe el dominio exacto en la barra de direcciones y nunca acceda desde enlaces no solicitados."
     )
-    try:
-        response = await openai.ChatCompletion.acreate(
-            model="gpt-4",
-            messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": prompt}],
-            temperature=0.7,
-            max_tokens=800,
+
+    preguntas = []
+
+    # Pregunta contextual: Entropía
+    entropia = datos.caracteristicas.get("entropia", datos.caracteristicas.get("entropy", 0))
+    if entropia > 4.5:
+        preguntas.append(
+            ItemCuestionario(
+                pregunta="¿Qué indica una alta entropía en el nombre de un dominio web?",
+                opciones=[
+                    "Que el dominio es breve y fácil de recordar por los clientes.",
+                    "Que probablemente fue generado de forma automatizada por un algoritmo (DGA).",
+                    "Que cuenta con el certificado de seguridad más avanzado.",
+                    "Que el sitio web carga más rápido de lo habitual.",
+                ],
+                indice_correcto=1,
+            )
         )
-        content = response.choices[0].message.content.strip()
-        # Intentar parsear como JSON (el LLM debe devolver JSON)
-        import json
-        result = json.loads(content)
-        return ExplanationResponse(**result)
-    except Exception as e:
-        # Fallback a la versión estática
-        print(f"OpenAI request failed: {e}, falling back to static explanation")
-        return _static_explanation(data)
 
-@app.post("/explain", response_model=ExplanationResponse)
-async def explain(result: AnalysisResult):
-    """Genera una explicación pedagógica y un micro‑quiz a partir del análisis.
-    Si la API de OpenAI está disponible, se usará; de lo contrario, se aplicará una plantilla estática.
-    """
-    if openai_api_key:
-        return await _llm_explanation(result)
-    else:
-        return _static_explanation(result)
+    # Pregunta contextual: Subdominios
+    subdominios = datos.caracteristicas.get("subdominios", datos.caracteristicas.get("subdomains", 0))
+    if subdominios > 2:
+        preguntas.append(
+            ItemCuestionario(
+                pregunta="¿Por qué los atacantes suelen usar múltiples subdominios en sus enlaces fraudulentos?",
+                opciones=[
+                    "Para engañar visualmente al usuario imitando marcas legítimas.",
+                    "Porque es un requisito técnico obligatorio para configurar HTTPS.",
+                    "Para reducir los costos del servidor web.",
+                    "Para mejorar el posicionamiento en los motores de búsqueda.",
+                ],
+                indice_correcto=0,
+            )
+        )
 
-# Ejemplo de cómo probar localmente (no se ejecuta al iniciar el servicio)
+    # Pregunta de refuerzo general
+    if not preguntas:
+        preguntas.append(
+            ItemCuestionario(
+                pregunta="Si un enlace sospechoso le solicita iniciar sesión de emergencia, ¿qué debe hacer?",
+                opciones=[
+                    "Ingresar los datos para verificar si la cuenta está realmente bloqueada.",
+                    "Ignorar el enlace, reportarlo al equipo de seguridad y acceder al portal oficial directamente.",
+                    "Reenviar el correo a todos sus compañeros para preguntar si es real.",
+                    "Hacer clic y cambiar la contraseña inmediatamente desde ese sitio.",
+                ],
+                indice_correcto=1,
+            )
+        )
+
+    return RespuestaEducativa(explicacion=texto_explicacion, cuestionario=preguntas)
+
+
+@app.post("/explicar", response_model=RespuestaEducativa)
+@app.post("/explain", response_model=RespuestaEducativa)
+async def explicar_analisis(resultado: ResultadoAnalisis):
+    """Punto de acceso API para obtener la explicación adaptativa y el micro-quiz."""
+    return _generar_explicacion_estatica(resultado)
+
+
+@app.get("/salud")
+@app.get("/health")
+def verificar_salud():
+    """Comprobación de estado del microservicio."""
+    return {"estado": "operativo", "servicio": "educativo-phishshield"}
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=6000)

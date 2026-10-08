@@ -1,50 +1,10 @@
-# 3️⃣ Motor de análisis forense y heurístico multicapa
-
 /**
  * forensicEngine.js
  * -----------------
- * Este módulo implementa **19 validaciones técnicas** sobre una URL para determinar su nivel de riesgo.
- * Cada función devuelve un objeto `{ passed: boolean, score: number, detail: string }` que será
- * acumulado por `runAllValidations`.
- *
- * Las validaciones incluyen:
- *   1. **Análisis estructural de la URL** (esquema, hostname, puerto, ruta, query).
- *   2. **Detección de typosquatting** mediante distancia de Levenshtein contra una lista de dominios de alta reputación.
- *   3. **Detección de homógrafos Unicode / Punycode** (uso de caracteres no‑ASCII en el hostname).
- *   4. **Uso de dirección IP en lugar de dominio**.
- *   5. **Longitud excesiva del dominio** (> 63 caracteres) y del URL completo (> 100 caracteres).
- *   6. **Cálculo de entropía de Shannon del dominio** (indicador de DGA).
- *   7. **Número de sub‑dominios** (más de 2 se considera sospechoso).
- *   8. **Presencia de guiones múltiples** en el hostname.
- *   9. **Presencia de números en el dominio**.
- *  10. **Parámetros sensibles** en la query string (password, token, ssn, etc.).
- *  11. **Número de parámetros** (más de 5).
- *  12. **Longitud de la ruta** (> 50 caracteres).
- *  13. **Redirecciones encadenadas** (más de 3 redirects usando `fetch` con `redirect: "follow"`).
- *  14. **Certificado SSL/TLS** (verificar caducidad, cadena de confianza, si es autofirmado).
- *  15. **Presencia de certificado expirado o próximo a expirar (< 30 días)**.
- *  16. **Reputación vía Google SafeBrowsing** (consulta API externa, si está disponible).
- *  17. **Reputación vía VirusTotal** (consulta API externa, si está disponible).
- *  18. **Reputación vía PhishTank** (consulta API externa, si está disponible).
- *  19. **Emulación aislada del DOM con Puppeteer** para detectar elementos de formulario de captura de credenciales.
- *
- * Cada validación asigna un **puntuación** (0‑2) que se suma a un **score total** (máximo ≈ 30).
- * El motor devuelve:
- *   ```json
- *   {
- *     "url": "https://example.com",
- *     "score": 12,
- *     "details": ["..."],
- *     "features": {"entropy": 4.5, "subdomains": 3, ...}
- *   }
- *   ```
- *
- * El código está escrito en **Node.js (ES2022)** y usa las siguientes dependencias externas:
- *   - `fast-levenshtein` – cálculo de distancia Levenshtein.
- *   - `punycode` – detección de dominios IDN.
- *   - `node-forge` – inspección de certificados TLS.
- *   - `puppeteer` – navegación sin cabeza para análisis de DOM.
- *   - `node-fetch` – solicitudes HTTP (con redirección controlada).
+ * Motor de análisis forense y heurístico multicapa para PhishShield.
+ * Este módulo implementa 19 validaciones técnicas sobre una URL para determinar su nivel de riesgo.
+ * Cada función evaluadora devuelve un objeto:
+ *   { aprobado: boolean, puntuacion: number, detalle: string, caracteristicas?: object }
  */
 
 import { URL } from 'url';
@@ -54,364 +14,506 @@ import punycode from 'punycode/';
 import forge from 'node-forge';
 import puppeteer from 'puppeteer';
 
-/** Helper: calcula entropía de Shannon de una cadena */
-function shannonEntropy(str) {
-  const freq = {};
-  for (const ch of str) freq[ch] = (freq[ch] || 0) + 1;
-  const len = str.length;
-  let entropy = 0;
-  for (const count of Object.values(freq)) {
-    const p = count / len;
-    entropy -= p * Math.log2(p);
+/**
+ * Calcula la entropía de Shannon de una cadena de texto (indicador de DGA / aleatoriedad).
+ * @param {string} cadena Cadena de entrada (ej. nombre de dominio).
+ * @returns {number} Entropía calculada en bits.
+ */
+export function calcularEntropiaShannon(cadena) {
+  const frecuencias = {};
+  for (const caracter of cadena) {
+    frecuencias[caracter] = (frecuencias[caracter] || 0) + 1;
   }
-  return entropy;
+  const longitud = cadena.length;
+  let entropia = 0;
+  for (const cantidad of Object.values(frecuencias)) {
+    const probabilidad = cantidad / longitud;
+    entropia -= probabilidad * Math.log2(probabilidad);
+  }
+  return entropia;
 }
 
-/** 1. Análisis estructural básico */
-function structuralAnalysis(urlStr) {
+/**
+ * Validación 1: Análisis estructural básico de la URL.
+ * @param {string} cadenaUrl URL completa a analizar.
+ */
+export function analisisEstructural(cadenaUrl) {
   try {
-    const url = new URL(urlStr);
-    const result = {
-      passed: true,
-      score: 0,
-      detail: `Esquema: ${url.protocol}, hostname: ${url.hostname}, puerto: ${url.port || 'default'}, ruta: ${url.pathname}`,
-      features: {
-        scheme: url.protocol.replace(':', ''),
-        hostname: url.hostname,
-        port: url.port || (url.protocol === 'https:' ? '443' : '80'),
-        pathLength: url.pathname.length,
-        queryLength: url.search.length,
-        totalLength: url.href.length,
+    const objetoUrl = new URL(cadenaUrl);
+    const resultado = {
+      aprobado: true,
+      puntuacion: 0,
+      detalle: `Esquema: ${objetoUrl.protocol}, host: ${objetoUrl.hostname}, puerto: ${objetoUrl.port || 'predeterminado'}, ruta: ${objetoUrl.pathname}`,
+      caracteristicas: {
+        esquema: objetoUrl.protocol.replace(':', ''),
+        nombreHost: objetoUrl.hostname,
+        puerto: objetoUrl.port || (objetoUrl.protocol === 'https:' ? '443' : '80'),
+        longitudRuta: objetoUrl.pathname.length,
+        longitudConsulta: objetoUrl.search.length,
+        longitudTotal: objetoUrl.href.length,
       },
     };
-    // Penalizar dominios >63 caracteres
-    if (url.hostname.length > 63) {
-      result.score += 2;
-      result.detail += ' | dominio demasiado largo (>63)';
+
+    // Penalizar si el dominio supera los 63 caracteres estándar
+    if (objetoUrl.hostname.length > 63) {
+      resultado.puntuacion += 2;
+      resultado.detalle += ' | Dominio demasiado largo (>63)';
     }
-    // Penalizar URLs >100 caracteres
-    if (url.href.length > 100) {
-      result.score += 1;
-      result.detail += ' | URL demasiado larga (>100)';
+
+    // Penalizar si la URL completa excede 100 caracteres
+    if (objetoUrl.href.length > 100) {
+      resultado.puntuacion += 1;
+      resultado.detalle += ' | URL demasiado larga (>100)';
     }
-    return result;
-  } catch (e) {
-    return { passed: false, score: 5, detail: 'URL inválida', features: {} };
+
+    return resultado;
+  } catch (error) {
+    return {
+      aprobado: false,
+      puntuacion: 5,
+      detalle: `URL inválida: ${error.message}`,
+      caracteristicas: {},
+    };
   }
 }
 
-/** 2. Detección de typosquatting (Levenshtein) */
-async function typosquattingDetection(hostname, whitelist) {
-  // whitelist: array de dominios de alta reputación (ej. Alexa Top 1M)
-  let minDist = Infinity;
-  for (const good of whitelist) {
-    const d = levenshtein.get(hostname, good);
-    if (d < minDist) minDist = d;
-    if (minDist === 0) break;
-  }
-  const suspicious = minDist > 0 && minDist <= 2; // umbral típico
-  return {
-    passed: !suspicious,
-    score: suspicious ? 3 : 0,
-    detail: `Distancia Levenshtein mínima = ${minDist}`,
-  };
-}
-
-/** 3. Homógrafos Unicode / Punycode */
-function unicodeHomographDetection(hostname) {
-  // Si el hostname contiene caracteres no ASCII, es sospechoso
-  const isAscii = /^[\x00-\x7F]+$/.test(hostname);
-  const hasPunycode = hostname.startsWith('xn--');
-  const suspicious = !isAscii || hasPunycode;
-  return {
-    passed: !suspicious,
-    score: suspicious ? 4 : 0,
-    detail: isAscii ? 'ASCII-only' : 'Unicode characters detected',
-  };
-}
-
-/** 4. Uso de IP en lugar de dominio */
-function ipAddressDetection(hostname) {
-  const ipRegex = /^(?:\d{1,3}\.){3}\d{1,3}$/;
-  const isIp = ipRegex.test(hostname);
-  return {
-    passed: !isIp,
-    score: isIp ? 3 : 0,
-    detail: isIp ? 'Hostname es una dirección IP' : 'Hostname es dominio',
-  };
-}
-
-/** 5. Número de sub‑dominios */
-function subdomainCount(hostname) {
-  const parts = hostname.split('.');
-  const subdomains = parts.length - 2; // excluir dominio + TLD
-  const suspicious = subdomains > 2;
-  return {
-    passed: !suspicious,
-    score: suspicious ? 2 : 0,
-    detail: `Sub‑dominios: ${subdomains}`,
-    features: { subdomains },
-  };
-}
-
-/** 6. Guiones múltiples */
-function multipleHyphens(hostname) {
-  const hyphens = (hostname.match(/-/g) || []).length;
-  const suspicious = hyphens > 2;
-  return {
-    passed: !suspicious,
-    score: suspicious ? 2 : 0,
-    detail: `Guiones en hostname: ${hyphens}`,
-  };
-}
-
-/** 7. Números en el dominio */
-function numericDomain(hostname) {
-  const hasNumber = /\d/.test(hostname);
-  return {
-    passed: !hasNumber,
-    score: hasNumber ? 1 : 0,
-    detail: hasNumber ? 'Contiene números' : 'Sin números',
-  };
-}
-
-/** 8. Parámetros sensibles en la query */
-function sensitiveParameters(urlObj) {
-  const sensitive = ['password', 'pwd', 'token', 'auth', 'ssn', 'login', 'user', 'pass', 'account'];
-  if (!urlObj.search) return { passed: true, score: 0, detail: 'Sin parámetros' };
-  const params = new URLSearchParams(urlObj.search);
-  const found = [];
-  for (const s of sensitive) if (params.has(s)) found.push(s);
-  const suspicious = found.length > 0;
-  return {
-    passed: !suspicious,
-    score: suspicious ? 3 : 0,
-    detail: suspicious ? `Parámetros sensibles: ${found.join(', ')}` : 'Sin parámetros sensibles',
-  };
-}
-
-/** 9. Número de parámetros */
-function parameterCount(urlObj) {
-  if (!urlObj.search) return { passed: true, score: 0, detail: '0 parámetros' };
-  const count = new URLSearchParams(urlObj.search).size;
-  const suspicious = count > 5;
-  return {
-    passed: !suspicious,
-    score: suspicious ? 1 : 0,
-    detail: `${count} parámetros en query`,
-    features: { paramCount: count },
-  };
-}
-
-/** 10. Longitud de la ruta */
-function pathLength(urlObj) {
-  const len = urlObj.pathname.length;
-  const suspicious = len > 50;
-  return {
-    passed: !suspicious,
-    score: suspicious ? 1 : 0,
-    detail: `Longitud de ruta: ${len}`,
-    features: { pathLength: len },
-  };
-}
-
-/** 11. Redirecciones encadenadas */
-async function redirectChain(urlStr, maxRedirects = 3) {
-  let redirects = 0;
-  let current = urlStr;
-  while (redirects < maxRedirects) {
-    const res = await fetch(current, { method: 'HEAD', redirect: 'manual' });
-    if (res.status >= 300 && res.status < 400 && res.headers.get('location')) {
-      current = new URL(res.headers.get('location'), current).href;
-      redirects++;
-    } else {
-      break;
+/**
+ * Validación 2: Detección de typosquatting mediante distancia Levenshtein.
+ * @param {string} nombreHost Nombre de host del dominio.
+ * @param {Array<string>} listaBlanca Dominios legítimos de referencia.
+ */
+export async function deteccionTyposquatting(nombreHost, listaBlanca = []) {
+  let distanciaMinima = Infinity;
+  for (const dominioLegitimo of listaBlanca) {
+    const distancia = levenshtein.get(nombreHost, dominioLegitimo);
+    if (distancia < distanciaMinima) {
+      distanciaMinima = distancia;
     }
+    if (distanciaMinima === 0) break;
   }
-  const suspicious = redirects >= maxRedirects;
+
+  const sospechoso = distanciaMinima > 0 && distanciaMinima <= 2;
   return {
-    passed: !suspicious,
-    score: suspicious ? 2 : 0,
-    detail: `Redirecciones: ${redirects}`,
+    aprobado: !sospechoso,
+    puntuacion: sospechoso ? 3 : 0,
+    detalle: `Distancia Levenshtein mínima = ${distanciaMinima}`,
   };
 }
 
-/** 12. Inspección de certificado SSL/TLS */
-async function sslInspection(hostname) {
-  return new Promise((resolve) => {
-    const tls = require('tls');
-    const socket = tls.connect(443, hostname, { rejectUnauthorized: false }, () => {
-      const cert = socket.getPeerCertificate(true);
-      const now = Date.now();
-      const notAfter = new Date(cert.valid_to).getTime();
-      const notBefore = new Date(cert.valid_from).getTime();
-      const daysToExpiry = (notAfter - now) / (1000 * 60 * 60 * 24);
-      const isSelfSigned = cert.issuerCertificate === undefined || cert.issuerCertificate === cert;
-      const issues = [];
-      if (isSelfSigned) issues.push('autofirmado');
-      if (daysToExpiry < 0) issues.push('expirado');
-      else if (daysToExpiry < 30) issues.push('próximo a expirar');
-      const score = issues.length * 2; // 2 puntos por cada issue
-      resolve({
-        passed: issues.length === 0,
-        score,
-        detail: issues.length ? `Certificado: ${issues.join(', ')}` : 'Certificado válido',
+/**
+ * Validación 3: Detección de homógrafos Unicode / Punycode.
+ * @param {string} nombreHost Nombre de host.
+ */
+export function deteccionHomografosUnicode(nombreHost) {
+  const esAscii = /^[\x00-\x7F]+$/.test(nombreHost);
+  const tienePunycode = nombreHost.startsWith('xn--');
+  const sospechoso = !esAscii || tienePunycode;
+
+  return {
+    aprobado: !sospechoso,
+    puntuacion: sospechoso ? 4 : 0,
+    detalle: sospechoso ? 'Caracteres Unicode / Punycode detectados' : 'Host únicamente ASCII',
+  };
+}
+
+/**
+ * Validación 4: Detección de uso de dirección IP en lugar de dominio.
+ * @param {string} nombreHost Nombre de host.
+ */
+export function deteccionDireccionIp(nombreHost) {
+  const patronIp = /^(?:\d{1,3}\.){3}\d{1,3}$/;
+  const esIp = patronIp.test(nombreHost);
+
+  return {
+    aprobado: !esIp,
+    puntuacion: esIp ? 3 : 0,
+    detalle: esIp ? 'El host es una dirección IP directa' : 'El host es un nombre de dominio',
+  };
+}
+
+/**
+ * Validación 5: Conteo de subdominios.
+ * @param {string} nombreHost Nombre de host.
+ */
+export function conteoSubdominios(nombreHost) {
+  const partes = nombreHost.split('.');
+  const subdominios = Math.max(0, partes.length - 2);
+  const sospechoso = subdominios > 2;
+
+  return {
+    aprobado: !sospechoso,
+    puntuacion: sospechoso ? 2 : 0,
+    detalle: `Subdominios detectados: ${subdominios}`,
+    caracteristicas: { subdominios },
+  };
+}
+
+/**
+ * Validación 6: Detección de guiones múltiples en el host.
+ * @param {string} nombreHost Nombre de host.
+ */
+export function guionesMultiples(nombreHost) {
+  const cantidadGuiones = (nombreHost.match(/-/g) || []).length;
+  const sospechoso = cantidadGuiones > 2;
+
+  return {
+    aprobado: !sospechoso,
+    puntuacion: sospechoso ? 2 : 0,
+    detalle: `Guiones en host: ${cantidadGuiones}`,
+  };
+}
+
+/**
+ * Validación 7: Detección de números en el dominio.
+ * @param {string} nombreHost Nombre de host.
+ */
+export function dominioNumerico(nombreHost) {
+  const contieneNumero = /\d/.test(nombreHost);
+
+  return {
+    aprobado: !contieneNumero,
+    puntuacion: contieneNumero ? 1 : 0,
+    detalle: contieneNumero ? 'Contiene dígitos numéricos' : 'Sin dígitos numéricos',
+  };
+}
+
+/**
+ * Validación 8: Detección de parámetros sensibles en la consulta.
+ * @param {URL} objetoUrl Objeto URL analizado.
+ */
+export function parametrosSensibles(objetoUrl) {
+  const palabrasSensibles = ['password', 'pwd', 'token', 'auth', 'ssn', 'login', 'user', 'pass', 'account', 'clave', 'contrasena'];
+  if (!objetoUrl.search) {
+    return { aprobado: true, puntuacion: 0, detalle: 'Sin parámetros en consulta' };
+  }
+
+  const parametros = new URLSearchParams(objetoUrl.search);
+  const encontrados = [];
+  for (const palabra of palabrasSensibles) {
+    if (parametros.has(palabra)) encontrados.push(palabra);
+  }
+
+  const sospechoso = encontrados.length > 0;
+  return {
+    aprobado: !sospechoso,
+    puntuacion: sospechoso ? 3 : 0,
+    detalle: sospechoso ? `Parámetros sensibles encontrados: ${encontrados.join(', ')}` : 'Sin parámetros sensibles',
+  };
+}
+
+/**
+ * Validación 9: Conteo de parámetros en consulta.
+ * @param {URL} objetoUrl Objeto URL.
+ */
+export function conteoParametros(objetoUrl) {
+  if (!objetoUrl.search) {
+    return { aprobado: true, puntuacion: 0, detalle: '0 parámetros en consulta' };
+  }
+
+  const cantidad = new URLSearchParams(objetoUrl.search).size;
+  const sospechoso = cantidad > 5;
+
+  return {
+    aprobado: !sospechoso,
+    puntuacion: sospechoso ? 1 : 0,
+    detalle: `${cantidad} parámetros en consulta`,
+    caracteristicas: { cantidadParametros: cantidad },
+  };
+}
+
+/**
+ * Validación 10: Longitud de la ruta.
+ * @param {URL} objetoUrl Objeto URL.
+ */
+export function longitudRuta(objetoUrl) {
+  const longitud = objetoUrl.pathname.length;
+  const sospechoso = longitud > 50;
+
+  return {
+    aprobado: !sospechoso,
+    puntuacion: sospechoso ? 1 : 0,
+    detalle: `Longitud de ruta: ${longitud} caracteres`,
+    caracteristicas: { longitudRuta: longitud },
+  };
+}
+
+/**
+ * Validación 11: Detección de cadenas de redirecciones sospechosas.
+ * @param {string} cadenaUrl URL inicial.
+ * @param {number} maximoRedirecciones Límite tolerado de saltos.
+ */
+export async function cadenaRedirecciones(cadenaUrl, maximoRedirecciones = 3) {
+  let contadorRedirecciones = 0;
+  let urlActual = cadenaUrl;
+
+  try {
+    while (contadorRedirecciones < maximoRedirecciones) {
+      const respuesta = await fetch(urlActual, { method: 'HEAD', redirect: 'manual' });
+      if (respuesta.status >= 300 && respuesta.status < 400 && respuesta.headers.get('location')) {
+        urlActual = new URL(respuesta.headers.get('location'), urlActual).href;
+        contadorRedirecciones++;
+      } else {
+        break;
+      }
+    }
+  } catch (error) {
+    // Si no responde se asume fallo de conexión
+  }
+
+  const sospechoso = contadorRedirecciones >= maximoRedirecciones;
+  return {
+    aprobado: !sospechoso,
+    puntuacion: sospechoso ? 2 : 0,
+    detalle: `Redirecciones encadenadas: ${contadorRedirecciones}`,
+  };
+}
+
+/**
+ * Validación 12: Inspección de certificado SSL/TLS.
+ * @param {string} nombreHost Nombre de host.
+ */
+export async function inspeccionSsl(nombreHost) {
+  return new Promise((resolver) => {
+    import('tls').then((moduloTls) => {
+      const socket = moduloTls.connect(443, nombreHost, { rejectUnauthorized: false, servername: nombreHost }, () => {
+        const certificado = socket.getPeerCertificate(true);
+        socket.end();
+
+        if (!certificado || Object.keys(certificado).length === 0) {
+          return resolver({
+            aprobado: false,
+            puntuacion: 4,
+            detalle: 'No se obtuvo certificado TLS/SSL',
+          });
+        }
+
+        const ahora = Date.now();
+        const fechaFin = new Date(certificado.valid_to).getTime();
+        const diasParaExpirar = (fechaFin - ahora) / (1000 * 60 * 60 * 24);
+        const esAutofirmado = !certificado.issuerCertificate || certificado.issuerCertificate === certificado;
+
+        const problemas = [];
+        if (esAutofirmado) problemas.push('autofirmado');
+        if (diasParaExpirar < 0) problemas.push('expirado');
+        else if (diasParaExpirar < 30) problemas.push('próximo a expirar (<30 días)');
+
+        const puntuacion = problemas.length * 2;
+        resolver({
+          aprobado: problemas.length === 0,
+          puntuacion,
+          detalle: problemas.length ? `Problemas de certificado: ${problemas.join(', ')}` : 'Certificado SSL/TLS válido',
+        });
       });
-    });
-    socket.on('error', () => {
-      resolve({ passed: false, score: 4, detail: 'Error al obtener certificado TLS' });
+
+      socket.on('error', () => {
+        resolver({ aprobado: false, puntuacion: 3, detalle: 'Error de conexión TLS/SSL' });
+      });
+      socket.setTimeout(5000, () => {
+        socket.destroy();
+        resolver({ aprobado: false, puntuacion: 2, detalle: 'Tiempo de espera agotado al verificar TLS' });
+      });
+    }).catch(() => {
+      resolver({ aprobado: false, puntuacion: 2, detalle: 'Módulo TLS no disponible' });
     });
   });
 }
 
-/** 13‑15. Reputación externa (SafeBrowsing, VirusTotal, PhishTank) */
-async function externalReputation(urlStr, apiKeys) {
-  const results = [];
-  // Google SafeBrowsing (si apiKey disponible)
-  if (apiKeys.safeBrowsing) {
+/**
+ * Validaciones 13-15: Consulta de reputación externa (SafeBrowsing, VirusTotal, PhishTank).
+ * @param {string} cadenaUrl URL objetivo.
+ * @param {object} clavesApi Objeto con claves opcionales de API.
+ */
+export async function reputacionExterna(cadenaUrl, clavesApi = {}) {
+  const resultados = [];
+
+  // Google Safe Browsing
+  if (clavesApi.safeBrowsing) {
     try {
-      const sbRes = await fetch(`https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${apiKeys.safeBrowsing}`, {
+      const respuesta = await fetch(`https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${clavesApi.safeBrowsing}`, {
         method: 'POST',
-        body: JSON.stringify({ client: { clientId: 'phishshield', clientVersion: '1.0' }, threatInfo: { threatTypes: ['MALWARE', 'SOCIAL_ENGINEERING'], platformTypes: ['ANY_PLATFORM'], threatEntryTypes: ['URL'], threatEntries: [{ url: urlStr }] } }),
+        body: JSON.stringify({
+          client: { clientId: 'phishshield', clientVersion: '1.2' },
+          threatInfo: {
+            threatTypes: ['MALWARE', 'SOCIAL_ENGINEERING'],
+            platformTypes: ['ANY_PLATFORM'],
+            threatEntryTypes: ['URL'],
+            threatEntries: [{ url: cadenaUrl }],
+          },
+        }),
         headers: { 'Content-Type': 'application/json' },
       });
-      const sbJson = await sbRes.json();
-      if (sbJson.matches) {
-        results.push({ source: 'SafeBrowsing', passed: false, score: 5, detail: 'Detectado como amenaza' });
-      } else {
-        results.push({ source: 'SafeBrowsing', passed: true, score: 0, detail: 'Sin amenaza' });
-      }
-    } catch (_) { /* ignore */ }
-  }
-  // VirusTotal (si apiKey disponible)
-  if (apiKeys.virusTotal) {
-    try {
-      const vtRes = await fetch(`https://www.virustotal.com/api/v3/urls`, {
-        method: 'POST',
-        body: new URLSearchParams({ url: urlStr }),
-        headers: { 'x-apikey': apiKeys.virusTotal },
+      const datosJson = await respuesta.json();
+      const esAmenaza = Boolean(datosJson.matches && datosJson.matches.length > 0);
+      resultados.push({
+        fuente: 'Google Safe Browsing',
+        aprobado: !esAmenaza,
+        puntuacion: esAmenaza ? 5 : 0,
+        detalle: esAmenaza ? 'Marcada como amenaza por Google' : 'Limpia en Google Safe Browsing',
       });
-      const vtJson = await vtRes.json();
-      if (vtJson.data && vtJson.data.attributes && vtJson.data.attributes.last_analysis_stats.malicious > 0) {
-        results.push({ source: 'VirusTotal', passed: false, score: 4, detail: 'Marcado como malicioso' });
-      } else {
-        results.push({ source: 'VirusTotal', passed: true, score: 0, detail: 'Limpio' });
-      }
-    } catch (_) { }
+    } catch (_) {
+      // Ignorar fallo de API externa
+    }
   }
-  // PhishTank (si apiKey disponible)
-  if (apiKeys.phishTank) {
+
+  // VirusTotal
+  if (clavesApi.virusTotal) {
     try {
-      const ptRes = await fetch(`http://checkurl.phishtank.com/checkurl/`, {
+      const respuesta = await fetch('https://www.virustotal.com/api/v3/urls', {
         method: 'POST',
-        body: new URLSearchParams({ url: urlStr, format: 'json', app_key: apiKeys.phishTank }),
+        body: new URLSearchParams({ url: cadenaUrl }),
+        headers: { 'x-apikey': clavesApi.virusTotal },
+      });
+      const datosJson = await respuesta.json();
+      const estadisticas = datosJson?.data?.attributes?.last_analysis_stats;
+      const maliciosos = estadisticas?.malicious || 0;
+      resultados.push({
+        fuente: 'VirusTotal',
+        aprobado: maliciosos === 0,
+        puntuacion: maliciosos > 0 ? 4 : 0,
+        detalle: maliciosos > 0 ? `Detectada por ${maliciosos} motores en VirusTotal` : 'Limpia en VirusTotal',
+      });
+    } catch (_) {
+      // Ignorar fallo de API externa
+    }
+  }
+
+  // PhishTank
+  if (clavesApi.phishTank) {
+    try {
+      const respuesta = await fetch('https://checkurl.phishtank.com/checkurl/', {
+        method: 'POST',
+        body: new URLSearchParams({ url: cadenaUrl, format: 'json', app_key: clavesApi.phishTank }),
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
-      const ptJson = await ptRes.json();
-      if (ptJson && ptJson.results && ptJson.results.in_database) {
-        results.push({ source: 'PhishTank', passed: false, score: 4, detail: 'En base de datos PhishTank' });
-      } else {
-        results.push({ source: 'PhishTank', passed: true, score: 0, detail: 'No encontrado' });
-      }
-    } catch (_) { }
+      const datosJson = await respuesta.json();
+      const estaEnBaseDatos = Boolean(datosJson?.results?.in_database);
+      resultados.push({
+        fuente: 'PhishTank',
+        aprobado: !estaEnBaseDatos,
+        puntuacion: estaEnBaseDatos ? 4 : 0,
+        detalle: estaEnBaseDatos ? 'Presente en base de datos de PhishTank' : 'No registrada en PhishTank',
+      });
+    } catch (_) {
+      // Ignorar fallo de API externa
+    }
   }
-  return results;
+
+  return resultados;
 }
 
-/** 16. Emulación DOM con Puppeteer */
-async function puppeteerDomAnalysis(urlStr) {
-  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
-  const page = await browser.newPage();
-  await page.goto(urlStr, { waitUntil: 'networkidle2', timeout: 15000 }).catch(() => {});
-  // Detectar formularios que solicitan credenciales
-  const forms = await page.$$eval('form', (forms) => forms.map((f) => ({ action: f.action, method: f.method, inputs: Array.from(f.elements).map(i => i.name) })));
-  const suspiciousForms = forms.filter(f => f.inputs.some(name => /pass|pwd|ssn|token|login|email/i.test(name)));
-  await browser.close();
-  const suspicious = suspiciousForms.length > 0;
+/**
+ * Validación 16-19: Emulación aislada del DOM con Puppeteer (captura de credenciales, formularios sospechosos).
+ * @param {string} cadenaUrl URL objetivo.
+ */
+export async function analisisDomPuppeteer(cadenaUrl) {
+  let navegador = null;
+  try {
+    navegador = await puppeteer.launch({
+      headless: 'new',
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+    const pagina = await navegador.newPage();
+    await pagina.goto(cadenaUrl, { waitUntil: 'networkidle2', timeout: 12000 });
+
+    const formularios = await pagina.$$eval('form', (elementosFormulario) =>
+      elementosFormulario.map((formulario) => ({
+        accion: formulario.action,
+        metodo: formulario.method,
+        entradas: Array.from(formulario.elements).map((elemento) => elemento.name || elemento.id || ''),
+      }))
+    );
+
+    const formulariosSospechosos = formularios.filter((formulario) =>
+      formulario.entradas.some((nombre) => /pass|pwd|clave|token|login|email|cedula|identificacion/i.test(nombre))
+    );
+
+    await navegador.close();
+    navegador = null;
+
+    const sospechoso = formulariosSospechosos.length > 0;
+    return {
+      aprobado: !sospechoso,
+      puntuacion: sospechoso ? 4 : 0,
+      detalle: sospechoso
+        ? `Formularios de recolección de credenciales detectados (${formulariosSospechosos.length})`
+        : 'Sin formularios sospechosos en el DOM',
+    };
+  } catch (error) {
+    if (navegador) {
+      try {
+        await navegador.close();
+      } catch (_) {}
+    }
+    return {
+      aprobado: true,
+      puntuacion: 0,
+      detalle: `Emulación DOM omitida: ${error.message}`,
+    };
+  }
+}
+
+/**
+ * Ejecuta el conjunto completo de validaciones forenses y heurísticas.
+ * @param {string} cadenaUrl URL a evaluar.
+ * @param {Array<string>} listaBlanca Lista de dominios de alta reputación.
+ * @param {object} clavesApi Claves para APIs de inteligencia de amenazas.
+ * @returns {Promise<object>} Resumen consolidado del análisis forense.
+ */
+export async function ejecutarTodasValidaciones(cadenaUrl, listaBlanca = [], clavesApi = {}) {
+  const objetoUrl = new URL(cadenaUrl);
+  const resultados = [];
+
+  // Ejecución secuencial y ordenada de validaciones técnicas
+  resultados.push(analisisEstructural(cadenaUrl));
+  resultados.push(await deteccionTyposquatting(objetoUrl.hostname, listaBlanca));
+  resultados.push(deteccionHomografosUnicode(objetoUrl.hostname));
+  resultados.push(deteccionDireccionIp(objetoUrl.hostname));
+  resultados.push(conteoSubdominios(objetoUrl.hostname));
+  resultados.push(guionesMultiples(objetoUrl.hostname));
+  resultados.push(dominioNumerico(objetoUrl.hostname));
+  resultados.push(parametrosSensibles(objetoUrl));
+  resultados.push(conteoParametros(objetoUrl));
+  resultados.push(longitudRuta(objetoUrl));
+  resultados.push(await cadenaRedirecciones(cadenaUrl));
+  resultados.push(await inspeccionSsl(objetoUrl.hostname));
+
+  const reputaciones = await reputacionExterna(cadenaUrl, clavesApi);
+  resultados.push(...reputaciones);
+
+  const resultadoDom = await analisisDomPuppeteer(cadenaUrl);
+  resultados.push(resultadoDom);
+
+  // Consolidación de puntuaciones, detalles y vector de características
+  let puntuacionTotal = 0;
+  const detalles = [];
+  const caracteristicas = {};
+
+  for (const item of resultados) {
+    puntuacionTotal += item.puntuacion || 0;
+    if (item.detalle) detalles.push(item.detalle);
+    if (item.caracteristicas) Object.assign(caracteristicas, item.caracteristicas);
+  }
+
+  // Cálculo de entropía de Shannon del nombre de host
+  const entropiaCalculada = calcularEntropiaShannon(objetoUrl.hostname.replace(/\./g, ''));
+  caracteristicas.entropia = Number(entropiaCalculada.toFixed(4));
+  if (entropiaCalculada > 4.5) {
+    puntuacionTotal += 2;
+    detalles.push(`Alta entropía en dominio (${entropiaCalculada.toFixed(2)} bits, indicio DGA)`);
+  }
+
   return {
-    passed: !suspicious,
-    score: suspicious ? 4 : 0,
-    detail: suspicious ? `Formularios sospechosos detectados (${suspiciousForms.length})` : 'Sin formularios sospechosos',
+    url: cadenaUrl,
+    puntuacionTotal,
+    detalles,
+    caracteristicas,
+    // Alias de compatibilidad
+    score: puntuacionTotal,
+    details: detalles,
+    features: caracteristicas,
   };
 }
 
-/** Ejecuta todas las validaciones y devuelve un resumen */
-export async function runAllValidations(urlStr, whitelist = [], apiKeys = {}) {
-  const urlObj = new URL(urlStr);
-  const results = [];
-  // 1‑5
-  results.push(structuralAnalysis(urlStr));
-  results.push(await typosquattingDetection(urlObj.hostname, whitelist));
-  results.push(unicodeHomographDetection(urlObj.hostname));
-  results.push(ipAddressDetection(urlObj.hostname));
-  results.push(subdomainCount(urlObj.hostname));
-  // 6‑10
-  results.push(multipleHyphens(urlObj.hostname));
-  results.push(numericDomain(urlObj.hostname));
-  results.push(sensitiveParameters(urlObj));
-  results.push(parameterCount(urlObj));
-  results.push(pathLength(urlObj));
-  // 11‑13
-  results.push(await redirectChain(urlStr));
-  results.push(await sslInspection(urlObj.hostname));
-  const external = await externalReputation(urlStr, apiKeys);
-  results.push(...external);
-  // 14
-  results.push(await puppeteerDomAnalysis(urlStr));
-
-  // Agregación de scores y features
-  let totalScore = 0;
-  const details = [];
-  const features = {};
-  for (const r of results) {
-    totalScore += r.score || 0;
-    details.push(r.detail);
-    if (r.features) Object.assign(features, r.features);
-  }
-
-  // Entropía del dominio (añadida como feature adicional)
-  const entropy = shannonEntropy(urlObj.hostname.replace(/\./g, ''));
-  features.entropy = entropy;
-  if (entropy > 4.5) { totalScore += 2; details.push('Alta entropía de dominio (>4.5)'); }
-
-  return {
-    url: urlStr,
-    score: totalScore,
-    details,
-    features,
-  };
-}
-
-/** Export helper for testing */
-export const _private = {
-  shannonEntropy,
-  structuralAnalysis,
-  typosquattingDetection,
-  unicodeHomographDetection,
-  ipAddressDetection,
-  subdomainCount,
-  multipleHyphens,
-  numericDomain,
-  sensitiveParameters,
-  parameterCount,
-  pathLength,
-  redirectChain,
-  sslInspection,
-  externalReputation,
-  puppeteerDomAnalysis,
-};
-```
-
-> **Nota**: El archivo asume que las dependencias listadas están instaladas (`npm i fast-levenshtein punycode node-forge puppeteer node-fetch`).
-
----
-
-## 3️⃣ Próximos pasos
-1. **Añadir el archivo al repositorio** y crear el primer commit de este motor.
-2. **Implementar pruebas unitarias** (`tests/engine/forensicEngine.test.js`).
-3. **Crear scripts de integración** para que el backend orquestador invoque `runAllValidations`.
-4. **Documentar** la API pública (`runAllValidations`) en el README del backend.
-
----
-
-*Este documento se guarda como `point3_engine_design.md` y el código en `backend/engine/forensicEngine.js`.*
+// Alias de compatibilidad para integración con librerías externas
+export const runAllValidations = ejecutarTodasValidaciones;
+export const shannonEntropy = calcularEntropiaShannon;

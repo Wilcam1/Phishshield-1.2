@@ -1,105 +1,108 @@
-// decisionEngine.js
-// --------------------
-// Motor de decisión y priorización de riesgo (Punto 5).
-// Combina el score del motor forense (forensicEngine) y la probabilidad del modelo
-// Random Forest (servicio ML) para asignar un nivel de riesgo (ALTO, MEDIO, BAJO).
-//
-// Configuración básica (puede sobrescribirse en tiempo de ejecución):
-//   - mlWeight: peso aplicado a la probabilidad de phishing devuelta por el modelo.
-//   - scoreFloor: puntuación mínima que fuerza al menos riesgo MEDIO.
-//   - highThreshold, mediumThreshold: límites de puntuación total para los niveles.
-//
-// Exporta la función principal `evaluateRisk` que recibe:
-//   - forensicResult: objeto devuelto por `runAllValidations` (score, features, details).
-//   - mlResult: objeto `{ prediction: 0|1, phishing_probability: number (0‑1) }`.
-//   - options (opcional) con los parámetros de configuración.
-// Devuelve:
-//   {
-//     totalScore: number,
-//     riskLevel: "ALTO"|"MEDIO"|"BAJO",
-//     details: [...],
-//     appliedFloor: boolean
-//   }
+/**
+ * decisionEngine.js
+ * -----------------
+ * Motor de decisión y priorización de riesgo para PhishShield (Punto 5).
+ * Combina la puntuación forense (forensicEngine) con la probabilidad inferida por el
+ * modelo Random Forest (servicio ML) para determinar el nivel de riesgo final
+ * (ALTO, MEDIO, BAJO), aplicando la regla de piso (Score Floor).
+ */
 
-/** Default configuration */
-const DEFAULT_OPTIONS = {
-  mlWeight: 10, // peso multiplicador para la probabilidad ML
-  scoreFloor: 5, // puntuación mínima que eleva a al menos MEDIO
-  highThreshold: 20,
-  mediumThreshold: 10,
+/** Configuración de ponderaciones y umbrales por defecto */
+export const OPCIONES_POR_DEFECTO = {
+  pesoMl: 10,           // Factor multiplicador sobre la probabilidad de phishing [0.0 - 1.0]
+  pisoPuntuacion: 5,     // Puntuación mínima de seguridad requerida ante sospecha
+  umbralAlto: 20,       // Límite para clasificar como riesgo ALTO
+  umbralMedio: 10,      // Límite para clasificar como riesgo MEDIO
 };
 
 /**
- * Calcula el score combinado y determina el nivel de riesgo.
- * @param {Object} forensicResult Resultado del motor forense.
- * @param {Object} mlResult Resultado del modelo ML.
- * @param {Object} [options] Configuración opcional.
- * @returns {Object} Evaluación de riesgo.
+ * Evalúa el riesgo consolidado de una URL analizada.
+ * @param {object} resultadoForense Objeto con puntuación y características del análisis forense.
+ * @param {object} resultadoMl Objeto con la predicción y probabilidad del microservicio ML.
+ * @param {object} [opcionesPersonalizadas] Opciones de configuración para sobrescribir umbrales.
+ * @returns {object} Evaluación completa de riesgo con nivel, detalles y regla de piso.
  */
-export function evaluateRisk(forensicResult, mlResult, options = {}) {
-  const cfg = { ...DEFAULT_OPTIONS, ...options };
+export function evaluarRiesgo(resultadoForense, resultadoMl, opcionesPersonalizadas = {}) {
+  const configuracion = { ...OPCIONES_POR_DEFECTO, ...opcionesPersonalizadas };
 
-  // Score forense ya está normalizado (≈0‑30). Convertimos la probabilidad ML a una escala
-  // comparable mediante multiplicación por mlWeight.
-  const mlScore = (mlResult.phishing_probability || 0) * cfg.mlWeight;
+  const puntuacionForense = resultadoForense?.puntuacionTotal ?? resultadoForense?.score ?? 0;
+  const probabilidadMl = resultadoMl?.probabilidadPhishing ?? resultadoMl?.phishing_probability ?? 0;
 
-  // Score total antes de aplicar floor.
-  let totalScore = forensicResult.score + mlScore;
-  let appliedFloor = false;
+  // Ponderación de la probabilidad devuelta por el modelo ML
+  const puntuacionMl = probabilidadMl * configuracion.pesoMl;
 
-  // Aplicar regla de piso: si el score forense < scoreFloor, elevar totalScore al menos a
-  // (scoreFloor + mlScore) para evitar que un bajo score forense haga que el riesgo sea bajo
-  // pese a una alta probabilidad ML.
-  if (forensicResult.score < cfg.scoreFloor) {
-    totalScore = Math.max(totalScore, cfg.scoreFloor + mlScore);
-    appliedFloor = true;
+  let puntuacionTotal = puntuacionForense + puntuacionMl;
+  let pisoAplicado = false;
+
+  // Regla de piso (Score Floor): si la heurística forense es baja pero el modelo predice alto riesgo,
+  // se eleva la puntuación al piso mínimo configurado para evitar falsos negativos críticos.
+  if (puntuacionForense < configuracion.pisoPuntuacion && probabilidadMl >= 0.5) {
+    puntuacionTotal = Math.max(puntuacionTotal, configuracion.pisoPuntuacion + puntuacionMl);
+    pisoAplicado = true;
   }
 
-  // Determinar nivel de riesgo según umbrales.
-  let riskLevel;
-  if (totalScore >= cfg.highThreshold) {
-    riskLevel = "ALTO";
-  } else if (totalScore >= cfg.mediumThreshold) {
-    riskLevel = "MEDIO";
+  // Determinación del nivel de riesgo en función de los umbrales
+  let nivelRiesgo;
+  if (puntuacionTotal >= configuracion.umbralAlto) {
+    nivelRiesgo = 'ALTO';
+  } else if (puntuacionTotal >= configuracion.umbralMedio) {
+    nivelRiesgo = 'MEDIO';
   } else {
-    riskLevel = "BAJO";
+    nivelRiesgo = 'BAJO';
   }
 
-  // Compilamos detalles útiles para el frontend.
-  const details = [];
-  details.push(`Score forense = ${forensicResult.score}`);
-  details.push(`Probabilidad ML = ${mlResult.phishing_probability?.toFixed(3) ?? "N/A"}`);
-  details.push(`Score ML ponderado = ${mlScore.toFixed(2)}`);
-  details.push(`Score total = ${totalScore.toFixed(2)}`);
-  if (appliedFloor) details.push(`Regla de piso aplicada (score forense < ${cfg.scoreFloor})`);
+  // Generación de detalles descriptivos para el panel SOC
+  const detalles = [
+    `Puntuación forense base: ${puntuacionForense}`,
+    `Probabilidad inferida por ML: ${(probabilidadMl * 100).toFixed(1)}%`,
+    `Puntuación ML ponderada: ${puntuacionMl.toFixed(2)}`,
+    `Puntuación combinada total: ${puntuacionTotal.toFixed(2)}`,
+  ];
+
+  if (pisoAplicado) {
+    detalles.push(`Regla de piso aplicada: elevada al mínimo de ${configuracion.pisoPuntuacion} por discrepancia`);
+  }
 
   return {
-    totalScore: Number(totalScore.toFixed(2)),
-    riskLevel,
-    details,
-    appliedFloor,
+    puntuacionTotal: Number(puntuacionTotal.toFixed(2)),
+    nivelRiesgo,
+    detalles,
+    pisoAplicado,
+    // Compatibilidad retroactiva
+    totalScore: Number(puntuacionTotal.toFixed(2)),
+    riskLevel: nivelRiesgo,
+    details: detalles,
+    appliedFloor: pisoAplicado,
   };
 }
 
 /**
- * Helper para transformar la respuesta del micro‑servicio ML.
- * Expected format: { prediction: 0|1, phishing_probability: number }.
+ * Normaliza la respuesta sin procesar devuelta por el microservicio de Machine Learning.
+ * @param {object} respuestaBruta Objeto JSON devuelto por la API FastAPI.
+ * @returns {object} Formato normalizado en español.
  */
-export function normalizeMlResult(raw) {
-  if (!raw) return { prediction: null, phishing_probability: 0 };
+export function normalizarResultadoMl(respuestaBruta) {
+  if (!respuestaBruta) {
+    return { prediccion: null, probabilidadPhishing: 0 };
+  }
+
+  const prediccion = respuestaBruta.prediccion ?? respuestaBruta.prediction ?? 0;
+  const probabilidadPhishing =
+    typeof respuestaBruta.probabilidadPhishing === 'number'
+      ? respuestaBruta.probabilidadPhishing
+      : typeof respuestaBruta.phishing_probability === 'number'
+      ? respuestaBruta.phishing_probability
+      : 0;
+
   return {
-    prediction: raw.prediction,
-    phishing_probability: typeof raw.phishing_probability === "number" ? raw.phishing_probability : 0,
+    prediccion,
+    probabilidadPhishing,
+    // Compatibilidad
+    prediction: prediccion,
+    phishing_probability: probabilidadPhishing,
   };
 }
 
-/**
- * Ejemplo de uso (para pruebas unitarias):
- *
- * import { evaluateRisk, normalizeMlResult } from './decisionEngine.js';
- * const forensic = { score: 12, details: [], features: {} };
- * const mlRaw = { prediction: 1, phishing_probability: 0.78 };
- * const ml = normalizeMlResult(mlRaw);
- * const result = evaluateRisk(forensic, ml);
- * console.log(result);
- */
+// Alias de compatibilidad
+export const evaluateRisk = evaluarRiesgo;
+export const normalizeMlResult = normalizarResultadoMl;
