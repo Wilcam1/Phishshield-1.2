@@ -26,41 +26,20 @@
   border: 1px solid var(--brillo-borde);
   transition: border-color var(--tiempo-hover) ease, box-shadow var(--tiempo-hover) ease;
 
-  /* Borde cónico animado en foco */
-  .borde-conico-foco {
-    position: absolute;
-    inset: -2px;
-    border-radius: calc(var(--radio-mediano) + 2px);
-    background: conic-gradient(from 0deg, var(--color-primario), #bf5af2, var(--color-seguro), var(--color-primario));
-    opacity: 0;
-    pointer-events: none;
-    z-index: 0;
-    transition: opacity var(--tiempo-hover) ease;
-    animation: rotarCono 6s linear infinite;
-  }
-
   &:focus-within {
-    border-color: transparent;
-    .borde-conico-foco {
-      opacity: 0.8;
-    }
+    border-color: var(--color-primario);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.22), 0 8px 24px rgba(0, 0, 0, 0.25);
   }
 
   &.con-formato-valido {
-    border-color: rgba(48, 209, 88, 0.4);
+    border-color: rgba(48, 209, 88, 0.5);
+
+    &:focus-within {
+      box-shadow: 0 0 0 3px rgba(48, 209, 88, 0.22), 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
   }
 }
 
-@keyframes rotarCono {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .borde-conico-foco {
-    animation: none !important;
-  }
-}
 
 .icono-enlace {
   color: var(--color-texto-terciario);
