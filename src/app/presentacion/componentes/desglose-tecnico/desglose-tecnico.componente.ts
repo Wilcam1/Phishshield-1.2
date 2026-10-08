@@ -1,20 +1,23 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { ResultadoAnalisis } from '../../../datos/modelos/analisis.modelo';
+import { IconoComponente, NombreIcono } from '../icono/icono.componente';
 
 export interface ElementoDetalle {
   etiqueta: string;
   valor: string;
   estado: 'seguro' | 'advertencia' | 'peligro';
+  icono?: NombreIcono;
 }
 
 @Component({
   selector: 'app-desglose-tecnico',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IconoComponente],
   templateUrl: './desglose-tecnico.componente.html',
   styleUrl: './desglose-tecnico.componente.scss',
 })
+
 export class DesgloseTecnicoComponente {
   @Input({ required: true }) resultado!: ResultadoAnalisis;
 
@@ -49,6 +52,7 @@ export class DesgloseTecnicoComponente {
       etiqueta: 'Dominio analizado',
       valor: dominio,
       estado: 'seguro',
+      icono: 'red',
     });
 
     // 2. Protocolo
@@ -56,6 +60,7 @@ export class DesgloseTecnicoComponente {
       etiqueta: 'Protocolo',
       valor: protocolo.toUpperCase(),
       estado: esHttps ? 'seguro' : 'advertencia',
+      icono: esHttps ? 'candado' : 'candado-abierto',
     });
 
     // 3. Subdominios
@@ -63,6 +68,7 @@ export class DesgloseTecnicoComponente {
       etiqueta: 'Subdominios',
       valor: tieneSubdominio ? 'Sí' : 'No',
       estado: tieneSubdominio ? 'advertencia' : 'seguro',
+      icono: 'enlace',
     });
 
     // 4. Longitud de URL
@@ -70,6 +76,7 @@ export class DesgloseTecnicoComponente {
       etiqueta: 'Longitud de URL',
       valor: longitudUrl > 50 ? 'Larga' : 'Normal',
       estado: longitudUrl > 50 ? 'advertencia' : 'seguro',
+      icono: 'terminal',
     });
 
     // 5. Caracteres especiales
@@ -77,6 +84,7 @@ export class DesgloseTecnicoComponente {
       etiqueta: 'Caracteres especiales',
       valor: `${caracteresEspeciales}`,
       estado: 'seguro',
+      icono: 'terminal',
     });
 
     // 6. Nivel de riesgo
@@ -90,6 +98,7 @@ export class DesgloseTecnicoComponente {
           : this.resultado.riesgo === 'medio'
             ? 'advertencia'
             : 'seguro',
+      icono: 'escudo',
     });
 
     // 7. Puntuación de Riesgo
@@ -102,6 +111,7 @@ export class DesgloseTecnicoComponente {
           : this.resultado.puntuacion <= 7
             ? 'advertencia'
             : 'peligro',
+      icono: 'cpu',
     });
 
     // 8. Probabilidad IA (ML)
@@ -114,9 +124,10 @@ export class DesgloseTecnicoComponente {
       etiqueta: 'Probabilidad IA (ML)',
       valor: textoMl,
       estado: tieneProbMl && probMl > 0.5 ? 'peligro' : 'seguro',
+      icono: 'ia-robot',
     });
 
-    // 9. 🔒 Certificado SSL
+    // 9. Certificado SSL
     if (this.resultado.inspeccionSsl) {
       const ssl = this.resultado.inspeccionSsl;
       if (ssl.tieneSsl) {
@@ -127,51 +138,58 @@ export class DesgloseTecnicoComponente {
             : 'No confiable';
 
         detalles.push({
-          etiqueta: '🔒 Certificado SSL',
+          etiqueta: 'Certificado SSL',
           valor: textoSsl,
           estado: (ssl.esConfiable || ssl.esValido) && !ssl.esAutofirmado
             ? (ssl.esReciente ? 'advertencia' : 'seguro')
             : 'peligro',
+          icono: 'candado',
         });
 
-        // 10. 📅 Antigüedad SSL
+        // 10. Antigüedad SSL
         detalles.push({
-          etiqueta: '📅 Antigüedad SSL',
+          etiqueta: 'Antigüedad SSL',
           valor: ssl.diasActivo !== undefined ? `${ssl.diasActivo} días` : 'N/A',
           estado: ssl.esReciente ? 'advertencia' : 'seguro',
+          icono: 'reloj',
         });
       } else {
         detalles.push({
-          etiqueta: '🔒 Certificado SSL',
+          etiqueta: 'Certificado SSL',
           valor: 'Sin SSL / Inseguro',
           estado: 'peligro',
+          icono: 'candado-abierto',
         });
       }
     } else {
       detalles.push({
-        etiqueta: '🔒 Certificado SSL',
+        etiqueta: 'Certificado SSL',
         valor: esHttps ? 'Válido' : 'Sin SSL / Inseguro',
         estado: esHttps ? 'seguro' : 'peligro',
+        icono: esHttps ? 'candado' : 'candado-abierto',
       });
     }
 
-    // 11. 📄 Título de la página
+    // 11. Título de la página
     if (this.resultado.inspeccionDom && this.resultado.inspeccionDom.fueAnalizado && this.resultado.inspeccionDom.titulo) {
       const titulo = this.resultado.inspeccionDom.titulo;
       const tituloCorto = titulo.length > 30 ? titulo.substring(0, 30) + '...' : titulo;
       detalles.push({
-        etiqueta: '📄 Título de la página',
+        etiqueta: 'Título de la página',
         valor: tituloCorto,
         estado: this.resultado.inspeccionDom.marcaEnTitulo ? 'peligro' : 'seguro',
+        icono: 'ojo',
       });
     } else {
       detalles.push({
-        etiqueta: '📄 Título de la página',
+        etiqueta: 'Título de la página',
         valor: 'No detectado',
         estado: 'seguro',
+        icono: 'ojo',
       });
     }
 
     return detalles;
   }
 }
+

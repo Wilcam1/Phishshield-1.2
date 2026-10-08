@@ -60,6 +60,10 @@
     border-color: var(--color-primario);
   }
 
+  .texto-opcion {
+    flex: 1;
+  }
+
   .letra-opcion {
     font-weight: 700;
     color: var(--color-primario);
@@ -96,7 +100,14 @@
   line-height: 1.45;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
+
+  .encabezado-retroalimentacion {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+  }
 
   &.exito {
     background: var(--color-seguro-fondo);
@@ -114,3 +125,4 @@
     color: var(--color-texto-secundario);
   }
 }
+

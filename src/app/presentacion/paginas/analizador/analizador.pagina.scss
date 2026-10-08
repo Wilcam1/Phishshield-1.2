@@ -2,6 +2,8 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
 }
 
 .banner-aviso-educativo {
@@ -10,6 +12,8 @@
   color: var(--color-texto-primario);
   padding: 10px var(--espaciado-lg);
   font-size: 0.82rem;
+  position: relative;
+  z-index: 10;
 
   .contenido-aviso {
     max-width: 1080px;
@@ -19,20 +23,22 @@
     gap: var(--espaciado-sm);
   }
 
-  .icono-aviso {
-    font-size: 1.1rem;
-  }
-
   .texto-aviso {
     flex: 1;
     line-height: 1.35;
   }
 
   .boton-cerrar-aviso {
-    padding: 4px 8px;
-    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
     color: var(--color-texto-secundario);
     border-radius: var(--radio-pequeno);
+    transition: color 0.15s ease, background-color 0.15s ease;
 
     &:hover {
       color: var(--color-texto-primario);
@@ -50,15 +56,24 @@
   justify-content: space-between;
   align-items: center;
   gap: var(--espaciado-md);
+  position: relative;
+  z-index: 10;
 
   .marca-sistema {
     display: flex;
     align-items: center;
     gap: var(--espaciado-sm);
 
-    .logo-escudo {
-      font-size: 2.2rem;
-      filter: drop-shadow(0 4px 10px rgba(0, 113, 227, 0.3));
+    .logo-escudo-contenedor {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 4px 12px rgba(56, 189, 248, 0.35));
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+      &:hover {
+        transform: scale(1.06);
+      }
     }
 
     .titulo-sistema {
@@ -76,6 +91,24 @@
     display: flex;
     align-items: center;
     gap: var(--espaciado-sm);
+
+    .boton-flujo-capas,
+    .boton-acceso-admin {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border-radius: var(--radio-mediano);
+      transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1),
+                  background-color 0.15s ease,
+                  border-color 0.15s ease;
+
+      &:active {
+        transform: scale(0.97);
+      }
+    }
   }
 }
 
@@ -87,14 +120,29 @@
   display: flex;
   flex-direction: column;
   gap: var(--espaciado-xl);
+  position: relative;
+  z-index: 1;
 }
 
 .seccion-hero {
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: var(--espaciado-sm);
-  padding: var(--espaciado-md) 0;
+  align-items: center;
+  gap: var(--espaciado-md);
+  padding: var(--espaciado-xs) 0 var(--espaciado-sm);
+
+  .contenedor-escudo-hero {
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+  }
+
+  .hero-textos {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espaciado-sm);
+  }
 
   .titular-grande {
     background: linear-gradient(135deg, var(--color-texto-primario) 30%, var(--color-primario));
@@ -108,10 +156,31 @@
   }
 }
 
+.seccion-progreso-escaneo {
+  width: 100%;
+  margin: 0 auto;
+}
+
 .seccion-resultados {
   display: flex;
   flex-direction: column;
   gap: var(--espaciado-lg);
+}
+
+.cascada-item {
+  animation: reveladoCascada 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--retraso-cascada, 0ms);
+}
+
+@keyframes reveladoCascada {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .animate-fade-in {
@@ -128,3 +197,11 @@
     transform: translateY(0);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .cascada-item,
+  .animate-fade-in {
+    animation: none !important;
+  }
+}
+

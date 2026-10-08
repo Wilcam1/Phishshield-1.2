@@ -1,13 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, OnDestroy, signal, SimpleChanges } from '@angular/core';
+import { IconoComponente } from '../icono/icono.componente';
 
 @Component({
   selector: 'app-visor-captura',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IconoComponente],
   templateUrl: './visor-captura.componente.html',
   styleUrl: './visor-captura.componente.scss',
 })
+
 export class VisorCapturaComponente implements OnChanges, OnDestroy {
   @Input({ required: true }) urlCaptura = '';
   @Input() urlDestino = '';

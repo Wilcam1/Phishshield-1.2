@@ -1,0 +1,174 @@
+@use '../../diseno/tokens' as *;
+
+.contenedor-capas-escaneo {
+  padding: var(--espaciado-xl);
+  border-radius: var(--radio-grande);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaciado-md);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--sombra-elevada);
+}
+
+.escaneo-cabecera {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  padding-bottom: var(--espaciado-sm);
+  border-bottom: 1px solid var(--brillo-borde);
+}
+
+.pulso-linea-radar {
+  position: absolute;
+  top: -24px;
+  left: -24px;
+  right: -24px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--color-primario) 50%, transparent 100%);
+  animation: barridoRadar 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes barridoRadar {
+  0% { transform: translateY(0); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(180px); opacity: 0; }
+}
+
+.titulo-escaneo {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-texto-primario);
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+.url-escaneo-destino {
+  font-size: 0.8rem;
+  color: var(--color-primario);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lista-capas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fila-capa {
+  display: flex;
+  align-items: center;
+  gap: var(--espaciado-md);
+  padding: 10px 14px;
+  border-radius: var(--radio-mediano);
+  background: var(--color-fondo-entrada);
+  border: 1px solid var(--brillo-borde);
+  transition: all var(--tiempo-hover) var(--resorte-critico);
+
+  &.estado-en_progreso {
+    background: var(--superficie-3);
+    border-color: var(--color-primario);
+    box-shadow: 0 0 16px var(--halo-escaneo);
+    transform: translateX(4px);
+
+    .icono-envoltorio {
+      color: var(--color-primario);
+      background: var(--color-primario-fondo);
+    }
+    .nombre-capa {
+      color: var(--color-primario);
+      font-weight: 700;
+    }
+  }
+
+  &.estado-completada {
+    opacity: 0.95;
+    .icono-envoltorio {
+      color: var(--color-seguro);
+      background: var(--color-seguro-fondo);
+    }
+  }
+
+  &.estado-pendiente {
+    opacity: 0.55;
+  }
+}
+
+.icono-envoltorio {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radio-pequeno);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--superficie-2);
+  border: 1px solid var(--brillo-borde);
+  color: var(--color-texto-secundario);
+  flex-shrink: 0;
+  transition: all var(--tiempo-hover) ease;
+}
+
+.info-capa {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.nombre-capa {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-texto-primario);
+}
+
+.descripcion-capa {
+  font-size: 0.75rem;
+  color: var(--color-texto-secundario);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.indicador-estado-capa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.punto-pendiente {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--brillo-borde-resaltado);
+}
+
+.spinner-capa {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(0, 113, 227, 0.2);
+  border-top-color: var(--color-primario);
+  border-radius: 50%;
+  animation: rotar 700ms linear infinite;
+}
+
+@keyframes rotar {
+  to { transform: rotate(360deg); }
+}
+
+.check-completado.animado {
+  display: inline-flex;
+  animation: pulsoPop 350ms var(--resorte-impulso);
+}
+
+@keyframes pulsoPop {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.25); }
+  100% { transform: scale(1); opacity: 1; }
+}

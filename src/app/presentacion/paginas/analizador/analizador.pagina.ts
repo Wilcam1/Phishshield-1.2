@@ -1,20 +1,25 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CredencialesAdministrador } from '../../../datos/modelos/administracion.modelo';
 import { AdministracionServicio } from '../../../logica/servicios/administracion.servicio';
 import { AnalisisServicio } from '../../../logica/servicios/analisis.servicio';
 import { NotificacionServicio } from '../../../logica/servicios/notificacion.servicio';
 import { SesionEstado } from '../../../logica/estado/sesion.estado';
+import { PreferenciasMovimientoServicio } from '../../../logica/servicios/preferencias-movimiento.servicio';
 import {
   AsistenteEducativoComponente,
   BarraBusquedaComponente,
+  CapasEscaneoComponente,
   CuestionarioInteractivoComponente,
   DesgloseTecnicoComponente,
   DialogoAutenticacionAdminComponente,
   DialogoUrlsCategoriaComponente,
+  Escudo3dComponente,
+  EstadoEscudo3D,
   FiltroCategoriaKpi,
   HistorialBusquedasComponente,
+  IconoComponente,
   IndicadorEstadoMotorComponente,
   ListaConsejosComponente,
   NotificacionFlotanteComponente,
@@ -31,6 +36,9 @@ import {
   imports: [
     CommonModule,
     BarraBusquedaComponente,
+    CapasEscaneoComponente,
+    Escudo3dComponente,
+    IconoComponente,
     TarjetaVeredictoComponente,
     VisorCapturaComponente,
     AsistenteEducativoComponente,
@@ -49,11 +57,12 @@ import {
   templateUrl: './analizador.pagina.html',
   styleUrl: './analizador.pagina.scss',
 })
-export class AnalizadorPaginaComponente implements OnInit {
+export class AnalizadorPaginaComponente implements OnInit, OnDestroy {
   readonly servicioAnalisis = inject(AnalisisServicio);
   readonly servicioAdmin = inject(AdministracionServicio);
   readonly servicioNotif = inject(NotificacionServicio);
   readonly sesionEstado = inject(SesionEstado);
+  readonly preferenciasMovimiento = inject(PreferenciasMovimientoServicio);
   private readonly enrutador = inject(Router);
 
   mostrarAvisoEducativo = true;
@@ -62,10 +71,32 @@ export class AnalizadorPaginaComponente implements OnInit {
   tituloModalCategoria = '';
   filtroActualCategoria: FiltroCategoriaKpi = 'todas';
   urlParaBarra = '';
+  private temporizadorTipeo?: ReturnType<typeof setInterval>;
 
   ngOnInit(): void {
     this.servicioAdmin.cargarEstadisticasPublicas().subscribe();
   }
+
+  ngOnDestroy(): void {
+    if (this.temporizadorTipeo) {
+      clearInterval(this.temporizadorTipeo);
+    }
+  }
+
+  get estadoEscudo3D(): EstadoEscudo3D {
+    if (this.servicioAnalisis.estaCargando()) {
+      return 'escaneando';
+    }
+    const resultado = this.servicioAnalisis.resultadoActual();
+    if (!resultado) {
+      return this.servicioAnalisis.mensajeError() ? 'error' : 'reposo';
+    }
+    if (resultado.riesgo === 'alto') return 'alto';
+    if (resultado.riesgo === 'medio') return 'medio';
+    return 'bajo';
+  }
+
+
 
   cerrarAvisoEducativo(): void {
     this.mostrarAvisoEducativo = false;
@@ -93,9 +124,36 @@ export class AnalizadorPaginaComponente implements OnInit {
   }
 
   cargarUrlDemo(url: string): void {
-    this.urlParaBarra = url;
-    this.analizarUrl(url);
+    if (this.temporizadorTipeo) {
+      clearInterval(this.temporizadorTipeo);
+      this.temporizadorTipeo = undefined;
+    }
+
+    if (this.preferenciasMovimiento.reduceMovimiento()) {
+      this.urlParaBarra = url;
+      this.analizarUrl(url);
+      return;
+    }
+
+    // Efecto de tipeo dinámico
+    this.urlParaBarra = '';
+    let indice = 0;
+    const totalCaracteres = url.length;
+    const retardoPorCaracter = Math.max(10, Math.floor(320 / totalCaracteres));
+
+    this.temporizadorTipeo = setInterval(() => {
+      indice++;
+      this.urlParaBarra = url.slice(0, indice);
+      if (indice >= totalCaracteres) {
+        clearInterval(this.temporizadorTipeo);
+        this.temporizadorTipeo = undefined;
+        setTimeout(() => {
+          this.analizarUrl(url);
+        }, 120);
+      }
+    }, retardoPorCaracter);
   }
+
 
   irAArquitectura(): void {
     this.enrutador.navigate(['/arquitectura']);

@@ -4,10 +4,13 @@ import { ResultadoAnalisis } from '../../../datos/modelos/analisis.modelo';
 import { FormatoFechaTuberia } from '../../tuberias/formato-fecha.tuberia';
 import { RiesgoColorTuberia } from '../../tuberias/riesgo-color.tuberia';
 
+import { MedidorRiesgoComponente } from '../medidor-riesgo/medidor-riesgo.componente';
+import { IconoComponente } from '../icono/icono.componente';
+
 @Component({
   selector: 'app-tarjeta-veredicto',
   standalone: true,
-  imports: [CommonModule, RiesgoColorTuberia, FormatoFechaTuberia],
+  imports: [CommonModule, RiesgoColorTuberia, FormatoFechaTuberia, MedidorRiesgoComponente, IconoComponente],
   templateUrl: './tarjeta-veredicto.componente.html',
   styleUrl: './tarjeta-veredicto.componente.scss',
 })

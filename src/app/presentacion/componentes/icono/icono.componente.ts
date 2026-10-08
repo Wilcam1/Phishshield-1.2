@@ -27,7 +27,10 @@ export type NombreIcono =
   | 'chevron-arriba'
   | 'bombilla'
   | 'ia-robot'
-  | 'verificado';
+  | 'verificado'
+  | 'check'
+  | 'capas';
+
 
 @Component({
   selector: 'app-icono',

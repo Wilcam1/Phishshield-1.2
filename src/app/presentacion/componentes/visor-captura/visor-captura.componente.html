@@ -1,7 +1,7 @@
 <section class="visor-captura superficie-cristal" role="region" aria-label="Vista previa de la página analizada">
   <header class="encabezado-visor">
     <div class="izquierda-cabecera">
-      <span class="icono-dispositivo" aria-hidden="true">📱</span>
+      <app-icono nombre="ojo" [tamano]="20" color="var(--color-primario)"></app-icono>
       <div>
         <h4 class="titulo-visor">Vista Previa de la Página (Emulación Headless)</h4>
         <span class="subtitulo-visor">Renderizado en navegador aislado y seguro</span>
@@ -17,7 +17,8 @@
           class="enlace-externo-seguro"
           title="Abrir destino en pestaña nueva bajo precaución"
         >
-          ↗ Abrir URL
+          <app-icono nombre="enlace" [tamano]="14"></app-icono>
+          <span>Abrir URL</span>
         </a>
       </div>
     }
@@ -38,7 +39,7 @@
         </div>
 
         <div class="indicador-carga-flotante">
-          <span class="spinner-suave" aria-hidden="true">⏳</span>
+          <app-icono nombre="reloj" [tamano]="18" color="var(--color-primario)"></app-icono>
           <div class="texto-carga-grupo">
             <strong>Generando captura ultrarrápida...</strong>
             @if (segundosEsperando() >= 3) {
@@ -54,7 +55,7 @@
     <!-- MENSAJE DE ERROR CON REINTENTO -->
     @if (tieneError()) {
       <div class="mensaje-error" role="alert">
-        <span class="icono-alerta" aria-hidden="true">⚠️</span>
+        <app-icono nombre="alerta" [tamano]="22" color="var(--color-peligro)"></app-icono>
         <div class="texto-error-grupo">
           <h5 class="titulo-error">No se pudo generar la vista previa</h5>
           <p class="detalle-error">
@@ -66,7 +67,8 @@
             (click)="reintentar()"
             title="Reintentar captura"
           >
-            🔄 Reintentar captura
+            <app-icono nombre="refrescar" [tamano]="14"></app-icono>
+            <span>Reintentar captura</span>
           </button>
         </div>
       </div>
@@ -89,7 +91,9 @@
 
   <footer class="pie-visor">
     <p>
-      💡 <strong>Nota Técnica SOC:</strong> Las capturas se ejecutan en entorno sandbox aislado mediante Puppeteer optimizado con compresión JPEG y caché local para máxima velocidad.
+      <app-icono nombre="bombilla" [tamano]="14" color="var(--color-primario)"></app-icono>
+      <strong>Nota Técnica SOC:</strong> Las capturas se ejecutan en entorno sandbox aislado mediante Puppeteer optimizado con compresión JPEG y caché local para máxima velocidad.
     </p>
   </footer>
 </section>
+

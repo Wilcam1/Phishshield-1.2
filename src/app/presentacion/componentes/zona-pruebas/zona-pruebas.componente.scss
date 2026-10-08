@@ -1,76 +1,126 @@
+@use '../../diseno/tokens' as *;
+
 .tarjeta-pruebas {
-  padding: var(--espaciado-lg);
+  padding: var(--espaciado-xl);
+  border-radius: var(--radio-grande);
   display: flex;
   flex-direction: column;
-  gap: var(--espaciado-md);
-  border-radius: var(--radio-grande);
+  gap: var(--espaciado-lg);
 }
 
 .encabezado-pruebas {
   display: flex;
-  gap: var(--espaciado-sm);
   align-items: flex-start;
+  gap: var(--espaciado-md);
 
   .icono-matraz {
-    font-size: 1.5rem;
-    line-height: 1.2;
+    color: var(--color-primario);
+    background: var(--color-primario-fondo);
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radio-mediano);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid var(--brillo-borde);
   }
 
   .titulo-pruebas {
     font-size: 1.15rem;
     font-weight: 700;
+    letter-spacing: -0.015em;
     color: var(--color-texto-primario);
-    letter-spacing: -0.01em;
+    margin-bottom: 4px;
   }
 
   .subtitulo-pruebas {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     color: var(--color-texto-secundario);
-    line-height: 1.4;
-    margin-top: 2px;
+    line-height: 1.45;
   }
 }
 
 .cuadricula-escenarios {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--espaciado-sm);
+  gap: var(--espaciado-md);
+  perspective: 1000px;
 }
 
 .boton-escenario {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--espaciado-sm);
-  padding: 12px 14px;
+  padding: 14px 16px;
   border-radius: var(--radio-mediano);
-  background: var(--color-fondo-entrada);
-  border: 1px solid var(--color-borde-cristal);
+  background: var(--superficie-2);
+  border: 1px solid var(--brillo-borde);
+  box-shadow: var(--sombra-base);
   color: var(--color-texto-primario);
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-align: left;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  will-change: transform;
+  overflow: hidden;
 
-  &:hover {
-    background: rgba(0, 0, 0, 0.08);
+  /* Resplandor radial de cursor (Spotlight) */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(180px circle at var(--x, 50%) var(--y, 50%), rgba(255, 255, 255, 0.12), transparent 70%);
+    opacity: var(--opacidad-luz, 0);
+    transition: opacity var(--tiempo-hover) ease;
+    pointer-events: none;
   }
 
-  body.modo-oscuro &:hover {
-    background: rgba(255, 255, 255, 0.1);
+  &:hover {
+    border-color: var(--brillo-borde-resaltado);
+    box-shadow: var(--sombra-elevada);
   }
 
   .icono-escenario {
-    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radio-pequeno);
+    flex-shrink: 0;
+    transition: transform var(--duracion-rapida) var(--curva-resorte);
   }
 
-  &.categoria-seguro:hover {
-    border-color: var(--color-seguro);
+  &:hover .icono-escenario {
+    transform: scale(1.15) translateZ(8px);
   }
 
-  &.categoria-advertencia:hover {
-    border-color: var(--color-advertencia);
+  .titulo-escenario {
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-align: left;
+    line-height: 1.25;
   }
 
-  &.categoria-peligro:hover {
-    border-color: var(--color-peligro);
+  &.categoria-seguro {
+    .icono-escenario {
+      color: var(--color-seguro);
+      background: var(--color-seguro-fondo);
+    }
+  }
+
+  &.categoria-advertencia {
+    .icono-escenario {
+      color: var(--color-advertencia);
+      background: var(--color-advertencia-fondo);
+    }
+  }
+
+  &.categoria-peligro {
+    .icono-escenario {
+      color: var(--color-peligro);
+      background: var(--color-peligro-fondo);
+    }
   }
 }

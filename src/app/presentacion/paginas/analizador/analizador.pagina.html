@@ -1,10 +1,14 @@
 <div class="diseno-analizador">
+  <!-- Atmósfera viva de fondo: degradado dinámico sutil y rejilla técnica -->
+  <div class="lienzo-aurora-fondo" aria-hidden="true"></div>
+  <div class="rejilla-patron-fondo" aria-hidden="true"></div>
+
   <app-notificacion-flotante />
 
   @if (mostrarAvisoEducativo) {
     <aside class="banner-aviso-educativo" role="note" aria-label="Aviso de uso educativo">
       <div class="contenido-aviso">
-        <span class="icono-aviso" aria-hidden="true">⚠️</span>
+        <app-icono nombre="alerta" [tamano]="18" color="var(--color-advertencia)"></app-icono>
         <div class="texto-aviso">
           <strong>USO EDUCATIVO & PREVENTIVO:</strong> Las heurísticas son modelos probabilísticos. Este analizador no sustituye los controles oficiales de tu entidad bancaria.
         </div>
@@ -14,7 +18,7 @@
           (click)="cerrarAvisoEducativo()"
           aria-label="Cerrar aviso informativo"
         >
-          ✕
+          <app-icono nombre="cerrar" [tamano]="16"></app-icono>
         </button>
       </div>
     </aside>
@@ -22,7 +26,9 @@
 
   <header class="barra-navegacion-superior" role="banner">
     <div class="marca-sistema">
-      <span class="logo-escudo" aria-hidden="true">🛡️</span>
+      <div class="logo-escudo-contenedor">
+        <app-icono nombre="escudo" [tamano]="32" color="var(--color-primario)"></app-icono>
+      </div>
       <div>
         <h1 class="titulo-sistema titular-mediano">PhishShield</h1>
         <span class="subtitulo-sistema">Verificador Forense de URLs & Detección de Fraude</span>
@@ -38,7 +44,7 @@
         (click)="irAArquitectura()"
         title="Ver el flujo y proceso entre capas en tiempo real"
       >
-        <span aria-hidden="true">🧬</span>
+        <app-icono nombre="capas" [tamano]="16"></app-icono>
         <span>Flujo de Capas</span>
       </button>
 
@@ -48,7 +54,7 @@
         (click)="abrirPanelAdmin()"
         title="Acceso para analistas SOC"
       >
-        <span aria-hidden="true">👮</span>
+        <app-icono nombre="candado" [tamano]="16"></app-icono>
         <span>Panel SOC</span>
       </button>
 
@@ -58,10 +64,17 @@
 
   <main class="contenedor-principal" role="main">
     <section class="seccion-hero">
-      <h2 class="titular-grande">Protege tu Entorno contra Phishing</h2>
-      <p class="subtitulo">
-        Inspección multicapa asistida por Machine Learning, emulación DOM y análisis de entropía para detectar suplantaciones antes de que comprometan tus datos.
-      </p>
+      <!-- Escudo 3D cinemático central/cabecera -->
+      <div class="contenedor-escudo-hero">
+        <app-escudo-3d [estado]="estadoEscudo3D" [altura]="250" />
+      </div>
+
+      <div class="hero-textos">
+        <h2 class="titular-grande">Protege tu Entorno contra Phishing</h2>
+        <p class="subtitulo">
+          Inspección multicapa asistida por Machine Learning, emulación DOM y análisis de entropía para detectar suplantaciones antes de que comprometan tus datos.
+        </p>
+      </div>
     </section>
 
     <!-- Barra de Búsqueda -->
@@ -72,35 +85,53 @@
       (alReportar)="reportarUrl($event)"
     />
 
-    <!-- Resultados Dinámicos del Análisis -->
+    <!-- Línea de Escaneo Progresivo Multicapa durante el análisis -->
+    @if (servicioAnalisis.estaCargando()) {
+      <div class="seccion-progreso-escaneo animate-fade-in">
+        <app-capas-escaneo [activo]="servicioAnalisis.estaCargando()" />
+      </div>
+    }
+
+    <!-- Resultados Dinámicos del Análisis en Cascada Escalonada -->
     @if (servicioAnalisis.resultadoActual(); as resultado) {
       <div class="seccion-resultados animate-fade-in">
-        <app-tarjeta-veredicto
-          [resultado]="resultado"
-        />
+        <div class="cascada-item" style="--retraso-cascada: 0ms">
+          <app-tarjeta-veredicto [resultado]="resultado" />
+        </div>
 
         @if (resultado.url.startsWith('http')) {
-          <app-visor-captura
-            [urlCaptura]="servicioAnalisis.obtenerUrlCaptura(resultado.url)"
-            [urlDestino]="resultado.url"
-          />
+          <div class="cascada-item" style="--retraso-cascada: 80ms">
+            <app-visor-captura
+              [urlCaptura]="servicioAnalisis.obtenerUrlCaptura(resultado.url)"
+              [urlDestino]="resultado.url"
+            />
+          </div>
         }
 
         @if (resultado.asistenteEducativo; as asistente) {
-          <app-asistente-educativo [asistente]="asistente" />
+          <div class="cascada-item" style="--retraso-cascada: 160ms">
+            <app-asistente-educativo [asistente]="asistente" />
+          </div>
 
           @if (asistente.cuestionario; as quiz) {
-            <app-cuestionario-interactivo [pregunta]="quiz" />
+            <div class="cascada-item" style="--retraso-cascada: 240ms">
+              <app-cuestionario-interactivo [pregunta]="quiz" />
+            </div>
           }
         }
 
         @if (resultado.consejos.length > 0) {
-          <app-lista-consejos [consejos]="resultado.consejos" />
+          <div class="cascada-item" style="--retraso-cascada: 320ms">
+            <app-lista-consejos [consejos]="resultado.consejos" />
+          </div>
         }
 
-        <app-desglose-tecnico [resultado]="resultado" />
+        <div class="cascada-item" style="--retraso-cascada: 400ms">
+          <app-desglose-tecnico [resultado]="resultado" />
+        </div>
       </div>
     }
+
 
     <!-- Zona de Pruebas Rápidas con Ejemplos Típicos -->
     <app-zona-pruebas (alSeleccionarUrl)="cargarUrlDemo($event)" />

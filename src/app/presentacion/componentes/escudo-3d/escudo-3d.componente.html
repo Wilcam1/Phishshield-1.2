@@ -1,0 +1,31 @@
+<div class="contenedor-escudo-raiz" [style.height.px]="altura">
+  <!-- Renderizado 3D acelerado por WebGL -->
+  @if (!mostrarFallback2D) {
+    <div
+      #contenedorLienzo
+      class="lienzo-escudo-3d"
+      [class.escaneando]="estado === 'escaneando'"
+      [attr.data-estado]="estado"
+      role="img"
+      aria-label="Escudo heráldico de seguridad PhishShield reflectivo e interactivo en 3D"
+    >
+      <!-- Halo de resplandor ambiental reactivo de fondo -->
+      <div class="halo-resplandor" [attr.data-estado]="estado"></div>
+    </div>
+  }
+
+  <!-- Fallback 2D refinado para prefers-reduced-motion o dispositivos sin WebGL -->
+  @if (mostrarFallback2D) {
+    <div
+      class="fallback-escudo-2d"
+      [attr.data-estado]="estado"
+      role="img"
+      aria-label="Escudo heráldico de seguridad PhishShield"
+    >
+      <div class="halo-resplandor-2d"></div>
+      <div class="emblema-vectorial">
+        <app-icono nombre="escudo" [tamano]="84" [color]="'var(--color-primario)'"></app-icono>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,40 @@
+<div class="contenedor-capas-escaneo superficie-nivel-2" role="status" aria-live="polite">
+  <div class="escaneo-cabecera">
+    <div class="pulso-linea-radar" aria-hidden="true"></div>
+    <div class="texto-cabecera-escaneo">
+      <h4 class="titulo-escaneo">Secuencia de Inspección Forense Activa</h4>
+      <span class="url-escaneo-destino texto-mono" [title]="urlObjetivo">{{ urlObjetivo }}</span>
+    </div>
+  </div>
+
+  <div class="lista-capas">
+    @for (capa of capas(); track capa.id) {
+      <div class="fila-capa" [class]="'estado-' + capa.estado">
+        <div class="icono-envoltorio">
+          <app-icono [nombre]="capa.icono" [tamano]="18" />
+        </div>
+
+        <div class="info-capa">
+          <span class="nombre-capa">{{ capa.nombre }}</span>
+          <span class="descripcion-capa">{{ capa.descripcion }}</span>
+        </div>
+
+        <div class="indicador-estado-capa">
+          @switch (capa.estado) {
+            @case ('pendiente') {
+              <span class="punto-pendiente" title="En cola"></span>
+            }
+            @case ('en_progreso') {
+              <span class="spinner-capa" aria-label="Analizando capa"></span>
+            }
+            @case ('completada') {
+              <span class="check-completado animado" aria-label="Capa verificada">
+                <app-icono nombre="copiado" [tamano]="16" color="#30d158" />
+              </span>
+            }
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

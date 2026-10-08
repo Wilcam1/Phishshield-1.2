@@ -1,0 +1,32 @@
+<div
+  class="medidor-contenedor"
+  role="progressbar"
+  [attr.aria-valuenow]="puntuacion"
+  aria-valuemin="0"
+  aria-valuemax="10"
+  [attr.aria-label]="'Puntuación de riesgo forense: ' + puntuacion + ' de 10'"
+>
+  <div class="medidor-puntuacion-grupo">
+    <span class="puntuacion-valor numero-tabular" [class]="'color-' + riesgo">
+      {{ puntuacionAnimada() }}
+    </span>
+    <span class="puntuacion-total">/ 10</span>
+  </div>
+
+  <!-- Pista y barra graduada de llenado -->
+  <div class="pista-barra">
+    <div
+      class="barra-llenado"
+      [class]="'fondo-' + riesgo"
+      [style.width.%]="porcentajeLlenado()"
+    >
+      <span class="brillo-punta"></span>
+    </div>
+  </div>
+
+  <div class="marcas-escala">
+    <span class="marca-inicio">0 Seguro</span>
+    <span class="marca-medio">5 Moderado</span>
+    <span class="marca-fin">10 Crítico</span>
+  </div>
+</div>

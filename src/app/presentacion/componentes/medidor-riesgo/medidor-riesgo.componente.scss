@@ -1,0 +1,86 @@
+@use '../../diseno/tokens' as *;
+
+.medidor-contenedor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaciado-xs);
+  width: 100%;
+}
+
+.medidor-puntuacion-grupo {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+
+  .puntuacion-valor {
+    font-size: 2.2rem;
+    font-weight: 800;
+    line-height: 1;
+
+    &.color-bajo { color: var(--color-seguro); }
+    &.color-medio { color: var(--color-advertencia); }
+    &.color-alto { color: var(--color-peligro); }
+  }
+
+  .puntuacion-total {
+    font-size: 0.95rem;
+    color: var(--color-texto-terciario);
+    font-weight: 600;
+  }
+
+  .numero-tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.pista-barra {
+  width: 100%;
+  height: 10px;
+  background: var(--superficie-3);
+  border-radius: var(--radio-pildora);
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--brillo-borde);
+}
+
+.barra-llenado {
+  height: 100%;
+  border-radius: var(--radio-pildora);
+  position: relative;
+  transition: width 150ms ease-out;
+
+  &.fondo-bajo {
+    background: linear-gradient(90deg, #30d158 0%, #34c759 100%);
+    box-shadow: 0 0 12px var(--halo-bajo);
+  }
+
+  &.fondo-medio {
+    background: linear-gradient(90deg, #ff9f0a 0%, #ff9500 100%);
+    box-shadow: 0 0 12px var(--halo-medio);
+  }
+
+  &.fondo-alto {
+    background: linear-gradient(90deg, #ff453a 0%, #ff3b30 100%);
+    box-shadow: 0 0 14px var(--halo-alto);
+  }
+
+  .brillo-punta {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    background: #ffffff;
+    opacity: 0.6;
+    border-radius: 50%;
+  }
+}
+
+.marcas-escala {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--color-texto-terciario);
+  font-weight: 500;
+  padding-top: 2px;
+}

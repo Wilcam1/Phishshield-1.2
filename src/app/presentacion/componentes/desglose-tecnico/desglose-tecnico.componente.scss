@@ -51,11 +51,19 @@
 .item-detalle {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   padding: 12px 14px;
   background: var(--color-fondo-entrada);
   border: 1px solid var(--color-borde-cristal);
   border-radius: var(--radio-mediano);
+  animation: reveladoCelda 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--retraso-celda, 0ms);
+
+  .etiqueta-contenedor {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
 
   .etiqueta-item {
     font-size: 0.75rem;
@@ -64,6 +72,7 @@
     text-transform: uppercase;
     letter-spacing: var(--rastreo-etiqueta);
   }
+
 
   .valor-item {
     font-size: 0.92rem;
@@ -83,3 +92,24 @@
     }
   }
 }
+
+@keyframes reveladoCelda {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item-detalle {
+    animation: none !important;
+  }
+  .flecha-indicador {
+    transition: none !important;
+  }
+}
+

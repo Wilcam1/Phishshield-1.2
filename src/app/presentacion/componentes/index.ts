@@ -21,3 +21,6 @@ export * from './drawer-incidente/drawer-incidente.componente';
 export * from './telemetria-servicios/telemetria-servicios.componente';
 export * from './visor-flujo-arquitectura/visor-flujo-arquitectura.componente';
 export * from './icono/icono.componente';
+export * from './capas-escaneo/capas-escaneo.componente';
+export * from './medidor-riesgo/medidor-riesgo.componente';
+export * from './escudo-3d/escudo-3d.componente';

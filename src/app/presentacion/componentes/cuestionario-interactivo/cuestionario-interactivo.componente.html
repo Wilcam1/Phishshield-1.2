@@ -1,6 +1,6 @@
 <section class="tarjeta-cuestionario superficie-cristal" role="region" aria-label="Micro-entrenamiento interactivo">
   <header class="encabezado-cuestionario">
-    <span class="icono-dardo" aria-hidden="true">🎯</span>
+    <app-icono nombre="escudo" [tamano]="20" color="var(--color-primario)"></app-icono>
     <h4 class="titulo-cuestionario">Micro-Entrenamiento (Desafío de 30 segundos)</h4>
   </header>
 
@@ -12,6 +12,8 @@
         <button
           type="button"
           class="boton-opcion"
+          appLuzCursor
+          [colorLuz]="esCorrecto(i) ? 'rgba(52, 211, 153, 0.25)' : 'rgba(56, 189, 248, 0.15)'"
           [class.correcta]="esCorrecto(i)"
           [class.incorrecta]="esIncorrecto(i)"
           [disabled]="haRespondido"
@@ -19,6 +21,12 @@
         >
           <span class="letra-opcion">{{ obtenerLetraOpcion(i) }})</span>
           <span class="texto-opcion">{{ opcion }}</span>
+          @if (esCorrecto(i)) {
+            <app-icono nombre="check" [tamano]="16" color="#34d399"></app-icono>
+          }
+          @if (esIncorrecto(i)) {
+            <app-icono nombre="alerta" [tamano]="16" color="#f87171"></app-icono>
+          }
         </button>
       }
     </div>
@@ -31,13 +39,15 @@
         role="status"
         aria-live="polite"
       >
-        <strong>
+        <div class="encabezado-retroalimentacion">
           @if (indiceSeleccionado === pregunta.respuestaCorrecta) {
-            🎉 ¡Excelente! Respuesta correcta.
+            <app-icono nombre="check" [tamano]="20" color="#34d399"></app-icono>
+            <strong>¡Excelente! Respuesta correcta.</strong>
           } @else {
-            ❌ Respuesta incorrecta.
+            <app-icono nombre="alerta" [tamano]="20" color="#f87171"></app-icono>
+            <strong>Respuesta incorrecta.</strong>
           }
-        </strong>
+        </div>
         @if (pregunta.explicacion) {
           <p class="explicacion-texto">{{ pregunta.explicacion }}</p>
         }
@@ -45,3 +55,4 @@
     }
   </div>
 </section>
+

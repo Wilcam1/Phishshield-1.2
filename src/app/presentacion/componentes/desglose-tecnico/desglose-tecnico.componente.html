@@ -7,20 +7,27 @@
     aria-controls="contenido-desglose"
   >
     <div class="izquierda-boton">
-      <span class="icono-grafico" aria-hidden="true">📊</span>
+      <app-icono nombre="terminal" [tamano]="18" color="var(--color-primario)"></app-icono>
       <span class="texto-boton">
         {{ estaExpandido ? 'Ocultar análisis técnico profundo' : 'Ver análisis técnico detallado (19 comprobaciones)' }}
       </span>
     </div>
-    <span class="flecha-indicador" [class.rotada]="estaExpandido" aria-hidden="true">▼</span>
+    <div class="flecha-indicador" [class.rotada]="estaExpandido">
+      <app-icono nombre="chevron-abajo" [tamano]="16"></app-icono>
+    </div>
   </button>
 
   @if (estaExpandido) {
     <div id="contenido-desglose" class="contenido-desglose" role="region">
       <div class="cuadricula-detalles">
-        @for (item of listaDetalles; track item.etiqueta) {
-          <div class="item-detalle">
-            <span class="etiqueta-item">{{ item.etiqueta }}</span>
+        @for (item of listaDetalles; track item.etiqueta; let i = $index) {
+          <div class="item-detalle" [style.--retraso-celda]="(i * 30) + 'ms'">
+            <div class="etiqueta-contenedor">
+              @if (item.icono) {
+                <app-icono [nombre]="item.icono" [tamano]="14" color="var(--color-texto-terciario)"></app-icono>
+              }
+              <span class="etiqueta-item">{{ item.etiqueta }}</span>
+            </div>
             <span class="valor-item" [ngClass]="'estado-' + item.estado">{{ item.valor }}</span>
           </div>
         }
@@ -28,3 +35,4 @@
     </div>
   }
 </section>
+

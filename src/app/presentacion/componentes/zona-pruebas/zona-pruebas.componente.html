@@ -1,6 +1,8 @@
-<section class="tarjeta-pruebas superficie-cristal" role="region" aria-label="Escenarios de prueba rápida">
+<section class="tarjeta-pruebas superficie-nivel-1" role="region" aria-label="Escenarios de prueba rápida">
   <header class="encabezado-pruebas">
-    <div class="icono-matraz" aria-hidden="true">🧪</div>
+    <div class="icono-matraz" aria-hidden="true">
+      <app-icono nombre="terminal" [tamano]="22" />
+    </div>
     <div>
       <h3 class="titulo-pruebas">Zona de Pruebas Rápidas</h3>
       <p class="subtitulo-pruebas">
@@ -15,10 +17,14 @@
         type="button"
         class="boton-escenario"
         [ngClass]="'categoria-' + escenario.categoria"
+        appInclinacion3d
+        appLuzCursor
         (click)="seleccionar(escenario.url)"
-        [title]="'Cargar ' + escenario.titulo"
+        [title]="'Cargar escenario: ' + escenario.titulo"
       >
-        <span class="icono-escenario" aria-hidden="true">{{ escenario.icono }}</span>
+        <span class="icono-escenario" aria-hidden="true">
+          <app-icono [nombre]="escenario.icono" [tamano]="18" />
+        </span>
         <span class="titulo-escenario">{{ escenario.titulo }}</span>
       </button>
     }
