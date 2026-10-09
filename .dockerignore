@@ -1,0 +1,11 @@
+node_modules
+dist
+.git
+.gitignore
+.env
+cache.json
+server/data
+npm-debug.log
+coverage
+__screenshots__
+.angular

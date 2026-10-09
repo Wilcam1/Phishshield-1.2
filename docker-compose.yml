@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  phishshield:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: phishshield:latest
+    container_name: phishshield-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=ChangeThisPasswordInProd123!
+      - ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+      # - VIRUSTOTAL_API_KEY=your_key_here
+      # - GOOGLE_SAFE_BROWSING_API_KEY=your_key_here
+      # - GEMINI_API_KEY=your_key_here
+    volumes:
+      - phishshield-data:/app/server/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  phishshield-data:
+    driver: local
