@@ -56,7 +56,12 @@ class PhishShieldServer {
   setupMiddleware() {
     this.app.use(cors());
     this.app.use(express.json());
-    this.app.use(express.static(path.join(__dirname, '../')));
+    
+    // Servir archivos de produccion de Angular si existen
+    const distPath = path.join(__dirname, '../dist/phishshield-angular/browser');
+    if (fs.existsSync(distPath)) {
+      this.app.use(express.static(distPath));
+    }
   }
 
   setupRoutes() {
@@ -67,9 +72,18 @@ class PhishShieldServer {
     this.app.get('/health', (req, res) => this.healthCheck(req, res));
     this.app.get('/api/screenshot', (req, res) => this.generateLocalScreenshot(req, res));
 
-    // Ruta para servir el archivo HTML principal
+    // Ruta raiz
     this.app.get('/', (req, res) => {
-      res.sendFile(path.join(__dirname, '../index.html'));
+      const distIndex = path.join(__dirname, '../dist/phishshield-angular/browser/index.html');
+      if (fs.existsSync(distIndex)) {
+        return res.sendFile(distIndex);
+      }
+      res.json({
+        servicio: 'PhishShield Forensic Engine API',
+        version: '2.0.0',
+        estado: 'operativo',
+        frontend: 'http://localhost:4200'
+      });
     });
   }
 
