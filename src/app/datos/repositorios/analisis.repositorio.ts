@@ -10,10 +10,14 @@ import {
 import {
   EstadisticasRespuestaDto,
   HistorialItemDto,
+  ReporteItemDto,
 } from '../dto/administracion.dto';
 import { AdministracionMapeador } from '../mapeadores/administracion.mapeador';
 import { AnalisisMapeador } from '../mapeadores/analisis.mapeador';
-import { ElementoHistorialGlobal } from '../modelos/administracion.modelo';
+import {
+  ElementoHistorialGlobal,
+  ReporteComunitario,
+} from '../modelos/administracion.modelo';
 import { ResultadoAnalisis } from '../modelos/analisis.modelo';
 import { EstadisticasSoc } from '../modelos/estadisticas.modelo';
 
