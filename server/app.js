@@ -215,6 +215,16 @@ class PhishShieldServer {
         res.status(400).json({ success: false, error: resultado.error });
       }
     }));
+
+    // Reentrenar microservicio de Machine Learning en caliente con los datos acumulados
+    this.app.post('/api/admin/ml/retrain', (req, res) => this.authenticateAdmin(req, res, async () => {
+      try {
+        const respuesta = await this.mlService.reentrenar();
+        res.json({ success: true, ...respuesta });
+      } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+      }
+    }));
   }
 
   async analyzeUrl(req, res) {

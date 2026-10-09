@@ -6,9 +6,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 class HistoryRepository {
-    constructor(maxEntries = 100, customFilePath = null) {
+    constructor(maxEntries = 5000, customFilePath = null) {
         this.historyFile = customFilePath || process.env.HISTORY_FILE || path.join(__dirname, '../../history.json');
-        this.maxEntries = maxEntries;
+        this.maxEntries = parseInt(process.env.MAX_HISTORY_ENTRIES || maxEntries, 10);
         this.historialAnalisis = this._loadHistory();
     }
 

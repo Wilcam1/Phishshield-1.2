@@ -1,5 +1,147 @@
 [
   {
+    "url": "https://osbuild.org/docs/user-guide/introduction/",
+    "riesgo": "bajo",
+    "indicadores": [],
+    "puntuacion": 0,
+    "probabilidad_ml": 0.13,
+    "inspeccion_ssl": {
+      "analizado": true,
+      "tieneSsl": true,
+      "autorizado": true,
+      "emisor": "Let's Encrypt",
+      "sujeto": "osbuild.org",
+      "validoDesde": "2026-08-24T06:35:23.000Z",
+      "validoHasta": "2026-11-22T06:35:22.000Z",
+      "diasActivo": 45,
+      "diasRestantes": 44,
+      "esReciente": false,
+      "esAutofirmado": false,
+      "estaExpirado": false,
+      "indicadores": [],
+      "factores": []
+    },
+    "inspeccion_dom": {
+      "analizado": true,
+      "titulo": "Introduction | Image Builder",
+      "tienePassword": false,
+      "tieneTarjeta": false,
+      "formularios": 0,
+      "iframes": 0,
+      "metaRefresh": false,
+      "marcaEnTitulo": null,
+      "indicadores": [],
+      "factores": []
+    },
+    "asistente_ia": {
+      "resumen_ia": "✅ **Sitio Verificado y Estable:** El dominio corresponde a una entidad legítima con certificado SSL maduro y confiable (Let's Encrypt), y el modelo de Inteligencia Artificial no encontró patrones de phishing.",
+      "recomendacion_ia": "El enlace presenta un perfil seguro para la navegación cotidiana.",
+      "quiz_interactivo": {
+        "pregunta": "¿Qué buena práctica de seguridad digital debes mantener incluso en sitios legítimos?",
+        "opciones": [
+          "Usar la misma contraseña en todos los servicios para no olvidarla.",
+          "Verificar que la URL en la barra de direcciones coincida con el servicio que deseas utilizar y usar autenticación en dos pasos (2FA).",
+          "Desactivar las alertas de seguridad del navegador."
+        ],
+        "respuesta_correcta": 1,
+        "explicacion": "¡Perfecto! Activar la autenticación de dos factores (2FA) y comprobar siempre el dominio en la barra de navegación son las mejores defensas para tu identidad digital."
+      },
+      "fuente": "Asistente Educativo PhishShield AI"
+    },
+    "caracteristicas_tecnicas": {
+      "dominio": "osbuild.org",
+      "protocolo": "https",
+      "subdominios": 0,
+      "esHTTPS": true,
+      "puerto": "443",
+      "longitudRuta": 30,
+      "numeroParametros": 0,
+      "parametrosSensibles": [],
+      "tieneGuionesMultiples": false,
+      "tieneNumerosEnDominio": false,
+      "esIP": false,
+      "longitudTotal": 49
+    },
+    "factores_puntuacion": [
+      "Machine Learning: Verificado limpio por modelo de clasificación (-2)",
+      "Verificado en Safe Browsing (-1)",
+      "Verificado limpio por VirusTotal (-2)"
+    ],
+    "timestamp": "2026-10-09T05:23:01.495Z"
+  },
+  {
+    "url": "https://www.bancolombia.com/personas/beneficios/tarjeta-debito",
+    "riesgo": "bajo",
+    "indicadores": [],
+    "puntuacion": 1,
+    "probabilidad_ml": 0.39,
+    "inspeccion_ssl": {
+      "analizado": true,
+      "tieneSsl": true,
+      "autorizado": true,
+      "emisor": "GlobalSign nv-sa",
+      "sujeto": "www.bancolombia.com",
+      "validoDesde": "2026-03-04T14:01:17.000Z",
+      "validoHasta": "2027-04-05T14:01:16.000Z",
+      "diasActivo": 218,
+      "diasRestantes": 178,
+      "esReciente": false,
+      "esAutofirmado": false,
+      "estaExpirado": false,
+      "indicadores": [],
+      "factores": [
+        "Certificado SSL maduro y confiable (-1)"
+      ]
+    },
+    "inspeccion_dom": {
+      "analizado": true,
+      "titulo": "Bancolombia Personas",
+      "tienePassword": false,
+      "tieneTarjeta": false,
+      "formularios": 0,
+      "iframes": 1,
+      "metaRefresh": false,
+      "marcaEnTitulo": "bancolombia",
+      "indicadores": [],
+      "factores": []
+    },
+    "asistente_ia": {
+      "resumen_ia": "✅ **Sitio Verificado y Estable:** El dominio corresponde a una entidad legítima con certificado SSL maduro y confiable (GlobalSign nv-sa), y el modelo de Inteligencia Artificial no encontró patrones de phishing.",
+      "recomendacion_ia": "El enlace presenta un perfil seguro para la navegación cotidiana.",
+      "quiz_interactivo": {
+        "pregunta": "¿Qué buena práctica de seguridad digital debes mantener incluso en sitios legítimos?",
+        "opciones": [
+          "Usar la misma contraseña en todos los servicios para no olvidarla.",
+          "Verificar que la URL en la barra de direcciones coincida con el servicio que deseas utilizar y usar autenticación en dos pasos (2FA).",
+          "Desactivar las alertas de seguridad del navegador."
+        ],
+        "respuesta_correcta": 1,
+        "explicacion": "¡Perfecto! Activar la autenticación de dos factores (2FA) y comprobar siempre el dominio en la barra de navegación son las mejores defensas para tu identidad digital."
+      },
+      "fuente": "Asistente Educativo PhishShield AI"
+    },
+    "caracteristicas_tecnicas": {
+      "dominio": "www.bancolombia.com",
+      "protocolo": "https",
+      "subdominios": 1,
+      "esHTTPS": true,
+      "puerto": "443",
+      "longitudRuta": 35,
+      "numeroParametros": 0,
+      "parametrosSensibles": [],
+      "tieneGuionesMultiples": false,
+      "tieneNumerosEnDominio": false,
+      "esIP": false,
+      "longitudTotal": 62
+    },
+    "factores_puntuacion": [
+      "Certificado SSL maduro y confiable (-1)",
+      "Verificado en Safe Browsing (-1)",
+      "Verificado limpio por VirusTotal (-2)"
+    ],
+    "timestamp": "2026-10-09T05:22:21.300Z"
+  },
+  {
     "url": "https://6357668.app.netsuite.com/app/login/secure/enterpriselogin.nl?c=6357668&redirect=%2Fapp%2Fsetup%2Frolelist.nl%3Fwhence%3D&whence=",
     "riesgo": "alto",
     "indicadores": [
@@ -5127,57 +5269,5 @@
       "Verificado limpio por VirusTotal (-2)"
     ],
     "timestamp": "2026-08-27T00:50:27.147Z"
-  },
-  {
-    "url": "google.com",
-    "riesgo": "bajo",
-    "indicadores": [],
-    "puntuacion": 3,
-    "probabilidad_ml": 0,
-    "caracteristicas_tecnicas": {
-      "dominio": "google.com",
-      "protocolo": "https",
-      "subdominios": 0,
-      "esHTTPS": true,
-      "puerto": "443",
-      "longitudRuta": 1,
-      "numeroParametros": 0,
-      "parametrosSensibles": [],
-      "tieneGuionesMultiples": false,
-      "tieneNumerosEnDominio": false,
-      "esIP": false,
-      "longitudTotal": 19
-    },
-    "factores_puntuacion": [
-      "Machine Learning: Verificado limpio por modelo de clasificación (-2)",
-      "Marcado como sospechoso por VirusTotal (+4)",
-      "Verificado en Safe Browsing (-1)"
-    ],
-    "timestamp": "2026-08-27T00:50:16.478Z"
-  },
-  {
-    "url": "https://www.bancolombia.com/personas/beneficios/tarjeta-debito",
-    "riesgo": "bajo",
-    "indicadores": [],
-    "puntuacion": 0,
-    "caracteristicas_tecnicas": {
-      "dominio": "www.bancolombia.com",
-      "protocolo": "https",
-      "subdominios": 1,
-      "esHTTPS": true,
-      "puerto": "443",
-      "longitudRuta": 35,
-      "numeroParametros": 0,
-      "parametrosSensibles": [],
-      "tieneGuionesMultiples": false,
-      "tieneNumerosEnDominio": false,
-      "esIP": false,
-      "longitudTotal": 62
-    },
-    "factores_puntuacion": [
-      "Verificado en Safe Browsing (-1)",
-      "Verificado limpio por VirusTotal (-2)"
-    ],
-    "timestamp": "2026-05-30T00:05:38.643Z"
   }
 ]

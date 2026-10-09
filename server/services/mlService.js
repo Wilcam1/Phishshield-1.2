@@ -38,6 +38,15 @@ class MlService {
       return { status: 'offline', details: error.message };
     }
   }
+
+  async reentrenar() {
+    try {
+      const response = await axios.post(`${this.serviceUrl}/retrain`, {}, { timeout: 45000 });
+      return response.data;
+    } catch (error) {
+      throw new Error(`No se pudo reentrenar el microservicio ML: ${error.message}`);
+    }
+  }
 }
 
 export default MlService;

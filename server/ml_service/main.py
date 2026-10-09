@@ -81,7 +81,23 @@ def health_check():
         "model_loaded": clf is not None
     }
 
+@app.post("/retrain")
+def retrain_model_endpoint():
+    global clf
+    try:
+        from train import train_model
+        print("[INFO] Reentrenando modelo con datos actualizados de history.json y reports.json...")
+        nuevo_clf = train_model()
+        clf = nuevo_clf
+        return {
+            "status": "ok",
+            "message": "Modelo de Machine Learning reentrenado y actualizado en caliente exitosamente con el historial acumulado."
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error durante el reentrenamiento: {str(e)}")
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
 

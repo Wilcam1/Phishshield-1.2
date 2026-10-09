@@ -117,8 +117,51 @@ def train_model():
     else:
         print("[INFO] No se detecto el archivo CSV. Generando dataset sintetico balanceado...")
         dataset = generate_synthetic_dataset(2000)
-        
-    print("[INFO] Extrayendo caracteristicas de las URLs...")
+
+    # Incorporar datos reales del historial de análisis y reportes comunitarios
+    history_path = os.path.join(os.path.dirname(__file__), "../../history.json")
+    reports_path = os.path.join(os.path.dirname(__file__), "../../reports.json")
+    real_data = []
+
+    if os.path.exists(reports_path):
+        try:
+            import json
+            with open(reports_path, "r", encoding="utf-8") as f:
+                reports = json.load(f)
+                for r in reports:
+                    target_url = f"http://{r}" if not r.startswith("http") else r
+                    real_data.append((target_url, 1))
+            print(f"[INFO] {len(real_data)} reportes comunitarios cargados para entrenamiento.")
+        except Exception as e:
+            print(f"[WARN] Error cargando reports.json: {e}")
+
+    if os.path.exists(history_path):
+        try:
+            import json
+            with open(history_path, "r", encoding="utf-8") as f:
+                hist = json.load(f)
+                hist_count = 0
+                for item in hist:
+                    u = item.get("url")
+                    if not u:
+                        continue
+                    riesgo = item.get("riesgo")
+                    score = item.get("puntuacion", 0)
+                    if riesgo == "alto" or score >= 5:
+                        real_data.append((u, 1))
+                        hist_count += 1
+                    elif riesgo == "bajo" and score <= 1:
+                        real_data.append((u, 0))
+                        hist_count += 1
+            print(f"[INFO] {hist_count} registros forenses reales agregados desde history.json.")
+        except Exception as e:
+            print(f"[WARN] Error cargando history.json: {e}")
+
+    if real_data:
+        dataset.extend(real_data)
+        random.shuffle(dataset)
+
+    print(f"[INFO] Dataset total listo: {len(dataset)} URLs combinadas. Extrayendo caracteristicas...")
     features_list = []
     labels = []
     
@@ -168,6 +211,8 @@ def train_model():
             print("[SUCCESS] El archivo CSV ha sido eliminado exitosamente.")
         except Exception as e:
             print(f"[WARNING] No se pudo eliminar el archivo CSV automaticamente: {e}")
-            
+
+    return clf
+
 if __name__ == "__main__":
     train_model()

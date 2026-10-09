@@ -108,6 +108,8 @@ export class AnalizadorPaginaComponente implements OnInit, OnDestroy {
       next: (resultado) => {
         if (resultado) {
           this.servicioNotif.mostrar('Análisis forense completado con éxito', 'exito');
+          // Actualizar inmediatamente las estadísticas del SOC para que el acumulado suba en vivo
+          this.servicioAdmin.cargarEstadisticasPublicas().subscribe();
         } else if (this.servicioAnalisis.mensajeError()) {
           this.servicioNotif.mostrar(this.servicioAnalisis.mensajeError()!, 'error');
         }
@@ -119,6 +121,9 @@ export class AnalizadorPaginaComponente implements OnInit, OnDestroy {
     this.servicioAnalisis.reportarUrl(url).subscribe({
       next: (res) => {
         this.servicioNotif.mostrar(res.mensaje, res.exito ? 'exito' : 'error');
+        if (res.exito) {
+          this.servicioAdmin.cargarEstadisticasPublicas().subscribe();
+        }
       },
     });
   }
