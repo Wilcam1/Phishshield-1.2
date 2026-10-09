@@ -6,8 +6,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 class AnalysisCache {
-    constructor(ttlMinutes = 60) {
-        this.cacheFile = path.join(__dirname, '../../cache.json');
+    constructor(ttlMinutes = 60, customFilePath = null) {
+        this.cacheFile = customFilePath || process.env.CACHE_FILE || path.join(__dirname, '../../cache.json');
         this.ttl = ttlMinutes * 60 * 1000;
         this.cache = this._loadCache();
     }
@@ -33,11 +33,11 @@ class AnalysisCache {
         return {};
     }
 
-    _saveCache() {
+    async _saveCache() {
         try {
-            fs.writeFileSync(this.cacheFile, JSON.stringify(this.cache, null, 2));
+            await fs.promises.writeFile(this.cacheFile, JSON.stringify(this.cache, null, 2), 'utf8');
         } catch (error) {
-            console.error('❌ Error guardando caché:', error.message);
+            console.error('❌ Error guardando caché de forma asíncrona:', error.message);
         }
     }
 

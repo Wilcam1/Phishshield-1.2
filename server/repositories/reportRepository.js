@@ -6,8 +6,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 class ReportRepository {
-  constructor() {
-    this.reportFile = path.join(__dirname, '../../reports.json');
+  constructor(customFilePath = null) {
+    this.reportFile = customFilePath || process.env.REPORTS_FILE || path.join(__dirname, '../../reports.json');
     this.reportesPhishing = this._loadReports();
   }
 
@@ -23,11 +23,11 @@ class ReportRepository {
     return new Set();
   }
 
-  _saveReports() {
+  async _saveReports() {
     try {
-      fs.writeFileSync(this.reportFile, JSON.stringify([...this.reportesPhishing], null, 2));
+      await fs.promises.writeFile(this.reportFile, JSON.stringify([...this.reportesPhishing], null, 2), 'utf8');
     } catch (error) {
-      console.error('❌ Error guardando reportes:', error.message);
+      console.error('❌ Error guardando reportes de forma asíncrona:', error.message);
     }
   }
 

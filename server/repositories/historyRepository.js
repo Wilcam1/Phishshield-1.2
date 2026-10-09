@@ -6,8 +6,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 class HistoryRepository {
-    constructor(maxEntries = 100) {
-        this.historyFile = path.join(__dirname, '../../history.json');
+    constructor(maxEntries = 100, customFilePath = null) {
+        this.historyFile = customFilePath || process.env.HISTORY_FILE || path.join(__dirname, '../../history.json');
         this.maxEntries = maxEntries;
         this.historialAnalisis = this._loadHistory();
     }
@@ -23,11 +23,11 @@ class HistoryRepository {
         return [];
     }
 
-    _saveHistory() {
+    async _saveHistory() {
         try {
-            fs.writeFileSync(this.historyFile, JSON.stringify(this.historialAnalisis, null, 2));
+            await fs.promises.writeFile(this.historyFile, JSON.stringify(this.historialAnalisis, null, 2), 'utf8');
         } catch (error) {
-            console.error('❌ Error guardando historial:', error.message);
+            console.error('❌ Error guardando historial de forma asíncrona:', error.message);
         }
     }
 

@@ -8,6 +8,8 @@ import { fileURLToPath } from 'url';
 import fs from 'fs';
 import puppeteer from 'puppeteer';
 
+import compression from 'compression';
+
 // Importar los módulos refactorizados
 import UrlAnalyzer from './analyzers/urlAnalyzer.js';
 import TyposquattingDetector from './analyzers/typosquattingDetector.js';
@@ -29,25 +31,25 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 class PhishShieldServer {
-  constructor() {
+  constructor(options = {}) {
     this.app = express();
-    this.port = process.env.PORT || 3000;
+    this.port = options.port || process.env.PORT || 3000;
 
-    // Inyectar dependencias
-    this.urlAnalyzer = new UrlAnalyzer();
-    this.typosquattingDetector = new TyposquattingDetector();
-    this.riskCalculator = new RiskCalculator();
-    this.sslInspector = new SslInspector();
-    this.domInspector = new DomInspector();
-    this.phishTankService = new PhishTankService();
-    this.safeBrowsingService = new SafeBrowsingService();
-    this.virusTotalService = new VirusTotalService();
-    this.reportRepository = new ReportRepository();
-    this.historyRepository = new HistoryRepository();
-    this.cache = new AnalysisCache();
-    this.mlService = new MlService();
-    this.aiExplanationService = new AiExplanationService();
-    this.authService = new AuthService();
+    // Inyectar dependencias con posibilidad de overrides (útil para tests e integración aislada)
+    this.urlAnalyzer = options.urlAnalyzer || new UrlAnalyzer();
+    this.typosquattingDetector = options.typosquattingDetector || new TyposquattingDetector();
+    this.riskCalculator = options.riskCalculator || new RiskCalculator();
+    this.sslInspector = options.sslInspector || new SslInspector();
+    this.domInspector = options.domInspector || new DomInspector();
+    this.phishTankService = options.phishTankService || new PhishTankService();
+    this.safeBrowsingService = options.safeBrowsingService || new SafeBrowsingService();
+    this.virusTotalService = options.virusTotalService || new VirusTotalService();
+    this.reportRepository = options.reportRepository || new ReportRepository();
+    this.historyRepository = options.historyRepository || new HistoryRepository();
+    this.cache = options.cache || new AnalysisCache();
+    this.mlService = options.mlService || new MlService();
+    this.aiExplanationService = options.aiExplanationService || new AiExplanationService();
+    this.authService = options.authService || new AuthService();
 
     this.screenshotCache = new Map();
 
@@ -62,6 +64,9 @@ class PhishShieldServer {
       contentSecurityPolicy: false, // Desactivado para no bloquear WebGL/Three.js local en desarrollo
       crossOriginEmbedderPolicy: false
     }));
+
+    // 2. Compresión HTTP Gzip/Deflate para alto rendimiento en payloads
+    this.app.use(compression());
 
     // 2. CORS restrictivo parametrizable
     const allowedOriginsEnv = process.env.ALLOWED_ORIGINS;
@@ -539,13 +544,28 @@ class PhishShieldServer {
   }
 
   start() {
-    this.app.listen(this.port, () => {
+    this.server = this.app.listen(this.port, () => {
       console.log(`🚀 Servidor PhishShield ejecutándose en http://localhost:${this.port}`);
       console.log(`📊 Endpoints disponibles:`);
       console.log(`   POST /analizar - Analizar URL`);
       console.log(`   POST /reportar - Reportar phishing`);
       console.log(`   GET  /estadisticas - Ver estadísticas`);
       console.log(`   GET  /health - Estado del servidor`);
+    });
+    return this.server;
+  }
+
+  stop() {
+    return new Promise((resolve, reject) => {
+      if (this.server) {
+        this.server.close((err) => {
+          if (err) return reject(err);
+          console.log('🛑 Servidor PhishShield cerrado limpiamente');
+          resolve();
+        });
+      } else {
+        resolve();
+      }
     });
   }
 }

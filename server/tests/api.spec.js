@@ -1,14 +1,41 @@
-import { describe, it, expect, beforeAll } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import request from 'supertest';
+import os from 'os';
+import path from 'path';
+import fs from 'fs';
 import PhishShieldServer from '../app.js';
+import HistoryRepository from '../repositories/historyRepository.js';
+import ReportRepository from '../repositories/reportRepository.js';
+import AnalysisCache from '../services/cacheService.js';
 
 describe('Express API Endpoints (Backend Integration Tests)', () => {
   let app;
   let serverInstance;
+  let tempHistoryFile;
+  let tempReportsFile;
+  let tempCacheFile;
 
   beforeAll(() => {
-    serverInstance = new PhishShieldServer();
+    const timestamp = Date.now();
+    tempHistoryFile = path.join(os.tmpdir(), `phish-test-history-${timestamp}.json`);
+    tempReportsFile = path.join(os.tmpdir(), `phish-test-reports-${timestamp}.json`);
+    tempCacheFile = path.join(os.tmpdir(), `phish-test-cache-${timestamp}.json`);
+
+    serverInstance = new PhishShieldServer({
+      historyRepository: new HistoryRepository(50, tempHistoryFile),
+      reportRepository: new ReportRepository(tempReportsFile),
+      cache: new AnalysisCache(60, tempCacheFile)
+    });
     app = serverInstance.app;
+  });
+
+  afterAll(() => {
+    // Limpieza de artefactos de prueba temporales
+    try {
+      if (fs.existsSync(tempHistoryFile)) fs.unlinkSync(tempHistoryFile);
+      if (fs.existsSync(tempReportsFile)) fs.unlinkSync(tempReportsFile);
+      if (fs.existsSync(tempCacheFile)) fs.unlinkSync(tempCacheFile);
+    } catch {}
   });
 
   describe('GET /health', () => {
@@ -119,6 +146,25 @@ describe('Express API Endpoints (Backend Integration Tests)', () => {
     it('debe bloquear acceso a /api/admin/export/reportes sin token de autorización', async () => {
       const res = await request(app).get('/api/admin/export/reportes');
       expect([401, 403]).toContain(res.status);
+    });
+  });
+
+  describe('Rendimiento y Concurrencia (Load & Resilience)', () => {
+    it('debe soportar ráfagas concurrentes en /estadisticas sin degradación', async () => {
+      const peticiones = Array.from({ length: 15 }, () => request(app).get('/estadisticas'));
+      const respuestas = await Promise.all(peticiones);
+
+      respuestas.forEach(res => {
+        expect(res.status).toBe(200);
+        expect(res.body.total_analisis).toBeDefined();
+      });
+    });
+
+    it('debe soportar compresión gzip cuando el cliente envía Accept-Encoding', async () => {
+      const res = await request(app)
+        .get('/health')
+        .set('Accept-Encoding', 'gzip, deflate');
+      expect(res.status).toBe(200);
     });
   });
 });
