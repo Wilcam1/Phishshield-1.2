@@ -16,9 +16,12 @@ services:
       - ADMIN_USERNAME=admin
       - ADMIN_PASSWORD=ChangeThisPasswordInProd123!
       - ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+      - ML_SERVICE_URL=http://phishshield-ml:8000
       # - VIRUSTOTAL_API_KEY=your_key_here
       # - GOOGLE_SAFE_BROWSING_API_KEY=your_key_here
       # - GEMINI_API_KEY=your_key_here
+    depends_on:
+      - phishshield-ml
     volumes:
       - phishshield-data:/app/server/data
     healthcheck:
@@ -27,6 +30,22 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
+
+  phishshield-ml:
+    image: python:3.11-slim
+    container_name: phishshield-ml
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./server/ml_service:/app
+    command: sh -c "pip install --no-cache-dir -r requirements.txt && python main.py"
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
 volumes:
   phishshield-data:

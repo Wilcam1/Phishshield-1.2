@@ -45,3 +45,6 @@ Thumbs.db
 .env
 cache.json
 server/data/
+server/ml_service/venv/
+server/ml_service/**/__pycache__/
+*.pyc
