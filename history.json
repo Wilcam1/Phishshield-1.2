@@ -1,5 +1,332 @@
 [
   {
+    "url": "https://6357668.app.netsuite.com/app/login/secure/enterpriselogin.nl?c=6357668&redirect=%2Fapp%2Fsetup%2Frolelist.nl%3Fwhence%3D&whence=",
+    "riesgo": "alto",
+    "indicadores": [
+      "📏 URL excesivamente larga (posible ofuscación)",
+      "🚨 FORMULARIO DE ACCESO - La página contiene campos para ingresar contraseñas en un dominio no oficial"
+    ],
+    "puntuacion": 7,
+    "probabilidad_ml": null,
+    "inspeccion_ssl": {
+      "analizado": true,
+      "tieneSsl": true,
+      "autorizado": true,
+      "emisor": "DigiCert Inc",
+      "sujeto": "*.app.netsuite.com",
+      "validoDesde": "2025-11-16T00:00:00.000Z",
+      "validoHasta": "2026-11-17T23:59:59.000Z",
+      "diasActivo": 327,
+      "diasRestantes": 39,
+      "esReciente": false,
+      "esAutofirmado": false,
+      "estaExpirado": false,
+      "indicadores": [],
+      "factores": [
+        "Certificado SSL maduro y confiable (-1)"
+      ]
+    },
+    "inspeccion_dom": {
+      "analizado": true,
+      "titulo": "NetSuite Login",
+      "tienePassword": true,
+      "tieneTarjeta": false,
+      "formularios": 1,
+      "iframes": 0,
+      "metaRefresh": false,
+      "marcaEnTitulo": null,
+      "indicadores": [
+        "🚨 FORMULARIO DE ACCESO - La página contiene campos para ingresar contraseñas en un dominio no oficial"
+      ],
+      "factores": [
+        "Formulario de contraseña en dominio no oficial (+5)"
+      ]
+    },
+    "asistente_ia": {
+      "resumen_ia": "🚨 **Captura No Autorizada de Datos:** Esta página contiene formularios para ingresar contraseñas maestras, pero el dominio no cuenta con verificación de autenticidad ni reputación oficial.",
+      "recomendacion_ia": "No completes ningún campo. Notifica de inmediato al área de Tecnología si recibiste este enlace en un correo corporativo.",
+      "quiz_interactivo": {
+        "pregunta": "¿Qué debes hacer si una página web desconocida te pide tu contraseña o tarjeta de crédito?",
+        "opciones": [
+          "Ingresar los datos para probar si el sistema los rechaza.",
+          "Cerrar la página de inmediato y verificar con el canal oficial de la empresa.",
+          "Reenviar el enlace a todos tus compañeros de trabajo."
+        ],
+        "respuesta_correcta": 1,
+        "explicacion": "¡Exacto! Nunca debes ingresar información sensible en sitios cuya procedencia no esté 100% verificada."
+      },
+      "fuente": "Asistente Educativo PhishShield AI"
+    },
+    "caracteristicas_tecnicas": {
+      "dominio": "6357668.app.netsuite.com",
+      "protocolo": "https",
+      "subdominios": 2,
+      "esHTTPS": true,
+      "puerto": "443",
+      "longitudRuta": 36,
+      "numeroParametros": 3,
+      "parametrosSensibles": [],
+      "tieneGuionesMultiples": false,
+      "tieneNumerosEnDominio": true,
+      "esIP": false,
+      "longitudTotal": 136
+    },
+    "factores_puntuacion": [
+      "Certificado SSL maduro y confiable (-1)",
+      "Formulario de contraseña en dominio no oficial (+5)",
+      "URL muy larga (+2)",
+      "Indicadores detectados: 2 (+2)",
+      "Números en dominio (+1)",
+      "Verificado en Safe Browsing (-1)",
+      "Verificado limpio por VirusTotal (-2)"
+    ],
+    "timestamp": "2026-10-09T04:10:19.966Z"
+  },
+  {
+    "url": "https://secure-bancolombia-login.com/verificar",
+    "riesgo": "alto",
+    "indicadores": [
+      "🎯 POSIBLE SUPLANTACIÓN - Utiliza el nombre oficial de \"bancolombia\" en un dominio no autorizado",
+      "🕵️ Contiene patrón sospechoso: \"-login\"",
+      "🕵️ Contiene patrón sospechoso: \"secure-\"",
+      "🚨 Dominio en lista negra - Posible phishing confirmado"
+    ],
+    "puntuacion": 10,
+    "probabilidad_ml": null,
+    "inspeccion_ssl": {
+      "analizado": true,
+      "tieneSsl": false,
+      "error": "getaddrinfo ENOTFOUND secure-bancolombia-login.com",
+      "indicadores": [],
+      "factores": []
+    },
+    "inspeccion_dom": {
+      "analizado": false,
+      "error": "net::ERR_NAME_NOT_RESOLVED at https://secure-bancolombia-login.com/verificar",
+      "indicadores": [],
+      "factores": []
+    },
+    "asistente_ia": {
+      "resumen_ia": "🎯 **Suplantación de Marca (Typosquatting):** El dominio analizado imita intencionalmente el nombre de una entidad reconocida cambiando sutilmente algunas letras o agregando palabras como \"-login\" o \"-seguro\".",
+      "recomendacion_ia": "No inicies sesión ni proporciones números de tarjeta. Escribe siempre la dirección oficial directamente en la barra de tu navegador.",
+      "quiz_interactivo": {
+        "pregunta": "¿Cuál es la forma más segura de ingresar a tu cuenta bancaria o servicio corporativo?",
+        "opciones": [
+          "Hacer clic directamente en los enlaces recibidos por correo o WhatsApp.",
+          "Escribir manualmente la dirección oficial en la barra del navegador o usar los marcadores guardados.",
+          "Verificar únicamente que el sitio tenga el candado verde/gris de HTTPS."
+        ],
+        "respuesta_correcta": 1,
+        "explicacion": "¡Excelente! Escribir la URL oficial tú mismo o usar marcadores de confianza evita caer en dominios similares creados por atacantes para robar credenciales."
+      },
+      "fuente": "Asistente Educativo PhishShield AI"
+    },
+    "caracteristicas_tecnicas": {
+      "dominio": "secure-bancolombia-login.com",
+      "protocolo": "https",
+      "subdominios": 0,
+      "esHTTPS": true,
+      "puerto": "443",
+      "longitudRuta": 10,
+      "numeroParametros": 0,
+      "parametrosSensibles": [],
+      "tieneGuionesMultiples": false,
+      "tieneNumerosEnDominio": false,
+      "esIP": false,
+      "longitudTotal": 46
+    },
+    "factores_puntuacion": [
+      "Reportado manualmente como Phishing (+10)",
+      "Detectado por Google Safe Browsing (+5)",
+      "Typosquatting detectado (+4)",
+      "Indicadores detectados: 3 (+3)",
+      "Verificado limpio por VirusTotal (-2)"
+    ],
+    "timestamp": "2026-10-09T04:10:01.454Z"
+  },
+  {
+    "url": "https://envios-gratis-hoy-",
+    "riesgo": "bajo",
+    "indicadores": [
+      "🕵️ Múltiples guiones en dominio (técnica común en phishing)"
+    ],
+    "puntuacion": 2,
+    "probabilidad_ml": null,
+    "inspeccion_ssl": {
+      "analizado": true,
+      "tieneSsl": false,
+      "error": "getaddrinfo ENOTFOUND envios-gratis-hoy-",
+      "indicadores": [],
+      "factores": []
+    },
+    "inspeccion_dom": {
+      "analizado": false,
+      "error": "net::ERR_NAME_NOT_RESOLVED at https://envios-gratis-hoy-",
+      "indicadores": [],
+      "factores": []
+    },
+    "asistente_ia": {
+      "resumen_ia": "✅ **Sitio Verificado y Estable:** El dominio corresponde a una entidad legítima con certificado SSL maduro y confiable (Entidad reconocida), y el modelo de Inteligencia Artificial no encontró patrones de phishing.",
+      "recomendacion_ia": "El enlace presenta un perfil seguro para la navegación cotidiana.",
+      "quiz_interactivo": {
+        "pregunta": "¿Qué buena práctica de seguridad digital debes mantener incluso en sitios legítimos?",
+        "opciones": [
+          "Usar la misma contraseña en todos los servicios para no olvidarla.",
+          "Verificar que la URL en la barra de direcciones coincida con el servicio que deseas utilizar y usar autenticación en dos pasos (2FA).",
+          "Desactivar las alertas de seguridad del navegador."
+        ],
+        "respuesta_correcta": 1,
+        "explicacion": "¡Perfecto! Activar la autenticación de dos factores (2FA) y comprobar siempre el dominio en la barra de navegación son las mejores defensas para tu identidad digital."
+      },
+      "fuente": "Asistente Educativo PhishShield AI"
+    },
+    "caracteristicas_tecnicas": {
+      "dominio": "envios-gratis-hoy-",
+      "protocolo": "https",
+      "subdominios": -1,
+      "esHTTPS": true,
+      "puerto": "443",
+      "longitudRuta": 1,
+      "numeroParametros": 0,
+      "parametrosSensibles": [],
+      "tieneGuionesMultiples": true,
+      "tieneNumerosEnDominio": false,
+      "esIP": false,
+      "longitudTotal": 27
+    },
+    "factores_puntuacion": [
+      "Múltiples guiones en dominio (+2)",
+      "Indicadores detectados: 1 (+1)",
+      "Verificado en Safe Browsing (-1)"
+    ],
+    "timestamp": "2026-10-09T04:09:50.031Z"
+  },
+  {
+    "url": "https://envios-gratis-hoy-ofertas.com/login?password=abc",
+    "riesgo": "medio",
+    "indicadores": [
+      "⚡ Contiene parámetros sensibles: password",
+      "🕵️ Múltiples guiones en dominio (técnica común en phishing)"
+    ],
+    "puntuacion": 4,
+    "probabilidad_ml": null,
+    "inspeccion_ssl": {
+      "analizado": true,
+      "tieneSsl": false,
+      "error": "getaddrinfo ENOTFOUND envios-gratis-hoy-ofertas.com",
+      "indicadores": [],
+      "factores": []
+    },
+    "inspeccion_dom": {
+      "analizado": false,
+      "error": "net::ERR_NAME_NOT_RESOLVED at https://envios-gratis-hoy-ofertas.com/login?password=abc",
+      "indicadores": [],
+      "factores": []
+    },
+    "asistente_ia": {
+      "resumen_ia": "⚠️ **Indicadores Sospechosos:** La URL presenta anomalías estructurales (como longitud excesiva, múltiples subdominios o parámetros inusuales) que ameritan precaución.",
+      "recomendacion_ia": "Revisa cuidadosamente el contenido antes de compartir datos.",
+      "quiz_interactivo": {
+        "pregunta": "¿Cuál de estas opciones representa una señal de alerta común en enlaces fraudulentos?",
+        "opciones": [
+          "El dominio contiene múltiples subdominios confusos y guiones en el nombre.",
+          "El sitio web carga en menos de dos segundos.",
+          "El enlace termina en '.com' oficial."
+        ],
+        "respuesta_correcta": 0,
+        "explicacion": "¡Así es! El uso de múltiples subdominios y guiones es una técnica recurrente para intentar confundir al usuario sobre el verdadero destino web."
+      },
+      "fuente": "Asistente Educativo PhishShield AI"
+    },
+    "caracteristicas_tecnicas": {
+      "dominio": "envios-gratis-hoy-ofertas.com",
+      "protocolo": "https",
+      "subdominios": 0,
+      "esHTTPS": true,
+      "puerto": "443",
+      "longitudRuta": 6,
+      "numeroParametros": 1,
+      "parametrosSensibles": [
+        "password"
+      ],
+      "tieneGuionesMultiples": true,
+      "tieneNumerosEnDominio": false,
+      "esIP": false,
+      "longitudTotal": 56
+    },
+    "factores_puntuacion": [
+      "Parámetros sensibles en URL (+3)",
+      "Múltiples guiones en dominio (+2)",
+      "Indicadores detectados: 2 (+2)",
+      "Verificado en Safe Browsing (-1)",
+      "Verificado limpio por VirusTotal (-2)"
+    ],
+    "timestamp": "2026-10-09T04:09:38.712Z"
+  },
+  {
+    "url": "http://192.168.1.1/login",
+    "riesgo": "medio",
+    "indicadores": [
+      "🌐 Usa dirección IP en lugar de dominio legítimo",
+      "🔓 Usa HTTP inseguro en lugar de HTTPS",
+      "🔓 Sitio web sin cifrado SSL/TLS (utiliza protocolo HTTP inseguro)"
+    ],
+    "puntuacion": 6,
+    "probabilidad_ml": null,
+    "inspeccion_ssl": {
+      "analizado": true,
+      "tieneSsl": false,
+      "indicadores": [
+        "🔓 Sitio web sin cifrado SSL/TLS (utiliza protocolo HTTP inseguro)"
+      ],
+      "factores": []
+    },
+    "inspeccion_dom": {
+      "analizado": false,
+      "error": "Navigation timeout of 8000 ms exceeded",
+      "indicadores": [],
+      "factores": []
+    },
+    "asistente_ia": {
+      "resumen_ia": "⚠️ **Conexión Insegura / Servidor Directo:** Esta URL utiliza el protocolo HTTP no cifrado. Además, su certificado de seguridad no es confiable.",
+      "recomendacion_ia": "Ten precaución. No transmitas información confidencial a través de conexiones sin cifrar.",
+      "quiz_interactivo": {
+        "pregunta": "¿Por qué es riesgoso navegar en un sitio que utiliza 'http://' en lugar de 'https://'?",
+        "opciones": [
+          "Porque la información viaja en texto plano y puede ser interceptada por terceros en la red.",
+          "Porque los sitios HTTP son automáticamente eliminados por los navegadores.",
+          "Porque no permite reproducir videos en línea."
+        ],
+        "respuesta_correcta": 0,
+        "explicacion": "¡Correcto! En los sitios 'http://' sin cifrar, cualquier persona en la misma red Wi-Fi o punto de acceso podría interceptar las contraseñas que envíes."
+      },
+      "fuente": "Asistente Educativo PhishShield AI"
+    },
+    "caracteristicas_tecnicas": {
+      "dominio": "192.168.1.1",
+      "protocolo": "http",
+      "subdominios": 2,
+      "esHTTPS": false,
+      "puerto": "80",
+      "longitudRuta": 6,
+      "numeroParametros": 0,
+      "parametrosSensibles": [],
+      "tieneGuionesMultiples": false,
+      "tieneNumerosEnDominio": true,
+      "esIP": true,
+      "longitudTotal": 24
+    },
+    "factores_puntuacion": [
+      "Usa dirección IP (+3)",
+      "Protocolo HTTP inseguro (+2)",
+      "Indicadores detectados: 3 (+3)",
+      "Números en dominio (+1)",
+      "Verificado en Safe Browsing (-1)",
+      "Verificado limpio por VirusTotal (-2)"
+    ],
+    "timestamp": "2026-10-09T04:09:29.447Z"
+  },
+  {
     "url": "https://bancolombia.com",
     "riesgo": "bajo",
     "indicadores": [],
@@ -4852,134 +5179,5 @@
       "Verificado limpio por VirusTotal (-2)"
     ],
     "timestamp": "2026-05-30T00:05:38.643Z"
-  },
-  {
-    "url": "https://www.bancodebogota.com/personas/tarjetas-de-credito?utm_source=google&utm_medium=search&utm_campaign=tcdg-gg-sr-br-ccn-bdb26202p_aon_brand_potenciales_sh_mar_2026&utm_content=texto&utm_term=bdb26202p_aon_brand_potenciales_sh_mar_2026&gad_source=1&gad_campaignid=19510037198&gbraid=0AAAAAC_GlEpKT73LXMOAqjx9ZAlhsKHfh&gclid=CjwKCAjw8uTQBhAdEiwAVvtJyh2FFrScsQPcFznIb36AjnoNkLxyOn3Q-xDhMLfkprErQ9oXqn81NRoCtUQQAvD_BwE",
-    "riesgo": "bajo",
-    "indicadores": [
-      "📏 URL excesivamente larga (posible ofuscación)"
-    ],
-    "puntuacion": 3,
-    "caracteristicas_tecnicas": {
-      "dominio": "www.bancodebogota.com",
-      "protocolo": "https",
-      "subdominios": 1,
-      "esHTTPS": true,
-      "puerto": "443",
-      "longitudRuta": 29,
-      "numeroParametros": 9,
-      "parametrosSensibles": [],
-      "tieneGuionesMultiples": false,
-      "tieneNumerosEnDominio": false,
-      "esIP": false,
-      "longitudTotal": 420
-    },
-    "factores_puntuacion": [
-      "URL muy larga (+2)",
-      "Indicadores detectados: 1 (+1)",
-      "Muchos parámetros (+1)",
-      "Verificado en Safe Browsing (-1)"
-    ],
-    "timestamp": "2026-05-30T00:00:44.208Z"
-  },
-  {
-    "url": "https://www.wallpaperflare.com/search?wallpaper=iphone+xr",
-    "riesgo": "bajo",
-    "indicadores": [],
-    "puntuacion": 0,
-    "caracteristicas_tecnicas": {
-      "dominio": "www.wallpaperflare.com",
-      "protocolo": "https",
-      "subdominios": 1,
-      "esHTTPS": true,
-      "puerto": "443",
-      "longitudRuta": 7,
-      "numeroParametros": 1,
-      "parametrosSensibles": [],
-      "tieneGuionesMultiples": false,
-      "tieneNumerosEnDominio": false,
-      "esIP": false,
-      "longitudTotal": 57
-    },
-    "factores_puntuacion": [
-      "Verificado en Safe Browsing (-1)"
-    ],
-    "timestamp": "2026-05-29T23:59:58.783Z"
-  },
-  {
-    "url": "https://www.shein.com.co/user/auth/login?direction=nav",
-    "riesgo": "bajo",
-    "indicadores": [],
-    "puntuacion": 0,
-    "caracteristicas_tecnicas": {
-      "dominio": "www.shein.com.co",
-      "protocolo": "https",
-      "subdominios": 2,
-      "esHTTPS": true,
-      "puerto": "443",
-      "longitudRuta": 16,
-      "numeroParametros": 1,
-      "parametrosSensibles": [],
-      "tieneGuionesMultiples": false,
-      "tieneNumerosEnDominio": false,
-      "esIP": false,
-      "longitudTotal": 54
-    },
-    "factores_puntuacion": [
-      "Verificado en Safe Browsing (-1)",
-      "Verificado limpio por VirusTotal (-2)"
-    ],
-    "timestamp": "2026-05-29T23:27:01.927Z"
-  },
-  {
-    "url": "https://www.bancolombia.com/personas/beneficios/tarjeta-debito",
-    "riesgo": "alto",
-    "indicadores": [],
-    "puntuacion": 7,
-    "caracteristicas_tecnicas": {
-      "dominio": "www.bancolombia.com",
-      "protocolo": "https",
-      "subdominios": 1,
-      "esHTTPS": true,
-      "puerto": "443",
-      "longitudRuta": 35,
-      "numeroParametros": 0,
-      "parametrosSensibles": [],
-      "tieneGuionesMultiples": false,
-      "tieneNumerosEnDominio": false,
-      "esIP": false,
-      "longitudTotal": 62
-    },
-    "factores_puntuacion": [
-      "Reportado manualmente como Phishing (+10)",
-      "Verificado en Safe Browsing (-1)",
-      "Verificado limpio por VirusTotal (-2)"
-    ],
-    "timestamp": "2026-05-29T23:20:20.510Z"
-  },
-  {
-    "url": "https://www.shein.com.co/user/auth/login?direction=nav",
-    "riesgo": "bajo",
-    "indicadores": [],
-    "puntuacion": 0,
-    "caracteristicas_tecnicas": {
-      "dominio": "www.shein.com.co",
-      "protocolo": "https",
-      "subdominios": 2,
-      "esHTTPS": true,
-      "puerto": "443",
-      "longitudRuta": 16,
-      "numeroParametros": 1,
-      "parametrosSensibles": [],
-      "tieneGuionesMultiples": false,
-      "tieneNumerosEnDominio": false,
-      "esIP": false,
-      "longitudTotal": 54
-    },
-    "factores_puntuacion": [
-      "Verificado en Safe Browsing (-1)",
-      "Verificado limpio por VirusTotal (-2)"
-    ],
-    "timestamp": "2026-05-14T04:09:43.561Z"
   }
 ]
