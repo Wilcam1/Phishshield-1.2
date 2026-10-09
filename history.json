@@ -1,5 +1,66 @@
 [
   {
+    "url": "https://lottiefiles.com/",
+    "riesgo": "bajo",
+    "indicadores": [],
+    "puntuacion": 0,
+    "probabilidad_ml": 0,
+    "inspeccion_ssl": {
+      "analizado": true,
+      "tieneSsl": false,
+      "error": "getaddrinfo ENOTFOUND lottiefiles.com",
+      "indicadores": [],
+      "factores": []
+    },
+    "inspeccion_dom": {
+      "analizado": true,
+      "titulo": "LottieFiles: Download Free lightweight animations for website & apps.",
+      "tienePassword": false,
+      "tieneTarjeta": false,
+      "formularios": 0,
+      "iframes": 0,
+      "metaRefresh": false,
+      "marcaEnTitulo": null,
+      "indicadores": [],
+      "factores": []
+    },
+    "asistente_ia": {
+      "resumen_ia": "✅ **Sitio Verificado y Estable:** El dominio corresponde a una entidad legítima con certificado SSL maduro y confiable (Entidad reconocida), y el modelo de Inteligencia Artificial no encontró patrones de phishing.",
+      "recomendacion_ia": "El enlace presenta un perfil seguro para la navegación cotidiana.",
+      "quiz_interactivo": {
+        "pregunta": "¿Qué buena práctica de seguridad digital debes mantener incluso en sitios legítimos?",
+        "opciones": [
+          "Usar la misma contraseña en todos los servicios para no olvidarla.",
+          "Verificar que la URL en la barra de direcciones coincida con el servicio que deseas utilizar y usar autenticación en dos pasos (2FA).",
+          "Desactivar las alertas de seguridad del navegador."
+        ],
+        "respuesta_correcta": 1,
+        "explicacion": "¡Perfecto! Activar la autenticación de dos factores (2FA) y comprobar siempre el dominio en la barra de navegación son las mejores defensas para tu identidad digital."
+      },
+      "fuente": "Asistente Educativo PhishShield AI"
+    },
+    "caracteristicas_tecnicas": {
+      "dominio": "lottiefiles.com",
+      "protocolo": "https",
+      "subdominios": 0,
+      "esHTTPS": true,
+      "puerto": "443",
+      "longitudRuta": 1,
+      "numeroParametros": 0,
+      "parametrosSensibles": [],
+      "tieneGuionesMultiples": false,
+      "tieneNumerosEnDominio": false,
+      "esIP": false,
+      "longitudTotal": 24
+    },
+    "factores_puntuacion": [
+      "Machine Learning: Verificado limpio por modelo de clasificación (-2)",
+      "Verificado en Safe Browsing (-1)",
+      "Verificado limpio por VirusTotal (-2)"
+    ],
+    "timestamp": "2026-10-09T05:42:16.513Z"
+  },
+  {
     "url": "https://6357668.app.netsuite.com/app/login/secure/enterpriselogin.nl?c=6357668&redirect=%2Fapp%2Fsetup%2Frolelist.nl%3Fwhence%3D&whence=",
     "riesgo": "alto",
     "indicadores": [

@@ -62,7 +62,8 @@ class PhishShieldServer {
     // 1. Cabeceras de seguridad HTTP con Helmet (OWASP ASVS)
     this.app.use(helmet({
       contentSecurityPolicy: false, // Desactivado para no bloquear WebGL/Three.js local en desarrollo
-      crossOriginEmbedderPolicy: false
+      crossOriginEmbedderPolicy: false,
+      crossOriginResourcePolicy: { policy: 'cross-origin' }
     }));
 
     // 2. Compresión HTTP Gzip/Deflate para alto rendimiento en payloads
@@ -474,6 +475,7 @@ class PhishShieldServer {
         console.log(`⚡ Retornando vista previa en caché para: ${targetUrl}`);
         res.set('Content-Type', 'image/jpeg');
         res.set('Cache-Control', 'public, max-age=900');
+        res.set('Cross-Origin-Resource-Policy', 'cross-origin');
         return res.send(cached.buffer);
       }
     }
@@ -542,6 +544,7 @@ class PhishShieldServer {
 
       res.set('Content-Type', 'image/jpeg');
       res.set('Cache-Control', 'public, max-age=900');
+      res.set('Cross-Origin-Resource-Policy', 'cross-origin');
       res.send(screenshotBuffer);
       console.log(`✅ Captura generada en tiempo récord para: ${targetUrl}`);
 
