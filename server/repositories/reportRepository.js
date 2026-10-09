@@ -32,6 +32,9 @@ class ReportRepository {
   }
 
   guardarReporte(url) {
+    if (!url || typeof url !== 'string') {
+      return false;
+    }
     try {
       const urlObj = new URL(url.startsWith('http') ? url : `https://${url}`);
       const dominio = urlObj.hostname;
@@ -41,8 +44,8 @@ class ReportRepository {
       console.log('📋 URL reportada como phishing:', dominio);
       return true;
     } catch (error) {
-      console.error('❌ Error guardando reporte:', error);
-      throw error;
+      console.error('❌ Error guardando reporte:', error.message);
+      return false;
     }
   }
 

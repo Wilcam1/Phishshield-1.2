@@ -61,6 +61,16 @@ describe('Express API Endpoints (Backend Integration Tests)', () => {
       expect(res.body.error).toBeDefined();
     });
 
+    it('debe bloquear intentos de ataque SSRF en /analizar (localhost, loopback, metadata)', async () => {
+      const r1 = await request(app).post('/analizar').send({ url: 'http://localhost:3000/api' });
+      expect(r1.status).toBe(400);
+      expect(r1.body.codigo).toBe('SSRF_BLOCKED');
+
+      const r2 = await request(app).post('/analizar').send({ url: 'http://169.254.169.254/latest/meta-data/' });
+      expect(r2.status).toBe(400);
+      expect(r2.body.codigo).toBe('SSRF_BLOCKED');
+    });
+
     it('debe responder con resultado forense estructurado para URL legítima', async () => {
       const res = await request(app).post('/analizar').send({ url: 'https://example.com' });
       expect(res.status).toBe(200);
@@ -71,7 +81,32 @@ describe('Express API Endpoints (Backend Integration Tests)', () => {
     });
   });
 
+  describe('GET /api/screenshot y protección SSRF', () => {
+    it('debe bloquear peticiones a localhost o IP privada en screenshot', async () => {
+      const res = await request(app).get('/api/screenshot?url=http://127.0.0.1:8080');
+      expect(res.status).toBe(400);
+      expect(res.body.codigo).toBe('SSRF_BLOCKED');
+    });
+  });
+
+  describe('Cabeceras de Seguridad HTTP (Helmet)', () => {
+    it('debe incluir cabeceras de protección OWASP como X-Content-Type-Options', async () => {
+      const res = await request(app).get('/health');
+      expect(res.headers['x-content-type-options']).toBe('nosniff');
+    });
+  });
+
   describe('POST /api/login y rutas protegidas', () => {
+    it('debe autenticar credenciales correctas y emitir token CSPRNG seguro', async () => {
+      const res = await request(app).post('/api/login').send({
+        username: 'admin',
+        password: process.env.ADMIN_PASSWORD || 'Windows12@'
+      });
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.token).toMatch(/^psh_[0-9a-f]{64}$/);
+    });
+
     it('debe rechazar credenciales incorrectas con 401', async () => {
       const res = await request(app).post('/api/login').send({
         username: 'admin',

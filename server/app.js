@@ -1,6 +1,8 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
@@ -20,6 +22,8 @@ import VirusTotalService from './services/virusTotalService.js';
 import AnalysisCache from './services/cacheService.js';
 import MlService from './services/mlService.js';
 import AiExplanationService from './services/aiExplanationService.js';
+import UrlSecurityValidator from './security/urlValidator.js';
+import AuthService from './security/authService.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -43,9 +47,8 @@ class PhishShieldServer {
     this.cache = new AnalysisCache();
     this.mlService = new MlService();
     this.aiExplanationService = new AiExplanationService();
+    this.authService = new AuthService();
 
-    // Sesiones de admin
-    this.activeTokens = new Set();
     this.screenshotCache = new Map();
 
     this.setupMiddleware();
@@ -54,10 +57,43 @@ class PhishShieldServer {
   }
 
   setupMiddleware() {
-    this.app.use(cors());
-    this.app.use(express.json());
+    // 1. Cabeceras de seguridad HTTP con Helmet (OWASP ASVS)
+    this.app.use(helmet({
+      contentSecurityPolicy: false, // Desactivado para no bloquear WebGL/Three.js local en desarrollo
+      crossOriginEmbedderPolicy: false
+    }));
+
+    // 2. CORS restrictivo parametrizable
+    const allowedOriginsEnv = process.env.ALLOWED_ORIGINS;
+    const allowedOrigins = allowedOriginsEnv
+      ? allowedOriginsEnv.split(',').map(o => o.trim())
+      : ['http://localhost:4200', 'http://127.0.0.1:4200', 'http://localhost:3001', 'http://127.0.0.1:3001'];
+
+    this.app.use(cors({
+      origin: (origin, callback) => {
+        // Permitir solicitudes sin origen (curl, pruebas locales, SSR) o en lista blanca
+        if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
+          callback(null, true);
+        } else {
+          callback(new Error('Origen no permitido por política CORS'));
+        }
+      },
+      credentials: true
+    }));
+
+    // 3. Rate Limiter Global (100 reqs por 15m)
+    const limiterGlobal = rateLimit({
+      windowMs: 15 * 60 * 1000,
+      max: process.env.NODE_ENV === 'test' ? 1000 : 300,
+      standardHeaders: true,
+      legacyHeaders: false,
+      message: { error: 'Límite de solicitudes excedido. Intenta más tarde.' }
+    });
+    this.app.use(limiterGlobal);
+
+    this.app.use(express.json({ limit: '1mb' }));
     
-    // Servir archivos de produccion de Angular si existen
+    // Servir archivos de producción de Angular si existen
     const distPath = path.join(__dirname, '../dist/phishshield-angular/browser');
     if (fs.existsSync(distPath)) {
       this.app.use(express.static(distPath));
@@ -65,12 +101,19 @@ class PhishShieldServer {
   }
 
   setupRoutes() {
-    this.app.post('/analizar', (req, res) => this.analyzeUrl(req, res));
+    // Rate limiters específicos
+    const limiterAnalisis = rateLimit({
+      windowMs: 5 * 60 * 1000,
+      max: process.env.NODE_ENV === 'test' ? 500 : 60,
+      message: { error: 'Demasiadas solicitudes de análisis o captura. Por favor espera unos minutos.' }
+    });
+
+    this.app.post('/analizar', limiterAnalisis, (req, res) => this.analyzeUrl(req, res));
     this.app.post('/reportar', (req, res) => this.reportUrl(req, res));
     this.app.get('/estadisticas', (req, res) => this.getStats(req, res));
     this.app.get('/historial', (req, res) => this.getHistory(req, res));
     this.app.get('/health', (req, res) => this.healthCheck(req, res));
-    this.app.get('/api/screenshot', (req, res) => this.generateLocalScreenshot(req, res));
+    this.app.get('/api/screenshot', limiterAnalisis, (req, res) => this.generateLocalScreenshot(req, res));
 
     // Ruta raiz
     this.app.get('/', (req, res) => {
@@ -87,33 +130,36 @@ class PhishShieldServer {
     });
   }
 
-  // Middleware de autenticación de admin
+  // Middleware de autenticación de admin con CSPRNG y TTL
   authenticateAdmin(req, res, next) {
     const authHeader = req.headers['authorization'];
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: 'No autorizado' });
+      return res.status(401).json({ error: 'No autorizado: Cabecera Authorization requerida' });
     }
     const token = authHeader.split(' ')[1];
-    if (!this.activeTokens.has(token)) {
+    if (!this.authService.validarToken(token)) {
       return res.status(403).json({ error: 'Token inválido o expirado' });
     }
     next();
   }
 
   setupAdminRoutes() {
-    // Login
-    this.app.post('/api/login', (req, res) => {
-      const { username, password } = req.body;
-      const expectedUsername = process.env.ADMIN_USERNAME || 'admin';
-      const expectedPassword = process.env.ADMIN_PASSWORD || 'admin123';
+    // Rate Limiter estricto contra ataques de fuerza bruta en Login
+    const limiterLogin = rateLimit({
+      windowMs: 15 * 60 * 1000,
+      max: process.env.NODE_ENV === 'test' ? 100 : 8,
+      message: { success: false, error: 'Demasiados intentos fallidos de inicio de sesión. Bloqueo temporal activado.' }
+    });
 
-      if (username === expectedUsername && password === expectedPassword) {
-        // Generar un token simple (en un entorno real usar JWT)
-        const token = 'admin_token_' + Math.random().toString(36).substr(2);
-        this.activeTokens.add(token);
-        res.json({ success: true, token });
+    // Login seguro con Scrypt y CSPRNG
+    this.app.post('/api/login', limiterLogin, (req, res) => {
+      const { username, password } = req.body || {};
+      const resultado = this.authService.autenticar(username, password);
+
+      if (resultado.exito) {
+        res.json({ success: true, token: resultado.token, expiraEn: resultado.expiraEnSegundos });
       } else {
-        res.status(401).json({ success: false, error: 'Credenciales incorrectas' });
+        res.status(401).json({ success: false, error: resultado.motivo || 'Credenciales incorrectas' });
       }
     });
 
@@ -150,58 +196,40 @@ class PhishShieldServer {
       }
     }));
 
-    // Cambiar contraseña
+    // Cambiar contraseña de forma segura con hash y salt
     this.app.post('/api/admin/change-password', (req, res) => this.authenticateAdmin(req, res, () => {
-      const { oldPassword, newPassword } = req.body;
-      const expectedPassword = process.env.ADMIN_PASSWORD || 'admin123';
-
-      if (oldPassword !== expectedPassword) {
-        return res.status(401).json({ success: false, error: 'Contraseña actual incorrecta' });
+      const { oldPassword, newPassword } = req.body || {};
+      if (!oldPassword || !newPassword) {
+        return res.status(400).json({ success: false, error: 'Ambas contraseñas son requeridas' });
       }
 
-      if (!newPassword || newPassword.length < 8) {
-        return res.status(400).json({ success: false, error: 'La nueva contraseña debe tener al menos 8 caracteres' });
-      }
-
-      const hasUpper = /[A-Z]/.test(newPassword);
-      const hasNumber = /\d/.test(newPassword);
-      const hasSpecial = /[^A-Za-z0-9]/.test(newPassword);
-
-      if (!hasUpper || !hasNumber || !hasSpecial) {
-        return res.status(400).json({ success: false, error: 'La nueva contraseña debe contener al menos una mayúscula, un número y un carácter especial.' });
-      }
-
-      try {
-        const envPath = path.join(__dirname, '../.env');
-        if (fs.existsSync(envPath)) {
-          let envContent = fs.readFileSync(envPath, 'utf8');
-          // Replace exactly the value assigned to ADMIN_PASSWORD
-          envContent = envContent.replace(/^ADMIN_PASSWORD=.*$/m, `ADMIN_PASSWORD=${newPassword}`);
-          // If for some reason it wasn't there
-          if (!envContent.includes(`ADMIN_PASSWORD=${newPassword}`)) {
-            envContent += `\nADMIN_PASSWORD=${newPassword}`;
-          }
-          fs.writeFileSync(envPath, envContent);
-        } else {
-          fs.writeFileSync(envPath, `ADMIN_PASSWORD=${newPassword}`);
-        }
-
-        // Update it in memory, too
-        process.env.ADMIN_PASSWORD = newPassword;
-        res.json({ success: true, mensaje: 'Contraseña actualizada' });
-      } catch (err) {
-        res.status(500).json({ success: false, error: 'No se pudo guardar la nueva contraseña' });
+      const resultado = this.authService.cambiarContrasena(oldPassword, newPassword);
+      if (resultado.exito) {
+        res.json({ success: true, mensaje: resultado.mensaje });
+      } else {
+        res.status(400).json({ success: false, error: resultado.error });
       }
     }));
   }
 
   async analyzeUrl(req, res) {
     try {
-      const { url } = req.body;
+      const { url } = req.body || {};
 
       if (!url) {
         return res.status(400).json({ error: 'URL requerida' });
       }
+
+      // Validación de Seguridad contra SSRF (Server-Side Request Forgery)
+      const validacionSeguridad = UrlSecurityValidator.validarUrl(url);
+      if (!validacionSeguridad.valida) {
+        return res.status(400).json({
+          error: validacionSeguridad.motivo || 'URL no permitida por política de seguridad',
+          codigo: 'SSRF_BLOCKED'
+        });
+      }
+
+      const urlSegura = validacionSeguridad.urlNormalizada;
 
       // Intentar obtener de caché primero
       const cacheHit = this.cache.get(url);
@@ -350,11 +378,20 @@ class PhishShieldServer {
   }
 
   reportUrl(req, res) {
-    const { url } = req.body;
+    const { url } = req.body || {};
+
+    if (!url) {
+      return res.status(400).json({ success: false, error: 'URL requerida' });
+    }
+
+    const validacion = UrlSecurityValidator.validarUrl(url);
+    if (!validacion.valida) {
+      return res.status(400).json({ success: false, error: validacion.motivo });
+    }
 
     try {
-      this.reportRepository.guardarReporte(url);
-      this.cache.invalidate(url);
+      this.reportRepository.guardarReporte(validacion.urlNormalizada);
+      this.cache.invalidate(validacion.urlNormalizada);
 
       res.json({
         success: true,
@@ -400,10 +437,19 @@ class PhishShieldServer {
   async generateLocalScreenshot(req, res) {
     const { url } = req.query;
     if (!url) {
-      return res.status(400).send('URL requerida');
+      return res.status(400).json({ error: 'Parámetro URL requerido' });
     }
 
-    const targetUrl = url.startsWith('http') ? url : `https://${url}`;
+    // Validación estricta anti-SSRF antes de lanzar Chromium
+    const validacionSeguridad = UrlSecurityValidator.validarUrl(url);
+    if (!validacionSeguridad.valida) {
+      return res.status(400).json({
+        error: validacionSeguridad.motivo || 'Acceso a URL bloqueado por seguridad',
+        codigo: 'SSRF_BLOCKED'
+      });
+    }
+
+    const targetUrl = validacionSeguridad.urlNormalizada;
 
     // 1. Servir desde caché si ya fue capturada recientemente (< 15 minutos)
     if (this.screenshotCache.has(targetUrl)) {
