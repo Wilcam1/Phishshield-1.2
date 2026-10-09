@@ -55,13 +55,25 @@ export class AnalisisRepositorio {
       .pipe(map((dto) => AdministracionMapeador.mapearEstadisticas(dto)));
   }
 
-  obtenerHistorial(limite = 50): Observable<ElementoHistorialGlobal[]> {
+  obtenerHistorial(limite = 500): Observable<ElementoHistorialGlobal[]> {
     return this.clienteHttp
       .get<HistorialItemDto[]>(`${this.urlBase}/historial?limite=${limite}`)
       .pipe(
         map((items) =>
           Array.isArray(items)
             ? items.map((item) => AdministracionMapeador.mapearHistorialGlobal(item))
+            : []
+        )
+      );
+  }
+
+  obtenerReportesPublicos(): Observable<ReporteComunitario[]> {
+    return this.clienteHttp
+      .get<(ReporteItemDto | string)[]>(`${this.urlBase}/reportes`)
+      .pipe(
+        map((items) =>
+          Array.isArray(items)
+            ? items.map((item) => AdministracionMapeador.mapearReporte(item))
             : []
         )
       );

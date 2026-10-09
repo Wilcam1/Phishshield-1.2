@@ -75,6 +75,8 @@ export class AnalizadorPaginaComponente implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.servicioAdmin.cargarEstadisticasPublicas().subscribe();
+    this.servicioAdmin.cargarHistorialPublico().subscribe();
+    this.servicioAdmin.cargarReportesPublicos().subscribe();
   }
 
   ngOnDestroy(): void {
@@ -110,6 +112,7 @@ export class AnalizadorPaginaComponente implements OnInit, OnDestroy {
           this.servicioNotif.mostrar('Análisis forense completado con éxito', 'exito');
           // Actualizar inmediatamente las estadísticas del SOC para que el acumulado suba en vivo
           this.servicioAdmin.cargarEstadisticasPublicas().subscribe();
+          this.servicioAdmin.cargarHistorialPublico().subscribe();
         } else if (this.servicioAnalisis.mensajeError()) {
           this.servicioNotif.mostrar(this.servicioAnalisis.mensajeError()!, 'error');
         }
@@ -123,6 +126,7 @@ export class AnalizadorPaginaComponente implements OnInit, OnDestroy {
         this.servicioNotif.mostrar(res.mensaje, res.exito ? 'exito' : 'error');
         if (res.exito) {
           this.servicioAdmin.cargarEstadisticasPublicas().subscribe();
+          this.servicioAdmin.cargarReportesPublicos().subscribe();
         }
       },
     });
@@ -198,8 +202,9 @@ export class AnalizadorPaginaComponente implements OnInit, OnDestroy {
     this.tituloModalCategoria = titulos[filtro] || 'URLs Analizadas';
     this.modalCategoriaVisible = true;
 
-    // Cargar historial para alimentar el modal
-    this.servicioAdmin.cargarDatosCompletosPanel().subscribe();
+    // Cargar historial y reportes públicos para alimentar el modal de exploración
+    this.servicioAdmin.cargarHistorialPublico().subscribe();
+    this.servicioAdmin.cargarReportesPublicos().subscribe();
   }
 
   get itemsHistorialFiltrados() {

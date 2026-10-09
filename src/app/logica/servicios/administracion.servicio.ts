@@ -66,6 +66,27 @@ export class AdministracionServicio {
     );
   }
 
+  cargarHistorialPublico(limite = 500): Observable<ElementoHistorialGlobal[]> {
+    this.estaCargandoSenal.set(true);
+    return this.repositorioAnalisis.obtenerHistorial(limite).pipe(
+      tap((historial) => {
+        this.historialSenal.set(historial);
+        this.estaCargandoSenal.set(false);
+      }),
+      catchError(() => {
+        this.estaCargandoSenal.set(false);
+        return of([]);
+      })
+    );
+  }
+
+  cargarReportesPublicos(): Observable<ReporteComunitario[]> {
+    return this.repositorioAnalisis.obtenerReportesPublicos().pipe(
+      tap((reportes) => this.reportesSenal.set(reportes)),
+      catchError(() => of([]))
+    );
+  }
+
   cargarDatosCompletosPanel(): Observable<boolean> {
     this.estaCargandoSenal.set(true);
     this.mensajeErrorSenal.set(null);

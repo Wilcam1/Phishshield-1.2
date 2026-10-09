@@ -117,6 +117,7 @@ class PhishShieldServer {
     this.app.post('/reportar', (req, res) => this.reportUrl(req, res));
     this.app.get('/estadisticas', (req, res) => this.getStats(req, res));
     this.app.get('/historial', (req, res) => this.getHistory(req, res));
+    this.app.get('/reportes', (req, res) => res.json(this.reportRepository.obtenerReportes()));
     this.app.get('/health', (req, res) => this.healthCheck(req, res));
     this.app.get('/api/screenshot', limiterAnalisis, (req, res) => this.generateLocalScreenshot(req, res));
 
@@ -435,8 +436,8 @@ class PhishShieldServer {
   }
 
   getHistory(req, res) {
-    const { limite = 10 } = req.query;
-    const historial = this.historyRepository.obtenerHistorial(parseInt(limite));
+    const { limite = 500 } = req.query;
+    const historial = this.historyRepository.obtenerHistorial(parseInt(limite, 10));
     res.json(historial);
   }
 
